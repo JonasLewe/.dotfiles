@@ -15,19 +15,19 @@
 :set scrolloff=8
 :set signcolumn=yes
 
-call plug#begin()
-
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'https://github.com/preservim/nerdtree'
-Plug 'ryanoasis/vim-devicons'
-Plug 'nvim-telescope/telescope.nvim'
-Plug 'gruvbox-community/gruvbox'
-Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/syntastic'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
-
-call plug#end()
+"call plug#begin()
+"
+"Plug 'https://github.com/vim-airline/vim-airline'
+"Plug 'https://github.com/preservim/nerdtree'
+"Plug 'ryanoasis/vim-devicons'
+"Plug 'nvim-telescope/telescope.nvim'
+"Plug 'gruvbox-community/gruvbox'
+"Plug 'tpope/vim-fugitive'
+"Plug 'scrooloose/syntastic'
+"Plug 'vim-airline/vim-airline-themes'
+"Plug 'airblade/vim-gitgutter'
+"
+"call plug#end()
 
 colorscheme gruvbox
 
