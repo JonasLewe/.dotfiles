@@ -1,3 +1,10 @@
+
+if [ -f /etc/arch-release ]; then
+    # Arch
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
+
+
 source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
 unsetopt CASE_GLOB
@@ -11,6 +18,7 @@ source ~/.dotfiles/zsh/external/completion.zsh
 fpath=($ZDOTDIR/external $fpath)
 
 autoload -Uz prompt_purification_setup; prompt_purification_setup
+autoload -Uz cursor_mode && cursor_mode
 
 # Push the current directory visited on to the stack.
 setopt AUTO_PUSHD
@@ -19,4 +27,13 @@ setopt PUSHD_IGNORE_DUPS
 # Do not print the directory stack after using pushd or popd.
 setopt PUSHD_SILENT
 
+bindkey -v
+export KEYTIMEOUT=1
 
+zmodload zsh/complist
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+source ~/.dotfiles/zsh/external/bd.zsh

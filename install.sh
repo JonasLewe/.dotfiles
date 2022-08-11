@@ -1,8 +1,18 @@
 #!/bin/bash
+###########
+# install #
+###########
+if [ -f /etc/lsb-release ]; then
+    # Ubuntu
+    sudo apt install zsh tmux -y
+elif [ -f /etc/arch-release ]; then
+    # Arch
+    sudo pacman -S zsh tmux zsh-syntax-highlighting
+fi
+
 #######
 # zsh #
 #######
-sudo apt install zsh -y
 
 mkdir -p "$HOME/.config/zsh"
 ln -sf "$HOME/.dotfiles/zsh/.zshenv" "$HOME"
@@ -19,3 +29,6 @@ mkdir -p "$HOME/.config/nvim"
 mkdir -p "$HOME/.config/nvim/undo"
 
 ln -sf "$HOME/.dotfiles/nvim/init.vim" "$HOME/.config/nvim/init.vim"
+
+# Install vim plug
+

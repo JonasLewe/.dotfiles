@@ -1,3 +1,10 @@
+" Install vim plug
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 :set exrc
 :set number
 :set hidden
@@ -29,7 +36,7 @@
 "
 "call plug#end()
 
-colorscheme gruvbox
+"colorscheme gruvbox
 
 let mapleader = " "
 nnoremap <Space> <NOP>
@@ -38,6 +45,13 @@ nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer=1
+
+" save undo-trees in files
+set undofile
+set undodir=$HOME/.config/nvim/undo
+" number of undo saved
+set undolevels=10000
+set undoreload=10000
 
 "Smart way to move between windows
 map <C-j> <C-W>j
