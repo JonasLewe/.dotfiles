@@ -18,6 +18,7 @@
 call plug#begin()
 
 Plug 'https://github.com/vim-airline/vim-airline'
+Plug 'mhinz/vim-startify'
 Plug 'https://github.com/preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-telescope/telescope.nvim'
