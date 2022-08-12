@@ -1,10 +1,3 @@
-
-if [ -f /etc/arch-release ]; then
-    # Arch
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
-
 source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
 unsetopt CASE_GLOB
@@ -37,3 +30,9 @@ bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
 source ~/.dotfiles/zsh/external/bd.zsh
+
+
+if [ -f /etc/arch-release ]; then
+    # Arch
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi

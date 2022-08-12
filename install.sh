@@ -7,27 +7,27 @@ if [ -f /etc/lsb-release ]; then
     sudo apt install zsh tmux -y
 elif [ -f /etc/arch-release ]; then
     # Arch
-    sudo pacman -S zsh tmux zsh-syntax-highlighting
+    sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep
 fi
 
 #######
 # zsh #
 #######
-mkdir -p "$HOME/.config/zsh"
-ln -sf "$HOME/.dotfiles/zsh/.zshenv" "$HOME"
-ln -sf "$HOME/.dotfiles/zsh/.zshrc" "$HOME/.config/zsh"
-ln -sf "$HOME/.dotfiles/zsh/aliases" "$HOME/.config/zsh/aliases"
+mkdir -p "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
+ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
 
-rm -rf "$HOME/.config/zsh/external"
-ln -sf "$HOME/.dotfiles/zsh/external" "$HOME/.config/zsh"
+rm -rf "$XDG_CONFIG_HOME/zsh/external"
+ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
 ########
 # nvim #
 ########
-mkdir -p "$HOME/.config/nvim"
-mkdir -p "$HOME/.config/nvim/undo"
+mkdir -p "$XDG_CONFIG_HOME/nvim"
+mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
-ln -sf "$HOME/.dotfiles/nvim/init.vim" "$HOME/.config/nvim/init.vim"
+ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 
 # Install vim plug
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -37,4 +37,4 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 # tmux #
 ########
 mkdir -p "$XDG_CONFIG_HOME/tmux"
-ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"#
+ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
