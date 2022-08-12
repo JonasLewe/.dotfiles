@@ -33,6 +33,10 @@ ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
+# :PlugInstall
+nvim --headless +PlugInstall +qall
+nvim +UpdateRemotePlugins +qa
+
 ########
 # tmux #
 ########
