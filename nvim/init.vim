@@ -35,6 +35,8 @@ colorscheme gruvbox
 let mapleader = " "
 nnoremap <Space> <NOP>
 
+nnoremap <c-w>h <c-w>s
+
 nnoremap <C-f> :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1

@@ -230,7 +230,7 @@ mode "$mode_system" {
 bindsym $mod+BackSpace mode "$mode_system"
 
 # Set wallpaper
-exec --no-startup -id feh --no-fehbg --bg-fill ~/.dotfiles/i3/feh/arch-wallpaper.png
+exec --no-startup-id feh --no-fehbg --bg-fill ~/.config/i3/feh/arch-wallpaper.png
 
 # floating pop up automatically
 for_window [window_role="pop-up"] floating enable
