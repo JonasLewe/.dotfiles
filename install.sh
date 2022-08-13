@@ -35,16 +35,30 @@ sudo mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
 sudo ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 
-# Install vim plug
-sudo sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
-       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+# install neovim plugin manager
+[ ! -f "$DOTFILES/nvim/autoload/plug.vim" ] && curl -fLo "$DOTFILES/nvim/autoload/plug.vim" --create -dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-# :PlugInstall
-sudo nvim --headless +PlugInstall +qall
-sudo nvim +UpdateRemotePlugins +qa
+mkdir -p "$XDG_CONFIG_HOME/nvim/autoload"
+ln -sf $DOTFILES/nvim/autoload/plug.vim" "$XDG_CONFIG_HOME/nvim/autoload/plug.vim"
+
+# Install (or update) all the plugins
+nvim --noplugin +PlugUpdate +qa
 
 ########
 # tmux #
 ########
 sudo mkdir -p "$XDG_CONFIG_HOME/tmux"
 sudo ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+
+#########
+# Fonts #
+#########
+mkdir -p "$XDG_DATA_HOME"
+cp -rf "$DOTFILES/fonts" "$XDG_DATA_HOME"
+
+
+#########
+# Stuff #
+#########
+mkdir -p "$XDG_CONFIG_HOME/dunst"
+ln -sf "$DOTFILES/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/dunstrc"
