@@ -6,7 +6,7 @@ autoload -Uz compinit; compinit
 
 # Autocomplete hidden files
 _comp_options+=(globdots)
-source ~/.dotfiles/zsh/external/completion.zsh
+source $DOTFILES/zsh/external/completion.zsh
 
 fpath=($ZDOTDIR/external $fpath)
 
@@ -29,7 +29,13 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-source ~/.dotfiles/zsh/external/bd.zsh
+source $DOTFILES/zsh/external/bd.zsh
+source $DOTFILES/zsh/scripts.sh
+
+if [ $(command -v "fzf") ]; then
+	source /usr/share/fzf/completion.zsh
+	source /usr/share/fzf/key-bindings.zsh
+fi
 
 
 if [ -f /etc/arch-release ]; then
