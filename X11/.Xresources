@@ -41,6 +41,7 @@ URxvt*borderLess: false
 URxvt*externalBorder: 0
 URxvt*internalBorder: 4
 URxvt*saveLines: 5000
+URxvt.scrollBar: false
 
 URxvt*perl-ext-common: default ,tabbedex
 
