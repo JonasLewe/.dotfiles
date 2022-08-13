@@ -10,6 +10,12 @@ elif [ -f /etc/arch-release ]; then
     sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep
 fi
 
+######
+# i3 #
+######
+sudo rm -rf "$HOME/.config/i3"
+sudo ln -s "$HOME/dotfiles/i3" "$HOME/.config"
+
 #######
 # zsh #
 #######
