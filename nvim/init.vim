@@ -24,6 +24,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-surround'
+
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 
