@@ -25,7 +25,6 @@ Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive'
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-surround'
-
 "Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 
@@ -43,12 +42,17 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer=1
 
+let g:airline_powerline_fonts = 1
+
 " save undo-trees in files
 set undofile
 set undodir=$HOME/.config/nvim/undo
+
 " number of undo saved
 set undolevels=10000
 set undoreload=10000
+
+set ttimeoutlen=100
 
 "Smart way to move between windows
 map <C-j> <C-W>j

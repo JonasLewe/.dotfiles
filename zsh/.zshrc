@@ -23,6 +23,11 @@ setopt PUSHD_SILENT
 bindkey -v
 export KEYTIMEOUT=1
 
+# remap screen clear to ctrl+g
+bindkey -r '^l'
+bindkey -r '^g'
+bindkey -s '^g' 'clear\n'
+
 zmodload zsh/complist
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
