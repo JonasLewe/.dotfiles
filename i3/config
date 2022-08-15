@@ -43,6 +43,10 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+# Add Brightness shortcuts
+bindsym XF86MonBrightnessUp exec blight set +5% 
+bindsym XF86MonBrightnessDown exec blight set -5% 
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -118,8 +122,8 @@ set $mail "2: mail"
 set $web "3: web"
 set $file_manager "4: files"
 set $passwd "5: passwd"
-set $viewer "6: viewer"
-set $mindmap "7: mindmap"
+set $chat "6: chat"
+set $viewer "7: viewer"
 
 # switch to workspace
 bindsym $mod+1 workspace $shell
@@ -127,8 +131,8 @@ bindsym $mod+2 workspace $mail
 bindsym $mod+3 workspace $web
 bindsym $mod+4 workspace $file_manager
 bindsym $mod+5 workspace $passwd
-bindsym $mod+6 workspace $viewer
-bindsym $mod+7 workspace $mindmap
+bindsym $mod+6 workspace $chat
+bindsym $mod+7 workspace $viewer
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
 
@@ -139,8 +143,8 @@ bindsym $mod+Shift+2 move container to workspace $mail
 bindsym $mod+Shift+3 move container to workspace $web
 bindsym $mod+Shift+4 move container to workspace $file_manager
 bindsym $mod+Shift+5 move container to workspace $passwd
-bindsym $mod+Shift+6 move container to workspace $viewer
-bindsym $mod+Shift+7 move container to workspace $mindmap
+bindsym $mod+Shift+6 move container to workspace $chat
+bindsym $mod+Shift+7 move container to workspace $viewer
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 
@@ -152,14 +156,17 @@ assign [class="Thunderbird" instance="Mail"] $mail
 assign [class="firefox" instance="Navigator"] $web
 assign [class="Caja" instance="caja"] $file_manager
 assign [class="KeePassXC" instance="keepassxc"] $passwd
+assign [class="discord" instance="discord"] $chat
 assign [class="Zathura" instance="org.pwmt.zathura"] $viewer
 
 # startup default applications
+exec insync start
 exec urxvtc
 exec thunderbird
 exec firefox
 exec caja
 exec keepassxc
+exec discord
 
 set $i3lockwall sh ~/.config/i3/scripts/lock.sh
 bindsym $mod+CTRL+Shift+l exec --no-startup -id $i3lockwall

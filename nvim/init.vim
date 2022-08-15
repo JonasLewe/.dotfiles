@@ -28,6 +28,8 @@ Plug 'tpope/vim-surround'
 Plug 'airblade/vim-gitgutter'
 Plug 'preservim/tagbar'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'tmsvg/pear-tree'
+Plug 'mhinz/vim-startify'
 
 call plug#end()
 
