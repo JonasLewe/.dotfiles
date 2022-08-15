@@ -2,6 +2,8 @@ source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
 unsetopt CASE_GLOB
 
+XDG_CURRENT_DESKTOP=KDE
+
 autoload -Uz compinit; compinit
 
 # Autocomplete hidden files

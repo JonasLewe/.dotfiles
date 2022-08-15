@@ -7,7 +7,7 @@ if [ -f /etc/lsb-release ]; then
     sudo apt install zsh tmux -y
 elif [ -f /etc/arch-release ]; then
     # Arch
-    sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep
+    sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep cmake
 fi
 
 ######

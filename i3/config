@@ -117,8 +117,8 @@ set $shell "1: shell"
 set $mail "2: mail"
 set $web "3: web"
 set $file_manager "4: files"
-set $db "5: db"
-set $documents "6: documents"
+set $passwd "5: passwd"
+set $viewer "6: viewer"
 set $mindmap "7: mindmap"
 
 # switch to workspace
@@ -126,8 +126,8 @@ bindsym $mod+1 workspace $shell
 bindsym $mod+2 workspace $mail
 bindsym $mod+3 workspace $web
 bindsym $mod+4 workspace $file_manager
-bindsym $mod+5 workspace $db
-bindsym $mod+6 workspace $documents
+bindsym $mod+5 workspace $passwd
+bindsym $mod+6 workspace $viewer
 bindsym $mod+7 workspace $mindmap
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
@@ -138,14 +138,28 @@ bindsym $mod+Shift+1 move container to workspace $shell
 bindsym $mod+Shift+2 move container to workspace $mail
 bindsym $mod+Shift+3 move container to workspace $web
 bindsym $mod+Shift+4 move container to workspace $file_manager
-bindsym $mod+Shift+5 move container to workspace $db
-bindsym $mod+Shift+6 move container to workspace $documents
+bindsym $mod+Shift+5 move container to workspace $passwd
+bindsym $mod+Shift+6 move container to workspace $viewer
 bindsym $mod+Shift+7 move container to workspace $mindmap
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 
 workspace_auto_back_and_forth yes
 focus_follows_mouse no
+
+# assign default workspaces to applications
+assign [class="Thunderbird" instance="Mail"] $mail
+assign [class="firefox" instance="Navigator"] $web
+assign [class="Caja" instance="caja"] $file_manager
+assign [class="KeePassXC" instance="keepassxc"] $passwd
+assign [class="Zathura" instance="org.pwmt.zathura"] $viewer
+
+# startup default applications
+exec urxvtc
+exec thunderbird
+exec firefox
+exec caja
+exec keepassxc
 
 set $i3lockwall sh ~/.config/i3/scripts/lock.sh
 bindsym $mod+CTRL+Shift+l exec --no-startup -id $i3lockwall
