@@ -3,6 +3,7 @@ alias ls='ls --color'
 alias la='ls -lah --color'
 
 alias vim='nvim'
+alias fuck='sudo !!'
 
 alias ga='git add .'
 alias gs='git status'
