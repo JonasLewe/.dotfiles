@@ -38,10 +38,10 @@
 ! URxvt*font: xft:DejaVuSansMono:size=14:antialias=true
 
 !URxvt*font: xft:Inconsolata Nerd Font Mono:style=Medium:size=14:pixelsize=16:antialias=true
-URxvt*font: xft:Inconsolata Nerd Font Mono:size=16:antialias=true
+URxvt*font: xft:Inconsolata Nerd Font Mono:size=14:antialias=true
 
 
-Xft.dpi: 96
+Xft.dpi: 110
 
 URxvt*borderLess: false
 URxvt*externalBorder: 0

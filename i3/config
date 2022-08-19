@@ -166,7 +166,7 @@ exec thunderbird
 exec firefox
 exec caja
 exec keepassxc
-exec discord
+# exec discord
 
 set $i3lockwall sh ~/.config/i3/scripts/lock.sh
 bindsym $mod+CTRL+Shift+l exec --no-startup -id $i3lockwall
