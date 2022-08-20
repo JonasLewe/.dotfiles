@@ -4,7 +4,7 @@
 ###########
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install zsh tmux -y
+    sudo apt install zsh tmux neovim -y
 elif [ -f /etc/arch-release ]; then
     # Arch
     sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep cmake
