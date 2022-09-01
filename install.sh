@@ -4,11 +4,7 @@
 ###########
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install zsh tmux -y
-elif [ -f /etc/arch-release ]; then
-    # Arch
-    sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep
-fi
+    sudo apt install zsh tmux nvim -y
 
 #######
 # zsh #
@@ -37,8 +33,17 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 nvim --headless +PlugInstall +qall
 nvim +UpdateRemotePlugins +qa
 
+# Install oh-my-zsh
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+# Install Powerline10k
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
 ########
 # tmux #
 ########
 mkdir -p "$XDG_CONFIG_HOME/tmux"
 ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+
+# Install tpm 
+git clone https://github.com/tmux-plugins/tpm "$XDG_CONFIG_HOME/tmux/plugins/tpm"
