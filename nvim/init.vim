@@ -17,14 +17,15 @@
 
 call plug#begin()
 
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'mhinz/vim-startify'
-Plug 'https://github.com/preservim/nerdtree'
+Plug 'https://github.com/vim-airline/vim-airline' 
+Plug 'mhinz/vim-startify' " vim start page
+Plug 'https://github.com/preservim/nerdtree' " adds file tree 
 Plug 'ryanoasis/vim-devicons'
-Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'gruvbox-community/gruvbox'
-Plug 'tpope/vim-fugitive'
-Plug 'scrooloose/syntastic'
+Plug 'tpope/vim-fugitive' " git wrapper 
+Plug 'dense-analysis/ale'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'airblade/vim-gitgutter'
 
