@@ -74,4 +74,4 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
-
+tmux source $HOME/.config/tmux/tmux.conf

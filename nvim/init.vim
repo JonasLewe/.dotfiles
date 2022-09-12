@@ -14,20 +14,22 @@
 :set incsearch
 :set scrolloff=8
 :set signcolumn=yes
+:set nocompatible
 
 call plug#begin()
 
-Plug 'https://github.com/vim-airline/vim-airline' 
 Plug 'mhinz/vim-startify' " vim start page
 Plug 'https://github.com/preservim/nerdtree' " adds file tree 
+Plug 'https://github.com/vim-airline/vim-airline' 
+Plug 'vim-airline/vim-airline-themes'
+Plug 'gruvbox-community/gruvbox'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
-Plug 'gruvbox-community/gruvbox'
 Plug 'tpope/vim-fugitive' " git wrapper 
-Plug 'dense-analysis/ale'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter' " show git status column
+"Plug 'dense-analysis/ale'
+Plug 'sheerun/vim-polyglot'
 
 call plug#end()
 
@@ -41,9 +43,19 @@ nnoremap <C-n> :NERDTreeToggle<CR>
 let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer=1
 
+" auto-close brackets
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+
 " save undo-trees in files
 set undofile
 set undodir=$HOME/.config/nvim/undo
+
 " number of undo saved
 set undolevels=10000
 set undoreload=10000
