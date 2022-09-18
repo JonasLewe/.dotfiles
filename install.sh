@@ -7,9 +7,13 @@ if [ -f /etc/lsb-release ]; then
     sudo apt install zsh tmux nvim ripgrep -y
 fi
 
+# make paths available
+source "$HOME/.dotfiles/zsh/.zshenv"
+
 #######
 # zsh #
 #######
+rm -rf "$XDG_CONFIG_HOME/zsh"
 mkdir -p "$XDG_CONFIG_HOME/zsh"
 ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
 ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
@@ -21,6 +25,7 @@ ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 ########
 # nvim #
 ########
+rm -rf "$XDG_CONFIG_HOME/nvim"
 mkdir -p "$XDG_CONFIG_HOME/nvim"
 mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
@@ -43,6 +48,7 @@ git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerl
 ########
 # tmux #
 ########
+rm -rf "$XDG_CONFIG_HOME/tmux"
 mkdir -p "$XDG_CONFIG_HOME/tmux"
 ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
