@@ -4,7 +4,7 @@
 ###########
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install zsh tmux nvim ripgrep
+    sudo apt install zsh tmux neovim ripgrep
 else
     exit 0
 fi
