@@ -52,6 +52,7 @@ git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerl
 ########
 sudo rm -rf "$XDG_CONFIG_HOME/tmux"
 sudo mkdir -p "$XDG_CONFIG_HOME/tmux"
+sudo mkdir -p "$XDG_CONFIG_HOME/tmux/plugins/tpm"
 sudo ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Install tpm 
