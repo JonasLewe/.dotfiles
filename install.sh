@@ -25,6 +25,7 @@ sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 sudo ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
 # Install oh-my-zsh
+sudo rm -rf "$HOME/.oh-my-zsh"
 sudo sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
 sudo rm -rf $HOME/.zshrc
