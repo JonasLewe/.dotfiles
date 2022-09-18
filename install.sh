@@ -18,16 +18,16 @@ fi
 #######
 sudo rm -rf "$XDG_CONFIG_HOME/zsh"
 sudo mkdir -p "$XDG_CONFIG_HOME/zsh"
-sudo ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
-sudo ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
-sudo ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
+ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
+ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
  
 sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
-sudo ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
+ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
 # Install oh-my-zsh
 sudo rm -rf "$HOME/.oh-my-zsh"
-sudo sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
 
 sudo rm -rf $HOME/.zshrc
 
@@ -41,7 +41,7 @@ sudo rm -rf "$XDG_CONFIG_HOME/nvim"
 sudo mkdir -p "$XDG_CONFIG_HOME/nvim"
 sudo mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
-sudo ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
+ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 
 # Install vim plug
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -57,7 +57,7 @@ nvim +UpdateRemotePlugins +qa
 sudo rm -rf "$XDG_CONFIG_HOME/tmux"
 sudo mkdir -p "$XDG_CONFIG_HOME/tmux"
 sudo mkdir -p "$XDG_CONFIG_HOME/tmux/plugins/tpm"
-sudo ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
+ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Install tpm 
 sudo git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
