@@ -24,6 +24,12 @@ sudo ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
 sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 sudo ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
+# Install oh-my-zsh
+sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+# Install Powerline10k
+git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
+
 ########
 # nvim #
 ########
@@ -40,12 +46,6 @@ sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.
 # :PlugInstall
 nvim --headless +PlugInstall +qall
 nvim +UpdateRemotePlugins +qa
-
-# Install oh-my-zsh
-sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
-
-# Install Powerline10k
-git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 
 ########
 # tmux #
