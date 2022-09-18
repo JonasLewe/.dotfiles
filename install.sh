@@ -5,6 +5,8 @@
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
     sudo apt install zsh tmux nvim ripgrep -y
+else
+    exit 0
 fi
 
 # make paths available
