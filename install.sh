@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/zsh
 ###########
 # install #
 ###########
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install zsh tmux neovim ripgrep -y
+    sudo apt install tmux neovim ripgrep -y
 else
     exit 0
 fi
@@ -25,7 +25,9 @@ sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 sudo ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
 # Install oh-my-zsh
-sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+sudo sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+
+sudo rm -rf $HOME/.zshrc
 
 # Install Powerline10k
 git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
