@@ -8,7 +8,7 @@ source "$HOME/.dotfiles/zsh/.zshenv"
 
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install zsh tmux neovim ripgrep -y
+    sudo apt install zsh tmux neovim ripgrep curl -y
 else
     exit 0
 fi
