@@ -17,7 +17,7 @@ fi
 # zsh #
 #######
 sudo rm -rf "$XDG_CONFIG_HOME/zsh"
-sudo mkdir -p "$XDG_CONFIG_HOME/zsh"
+mkdir -p "$XDG_CONFIG_HOME/zsh"
 ln -sf "$DOTFILES/zsh/.zshenv" "$HOME"
 ln -sf "$DOTFILES/zsh/.zshrc" "$XDG_CONFIG_HOME/zsh"
 ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
@@ -38,8 +38,8 @@ git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerl
 # nvim #
 ########
 sudo rm -rf "$XDG_CONFIG_HOME/nvim"
-sudo mkdir -p "$XDG_CONFIG_HOME/nvim"
-sudo mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
+mkdir -p "$XDG_CONFIG_HOME/nvim"
+mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
 ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
 
@@ -55,10 +55,10 @@ nvim +UpdateRemotePlugins +qa
 # tmux #
 ########
 sudo rm -rf "$XDG_CONFIG_HOME/tmux"
-sudo mkdir -p "$XDG_CONFIG_HOME/tmux"
-sudo mkdir -p "$XDG_CONFIG_HOME/tmux/plugins/tpm"
+mkdir -p "$XDG_CONFIG_HOME/tmux"
+mkdir -p "$XDG_CONFIG_HOME/tmux/plugins/tpm"
 ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Install tpm 
-sudo git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tpm $XDG_CONFIG_HOME/tmux/plugins/tpm
 
