@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 ###########
 # install #
 ###########
@@ -8,7 +8,7 @@ source "$HOME/.dotfiles/zsh/.zshenv"
 
 if [ -f /etc/lsb-release ]; then
     # Ubuntu
-    sudo apt install tmux neovim ripgrep -y
+    sudo apt install zsh tmux neovim ripgrep -y
 else
     exit 0
 fi
@@ -27,7 +27,8 @@ ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
 # Install oh-my-zsh
 sudo rm -rf "$HOME/.oh-my-zsh"
-sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+#sh -c "$(wget https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 sudo rm -rf $HOME/.zshrc
 
