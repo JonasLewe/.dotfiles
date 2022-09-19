@@ -25,7 +25,7 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'gruvbox-community/gruvbox'
 Plug 'ryanoasis/vim-devicons'
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+"Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'tpope/vim-fugitive' " git wrapper 
 Plug 'airblade/vim-gitgutter' " show git status column
 "Plug 'dense-analysis/ale'
