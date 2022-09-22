@@ -6,12 +6,8 @@
 # make paths available
 source "$HOME/.dotfiles/zsh/.zshenv"
 
-if [ -f /etc/lsb-release ]; then
-    # Ubuntu
-    sudo apt install zsh tmux neovim ripgrep curl -y
-else
-    exit 0
-fi
+# Ubuntu
+sudo apt install zsh tmux neovim ripgrep curl -y
 
 #######
 # zsh #
@@ -24,15 +20,6 @@ ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
  
 sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
-
-# Install oh-my-zsh
-sudo rm -rf "$HOME/.oh-my-zsh"
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-
-sudo rm -rf $HOME/.zshrc
-
-# Install Powerline10k
-git clone https://github.com/romkatv/powerlevel10k.git $ZSH_CUSTOM/themes/powerlevel10k
 
 ########
 # nvim #
@@ -50,7 +37,7 @@ mkdir -p "$XDG_CONFIG_HOME/nvim/autoload"
 ln -sf "$DOTFILES/nvim/autoload/plug.vim" "$XDG_CONFIG_HOME/nvim/autoload/plug.vim"
 
 # Install (or update) all the plugins
-nvim --noplugin +PlugInstall +qa
+nvim --noplugin +PlugUpdate +qa
 
 ########
 # tmux #
@@ -63,4 +50,10 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 # Install tpm 
 [ ! -d "$XDG_CONFIG_HOME/tmux/plugins/tpm" ] \
 && git clone https://github.com/tmux-plugins/tpm \
+
+#########
+# Fonts #
+#########
+mkdir -p "$XDG_DATA_HOME"
+cp -rf "$DOTFILES/fonts" "$XDG_DATA_HOME"
 "$XDG_CONFIG_HOME/tmux/plugins/tpm"
