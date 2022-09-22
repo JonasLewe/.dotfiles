@@ -12,8 +12,6 @@ export VISUAL="nvim"
 
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
-export ZSH_CUSTOM="$HOME/.oh-my-zsh"
-
 # History filepath
 export HISTFILE="$ZDOTDIR/.zhistory"
 # Maximum events for internal history
@@ -22,3 +20,6 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 
 export DOTFILES="$HOME/.dotfiles"
+
+export FZF_DEFAULT_COMMAND="rg --files --hidden --glob '!.git'"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
