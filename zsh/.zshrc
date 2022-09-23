@@ -52,10 +52,5 @@ fi
 #	pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
 #fi
 
-if [ $(command -v "fzf") ]; then
-	source /usr/share/fzf/completion.zsh
-	source /usr/share/fzf/key-bindings.zsh
-fi
 
-
-#source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
