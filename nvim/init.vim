@@ -15,6 +15,7 @@
 :set scrolloff=8
 :set signcolumn=yes
 :set nocompatible
+:set guifont=Inconsolata\ Nerd\ Font:h19
 
 call plug#begin()
 
