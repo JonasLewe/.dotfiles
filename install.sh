@@ -69,9 +69,11 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 #########
 # Fonts #
 #########
-mkdir -p "$HOME/.local"
-mkdir -p "$HOME/.local/share"
-cp -rf "$DOTFILES/fonts" "$HOME/.local/share"
+#mkdir -p "$HOME/.local"
+#mkdir -p "$HOME/.local/share"
+#cp -rf "$DOTFILES/fonts" "$HOME/.local/share"
+mkdir -p ~/.local/share/fonts
+cd ~/.local/share/fonts && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
 
 #########
 # Stuff #
