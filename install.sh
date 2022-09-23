@@ -7,7 +7,7 @@
 source "$HOME/.dotfiles/zsh/.zshenv"
 
 if [ -f /etc/lsb-release ]; then
-    # Ubuntu
+    # Ubuntu, PopOS
     sudo apt install zsh tmux neovim ripgrep curl -y
 elif [ -f /etc/arch-release ]; then
     # Arch
@@ -41,9 +41,6 @@ mkdir -p "$XDG_CONFIG_HOME/nvim"
 mkdir -p "$XDG_CONFIG_HOME/nvim/undo"
 
 sudo ln -sf "$DOTFILES/nvim/init.vim" "$XDG_CONFIG_HOME/nvim/init.vim"
-
-# install neovim plugin manager
-[ ! -f "$DOTFILES/nvim/autoload/plug.vim" ] && curl -fLo "$DOTFILES/nvim/autoload/plug.vim" --create -dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # install neovim plugin manager
 [ ! -f "$DOTFILES/nvim/autoload/plug.vim" ] && curl -fLo "$DOTFILES/nvim/autoload/plug.vim" --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
