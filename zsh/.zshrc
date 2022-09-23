@@ -1,5 +1,5 @@
 # Enable Tmux by default
-if [ "$TMUX" = "" ]; then tmux; fi
+# if [ "$TMUX" = "" ]; then tmux; fi
 
 source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
