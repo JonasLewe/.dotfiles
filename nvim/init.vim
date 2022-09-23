@@ -15,7 +15,6 @@
 :set scrolloff=8
 :set signcolumn=yes
 :set nocompatible
-:set guifont=Inconsolata\ Nerd\ Font:h19
 
 call plug#begin()
 
@@ -34,7 +33,7 @@ Plug 'airblade/vim-gitgutter' " show git status column
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
 Plug 'preservim/tagbar'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+"Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'tmsvg/pear-tree'
 Plug 'mhinz/vim-startify'
 
