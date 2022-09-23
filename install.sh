@@ -62,8 +62,8 @@ mkdir -p "$XDG_CONFIG_HOME/tmux/plugins"
 ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Install tpm 
-[ ! -d "$XDG_CONFIG_HOME/tmux/plugins" ] \
-&& git clone https://github.com/tmux-plugins/tpm \
+cd "$XDG_CONFIG_HOME/tmux/plugins"
+git clone https://github.com/tmux-plugins/tpm \
 
 #########
 # Fonts #
