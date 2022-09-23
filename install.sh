@@ -58,12 +58,11 @@ nvim --noplugin +PlugUpdate +qa
 # tmux #
 ########
 sudo rm -rf "$XDG_CONFIG_HOME/tmux"
-mkdir -p "$XDG_CONFIG_HOME/tmux"
-mkdir -p "$XDG_CONFIG_HOME/tmux/plugins/tpm"
+mkdir -p "$XDG_CONFIG_HOME/tmux/plugins"
 ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 
 # Install tpm 
-[ ! -d "$XDG_CONFIG_HOME/tmux/plugins/tpm" ] \
+[ ! -d "$XDG_CONFIG_HOME/tmux/plugins" ] \
 && git clone https://github.com/tmux-plugins/tpm \
 
 #########
