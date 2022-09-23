@@ -14,18 +14,24 @@
 :set incsearch
 :set scrolloff=8
 :set signcolumn=yes
+:set nocompatible
 
 call plug#begin()
 
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'https://github.com/preservim/nerdtree'
-Plug 'ryanoasis/vim-devicons'
-Plug 'nvim-telescope/telescope.nvim'
+Plug 'mhinz/vim-startify' " vim start page
+Plug 'https://github.com/preservim/nerdtree' " adds file tree 
+Plug 'https://github.com/vim-airline/vim-airline' 
+Plug 'vim-airline/vim-airline-themes'
 Plug 'gruvbox-community/gruvbox'
-Plug 'tpope/vim-fugitive'
+Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/syntastic'
+Plug 'nvim-lua/plenary.nvim'
+"Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+Plug 'tpope/vim-fugitive' " git wrapper 
+Plug 'airblade/vim-gitgutter' " show git status column
+"Plug 'dense-analysis/ale'
+Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-surround'
-Plug 'airblade/vim-gitgutter'
 Plug 'preservim/tagbar'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 Plug 'tmsvg/pear-tree'
@@ -72,4 +78,3 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
-

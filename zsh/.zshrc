@@ -1,3 +1,6 @@
+# Enable Tmux by default
+if [ "$TMUX" = "" ]; then tmux; fi
+
 source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
 unsetopt CASE_GLOB
@@ -45,13 +48,14 @@ if [ $(command -v "fzf") ]; then
 fi
 
 
-if [ "$(tty)" = "/dev/tty1" ]; then
-	pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
+#if [ "$(tty)" = "/dev/tty1" ]; then
+#	pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
+#fi
+
+if [ $(command -v "fzf") ]; then
+	source /usr/share/fzf/completion.zsh
+	source /usr/share/fzf/key-bindings.zsh
 fi
 
 
-if [ -f /etc/arch-release ]; then
-    # Arch
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-
+#source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
