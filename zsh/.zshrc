@@ -42,10 +42,10 @@ bindkey -M menuselect 'l' vi-forward-char
 source $DOTFILES/zsh/external/bd.zsh
 source $DOTFILES/zsh/scripts.sh
 
-if [ $(command -v "fzf") ]; then
-	source /usr/share/fzf/completion.zsh
-	source /usr/share/fzf/key-bindings.zsh
-fi
+#if [ $(command -v "fzf") ]; then
+#	source /usr/share/fzf/completion.zsh
+#	source /usr/share/fzf/key-bindings.zsh
+#fi
 
 
 #if [ "$(tty)" = "/dev/tty1" ]; then
