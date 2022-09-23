@@ -31,6 +31,11 @@ Plug 'tpope/vim-fugitive' " git wrapper
 Plug 'airblade/vim-gitgutter' " show git status column
 "Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-surround'
+Plug 'preservim/tagbar'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
+Plug 'tmsvg/pear-tree'
+Plug 'mhinz/vim-startify'
 
 call plug#end()
 

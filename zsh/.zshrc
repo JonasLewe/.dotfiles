@@ -40,6 +40,7 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 
 source $DOTFILES/zsh/external/bd.zsh
+source $DOTFILES/zsh/scripts.sh
 
 if [ $(command -v "fzf") ]; then
 	source /usr/share/fzf/completion.zsh
@@ -50,5 +51,11 @@ fi
 #if [ "$(tty)" = "/dev/tty1" ]; then
 #	pgrep i3 || exec startx "$XDG_CONFIG_HOME/X11/.xinitrc"
 #fi
+
+if [ $(command -v "fzf") ]; then
+	source /usr/share/fzf/completion.zsh
+	source /usr/share/fzf/key-bindings.zsh
+fi
+
 
 #source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
