@@ -8,7 +8,7 @@ source "$HOME/.dotfiles/zsh/.zshenv"
 
 if [ -f /etc/lsb-release ]; then
     # Ubuntu, PopOS
-    sudo apt install zsh tmux neovim ripgrep curl -y
+    sudo apt install zsh tmux neovim ripgrep curl fzf zsh-syntax-highlighting -y
 elif [ -f /etc/arch-release ]; then
     # Arch
     sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep cmake
@@ -66,8 +66,9 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 #########
 # Fonts #
 #########
-mkdir -p "$XDG_DATA_HOME"
-cp -rf "$DOTFILES/fonts" "$XDG_DATA_HOME"
+mkdir -p "$HOME/.local"
+mkdir -p "$HOME/.local/share"
+cp -rf "$DOTFILES/fonts" "$HOME/.local/share"
 
 #########
 # Stuff #
