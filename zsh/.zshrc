@@ -1,5 +1,8 @@
 # Enable Tmux by default
 # if [ "$TMUX" = "" ]; then tmux; fi
+if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+  exec tmux
+fi
 
 source "$XDG_CONFIG_HOME/zsh/aliases"
 setopt AUTO_PARAM_SLASH
