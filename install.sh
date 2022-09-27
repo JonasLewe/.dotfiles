@@ -32,9 +32,6 @@ ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
 sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
 
-# Make ZSH default shell
-chsh -s $(which zsh)
-
 
 ########
 # nvim #
@@ -54,6 +51,7 @@ ln -sf "$DOTFILES/nvim/autoload/plug.vim" "$XDG_CONFIG_HOME/nvim/autoload/plug.v
 # Install (or update) all the plugins
 nvim --noplugin +PlugUpdate +qa
 
+
 ########
 # tmux #
 ########
@@ -65,17 +63,21 @@ ln -sf "$DOTFILES/tmux/tmux.conf" "$XDG_CONFIG_HOME/tmux/tmux.conf"
 cd "$XDG_CONFIG_HOME/tmux/plugins"
 git clone https://github.com/tmux-plugins/tpm \
 
+
 #########
 # Fonts #
 #########
 #mkdir -p "$HOME/.local"
 #mkdir -p "$HOME/.local/share"
 #cp -rf "$DOTFILES/fonts" "$HOME/.local/share"
-mkdir -p "$HOME/.local/share/fonts"
-cd "$HOME/.local/share/fonts" && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+mkdir -p "$HOME/.fonts"
+cd "$HOME/.fonts" && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete.otf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DroidSansMono/complete/Droid%20Sans%20Mono%20Nerd%20Font%20Complete.otf
+
 
 #########
 # Stuff #
 #########
 # mkdir -p "$XDG_CONFIG_HOME/dunst"
 # ln -sf "$DOTFILES/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/dunstrc"
+
+chsh -s $(which zsh)
