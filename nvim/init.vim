@@ -19,23 +19,22 @@
 call plug#begin()
 
 Plug 'mhinz/vim-startify' " vim start page
-Plug 'https://github.com/preservim/nerdtree' " adds file tree 
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'https://github.com/vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'gruvbox-community/gruvbox'
 Plug 'ryanoasis/vim-devicons'
-Plug 'scrooloose/syntastic'
-Plug 'nvim-lua/plenary.nvim'
-"Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'tpope/vim-fugitive' " git wrapper 
 Plug 'airblade/vim-gitgutter' " show git status column
-"Plug 'dense-analysis/ale'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-surround'
 Plug 'preservim/tagbar'
+"Plug 'scrooloose/syntastic'
+"Plug 'nvim-lua/plenary.nvim'
+"Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+"Plug 'dense-analysis/ale'
+"Plug 'sheerun/vim-polyglot'
+"Plug 'tpope/vim-surround'
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
-Plug 'tmsvg/pear-tree'
-Plug 'mhinz/vim-startify'
+"Plug 'tmsvg/pear-tree'
 
 call plug#end()
 
