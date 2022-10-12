@@ -20,14 +20,15 @@ call plug#begin()
 
 Plug 'mhinz/vim-startify' " vim start page
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'scrooloose/syntastic'
+Plug 'gruvbox-community/gruvbox'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'https://github.com/vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
-Plug 'gruvbox-community/gruvbox'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive' " git wrapper 
 Plug 'airblade/vim-gitgutter' " show git status column
 Plug 'preservim/tagbar'
-"Plug 'scrooloose/syntastic'
 "Plug 'nvim-lua/plenary.nvim'
 "Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 "Plug 'dense-analysis/ale'
