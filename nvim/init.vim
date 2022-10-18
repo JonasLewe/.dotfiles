@@ -21,6 +21,7 @@ call plug#begin()
 Plug 'mhinz/vim-startify' " vim start page
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'scrooloose/syntastic'
+Plug 'https://github.com/rafi/awesome-vim-colorschemes'
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'https://github.com/vim-airline/vim-airline' 
@@ -29,6 +30,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive' " git wrapper 
 Plug 'airblade/vim-gitgutter' " show git status column
 Plug 'preservim/tagbar'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'nvim-lua/plenary.nvim'
 "Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 "Plug 'dense-analysis/ale'
@@ -39,7 +41,10 @@ Plug 'preservim/tagbar'
 
 call plug#end()
 
-colorscheme gruvbox
+set encoding=UTF-8
+
+"colorscheme gruvbox
+colorscheme jellybeans
 
 let mapleader = " "
 nnoremap <Space> <NOP>
@@ -78,3 +83,5 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+
+inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
