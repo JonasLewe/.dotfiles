@@ -1,7 +1,6 @@
 :set exrc
 :set number
 :set hidden
-:set nowrap
 :set noerrorbells
 :set relativenumber
 :set autoindent
@@ -16,24 +15,30 @@
 :set signcolumn=yes
 :set nocompatible
 
+" Define installed plugins
 call plug#begin()
 
+" Make nvim pretty again
 Plug 'mhinz/vim-startify' " vim start page
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'scrooloose/syntastic'
 Plug 'https://github.com/rafi/awesome-vim-colorschemes'
 Plug 'gruvbox-community/gruvbox'
-Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'norcalli/nvim-colorizer.lua'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-"Plug 'https://github.com/vim-airline/vim-airline' 
-Plug 'vim-airline/vim-airline-themes'
+Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
+Plug 'romgrk/barbar.nvim'
+Plug 'https://github.com/vim-airline/vim-airline' 
+Plug 'vim-airline/vim-airline-themes'
+
+" Functional plugins
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'preservim/tagbar'
+Plug 'scrooloose/syntastic'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive' " git wrapper 
 Plug 'tpope/vim-commentary'  
 Plug 'airblade/vim-gitgutter' " show git status column
-Plug 'preservim/tagbar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
@@ -42,12 +47,24 @@ call plug#end()
 
 set encoding=UTF-8
 
-
+" Define visuals
 " colorscheme gruvbox
-" colorscheme tokyonight-moon
-colorscheme jellybeans
-
+colorscheme tokyonight-moon
+" colorscheme jellybeans
 lua require'colorizer'.setup()
+
+
+" save undo-trees in files
+set undofile
+set undodir=$HOME/.config/nvim/undo
+
+" number of undo saved
+set undolevels=10000
+set undoreload=10000
+set ttimeoutlen=100
+
+
+" vim rebindings
 
 let mapleader = " "
 nnoremap <Space> <NOP>
@@ -58,19 +75,7 @@ let NERDTreeShowHidden=1
 let NERDTreeAutoDeleteBuffer=1
 let g:airline_powerline_fonts = 1
 
-
-" save undo-trees in files
-set undofile
-set undodir=$HOME/.config/nvim/undo
-
-
-" number of undo saved
-set undolevels=10000
-set undoreload=10000
-set ttimeoutlen=100
-
-
-"Smart way to move between windows
+" Smart way to move between windows
 map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
@@ -85,6 +90,29 @@ cnoremap kj <C-C>
 " Note: In command mode mappings to esc run the command for some odd
 " historical vi compatibility reason. We use the alternate method of
 " existing which is Ctrl-C
+
+
+" barbar settings
+" Move to previous/next tab
+nnoremap <silent>    <A-,> <Cmd>BufferPrevious<CR>
+nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
+
+" Re-order to previous/next tab
+nnoremap <silent>    <A-<> <Cmd>BufferMovePrevious<CR>
+nnoremap <silent>    <A->> <Cmd>BufferMoveNext<CR>
+
+" Close buffer
+nnoremap <silent>    <A-c> <Cmd>BufferClose<CR>
+
+" NOTE: If barbar's option dict isn't created yet, create it
+let bufferline = get(g:, 'bufferline', {})
+
+" Enable/disable animations
+let bufferline.animation = v:false
+
+" Enable/disable auto-hiding the tab bar when there is a single buffer
+let bufferline.auto_hide = v:true
+
 
 " syntastic settings
 set statusline+=%#warningmsg#
