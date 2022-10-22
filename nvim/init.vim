@@ -20,14 +20,16 @@ call plug#begin()
 
 Plug 'mhinz/vim-startify' " vim start page
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'scrooloose/syntastic'
 Plug 'https://github.com/rafi/awesome-vim-colorschemes'
 Plug 'gruvbox-community/gruvbox'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'https://github.com/vim-airline/vim-airline' 
+"Plug 'https://github.com/vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ryanoasis/vim-devicons'
 Plug 'tpope/vim-fugitive' " git wrapper 
+Plug 'tpope/vim-commentary'  
 Plug 'airblade/vim-gitgutter' " show git status column
 Plug 'preservim/tagbar'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
@@ -36,7 +38,6 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 "Plug 'dense-analysis/ale'
 "Plug 'sheerun/vim-polyglot'
 "Plug 'tpope/vim-surround'
-"Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 "Plug 'tmsvg/pear-tree'
 
 call plug#end()
@@ -65,7 +66,6 @@ set undodir=$HOME/.config/nvim/undo
 " number of undo saved
 set undolevels=10000
 set undoreload=10000
-
 set ttimeoutlen=100
 
 "Smart way to move between windows
@@ -84,4 +84,27 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
-inoremap <expr> <Tab> pumvisible() ? coc#_select_confirm() : "<Tab>"
+" Coc.nvim motions
+function! CheckBackSpace()
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+inoremap <silent><expr> <Tab>
+  \ coc#pum#visible() ? coc#pum#next(1) :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#snippet#next()\<CR>" :
+  \ CheckBackSpace() ? "\<Tab>" :
+  \ coc#refresh()
+
+inoremap <silent><expr> <S-Tab>
+  \ coc#pum#visible() ? coc#pum#prev(1) :
+  \ coc#expandableOrJumpable() ? "\<C-r>=coc#snippet#prev()\<CR>" :
+  \ CheckBackSpace() ? "\<S-Tab>" :
+  \ coc#refresh()
+
+
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+let g:coc_snippet_next = '<Tab>'
+let g:coc_snippet_prev = '<S-Tab>'
