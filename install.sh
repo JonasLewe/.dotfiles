@@ -8,7 +8,7 @@ source "$HOME/.dotfiles/zsh/.zshenv"
 
 if [ -f /etc/lsb-release ]; then
     # Ubuntu, PopOS
-    sudo apt install zsh tmux neovim ripgrep curl fzf zsh-syntax-highlighting g++ -y
+    sudo apt install zsh tmux neovim ripgrep curl fzf zsh-syntax-highlighting g++ fd-find -y
 elif [ -f /etc/arch-release ]; then
     # Arch
     sudo pacman -S zsh tmux zsh-syntax-highlighting fzf ripgrep cmake
@@ -31,6 +31,7 @@ ln -sf "$DOTFILES/zsh/aliases" "$XDG_CONFIG_HOME/zsh/aliases"
  
 sudo rm -rf "$XDG_CONFIG_HOME/zsh/external"
 ln -sf "$DOTFILES/zsh/external" "$XDG_CONFIG_HOME/zsh"
+
 
 
 ########
@@ -79,5 +80,6 @@ cd "$HOME/.fonts" && curl -fLo "Droid Sans Mono for Powerline Nerd Font Complete
 #########
 # mkdir -p "$XDG_CONFIG_HOME/dunst"
 # ln -sf "$DOTFILES/dunst/dunstrc" "$XDG_CONFIG_HOME/dunst/dunstrc"
+export TERMINAL=gnome-terminal
 
 chsh -s $(which zsh)
