@@ -14,6 +14,7 @@
 :set scrolloff=8
 :set signcolumn=yes
 :set nocompatible
+set clipboard=unnamedplus
 
 " Define installed plugins
 call plug#begin()
@@ -26,31 +27,39 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
-Plug 'romgrk/barbar.nvim'
-Plug 'https://github.com/vim-airline/vim-airline' 
+Plug 'romgrk/barbar.nvim' " pretty tagbar
+Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'junegunn/vim-emoji'
 
 " Functional plugins
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'ThePrimeagen/vim-be-good'
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'preservim/tagbar'
 Plug 'scrooloose/syntastic'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'tpope/vim-fugitive' " git wrapper 
-Plug 'tpope/vim-commentary'  
+Plug 'tpope/vim-fugitive' " git wrapper
+Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter' " show git status column
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
+Plug 'mattn/emmet-vim'
+Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
+
 
 call plug#end()
 
 set encoding=UTF-8
+set completefunc=emoji#complete
+
 
 " Define visuals
 " colorscheme gruvbox
 colorscheme tokyonight-moon
 " colorscheme jellybeans
+" colorscheme atom
 lua require'colorizer'.setup()
 
 
@@ -62,6 +71,9 @@ set undodir=$HOME/.config/nvim/undo
 set undolevels=10000
 set undoreload=10000
 set ttimeoutlen=100
+
+" remove trailing whitespaces on buffer save
+" autocmd BufWritePre * :%s/\s\+$//e
 
 
 " vim rebindings
@@ -91,6 +103,9 @@ cnoremap kj <C-C>
 " historical vi compatibility reason. We use the alternate method of
 " existing which is Ctrl-C
 
+" open terminal below all splits
+cabbrev bterm bo term
+
 
 " barbar settings
 " Move to previous/next tab
@@ -101,8 +116,22 @@ nnoremap <silent>    <A-.> <Cmd>BufferNext<CR>
 nnoremap <silent>    <A-<> <Cmd>BufferMovePrevious<CR>
 nnoremap <silent>    <A->> <Cmd>BufferMoveNext<CR>
 
+" Goto buffer in position...
+nnoremap <silent>    <A-1> <Cmd>BufferGoto 1<CR>
+nnoremap <silent>    <A-2> <Cmd>BufferGoto 2<CR>
+nnoremap <silent>    <A-3> <Cmd>BufferGoto 3<CR>
+nnoremap <silent>    <A-4> <Cmd>BufferGoto 4<CR>
+nnoremap <silent>    <A-5> <Cmd>BufferGoto 5<CR>
+nnoremap <silent>    <A-6> <Cmd>BufferGoto 6<CR>
+nnoremap <silent>    <A-7> <Cmd>BufferGoto 7<CR>
+nnoremap <silent>    <A-8> <Cmd>BufferGoto 8<CR>
+nnoremap <silent>    <A-9> <Cmd>BufferGoto 9<CR>
+nnoremap <silent>    <A-0> <Cmd>BufferLast<CR>
+" Pin/unpin buffer
+nnoremap <silent>    <A-p> <Cmd>BufferPin<CR>
+
 " Close buffer
-nnoremap <silent>    <A-c> <Cmd>BufferClose<CR>
+nnoremap <silent>    <A-x> <Cmd>BufferClose<CR>
 
 " NOTE: If barbar's option dict isn't created yet, create it
 let bufferline = get(g:, 'bufferline', {})
@@ -161,3 +190,5 @@ inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
 
 let g:coc_snippet_next = '<Tab>'
 let g:coc_snippet_prev = '<S-Tab>'
+autocmd FileType * let b:coc_pairs_disabled = ["<"]
+

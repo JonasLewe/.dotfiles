@@ -3,12 +3,13 @@ alias ls='ls --color'
 alias la='ls -lah --color'
 
 alias vim='nvim'
-alias fuck='sudo !!'
 
 alias ga='git add .'
 alias gs='git status'
 alias gc='git commit'
 alias gp='git push'
+
+alias pdf='f() { okular &>/dev/null $1 &};f'
 
 alias d='dirs -v'
 for index ({1..9}) alias "$index"="cd +${index}"; unset index
