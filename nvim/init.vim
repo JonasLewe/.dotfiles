@@ -14,6 +14,8 @@
 :set scrolloff=8
 :set signcolumn=yes
 :set nocompatible
+
+" Use system clipboard
 set clipboard=unnamedplus
 
 " Define installed plugins
