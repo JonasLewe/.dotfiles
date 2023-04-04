@@ -29,27 +29,26 @@ Plug 'norcalli/nvim-colorizer.lua'
 Plug 'folke/tokyonight.nvim', { 'branch': 'main' }
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'ryanoasis/vim-devicons'
-Plug 'romgrk/barbar.nvim' " pretty tagbar
+"Plug 'romgrk/barbar.nvim' " pretty tagbar
 Plug 'https://github.com/vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'junegunn/vim-emoji'
 
 " Functional plugins
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'ThePrimeagen/vim-be-good'
+Plug 'ThePrimeagen/vim-be-good' " vim learning game
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'preservim/tagbar'
-Plug 'scrooloose/syntastic'
+"Plug 'scrooloose/syntastic'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'tpope/vim-fugitive' " git wrapper
-Plug 'tpope/vim-commentary'
+"Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter' " show git status column
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'branch': '0.1.x' }
 Plug 'mattn/emmet-vim'
 Plug 'akinsho/toggleterm.nvim', {'tag' : '*'}
-
 
 call plug#end()
 
