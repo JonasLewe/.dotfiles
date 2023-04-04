@@ -28,5 +28,5 @@ if [[ -e $config_dir ]]; then
 fi
 
 mkdir -p $config_dir
-ln -s $(pwd)/nvim/init.vim $config_dir/init.vim
-
+ln -s $(pwd)/nvim/ $config_dir/nvim 
+echo "Successfully installed neovim configuration."
