@@ -14,7 +14,7 @@ else
     sudo mv nvim.appimage /usr/local/bin/nvim
 fi
 
-config_dir=~/.config/nvim
+config_dir=~/.config/
 
 if [[ -e $config_dir ]]; then
     read -p "Neovim configuration already exists. Do you want to overwrite it? (y/n) " -r
