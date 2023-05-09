@@ -28,7 +28,7 @@ if [[ -e $config_dir ]]; then
 fi
 
 mkdir -p $config_dir
-ln -s $(pwd)/nvim/ $config_dir/nvim 
+ln -s $(pwd)/nvim/ $config_dir
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 echo "Successfully installed neovim configuration."
