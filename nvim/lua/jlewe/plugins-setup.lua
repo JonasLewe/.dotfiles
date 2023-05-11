@@ -30,12 +30,12 @@ end
 return packer.startup(function(use)
   -- packer can manage itself
   use("wbthomason/packer.nvim")
-  
+
   -- lua functions that many plugins use
   use("nvim-lua/plenary.nvim")
 
   -- preferred colorscheme
-  use("bluz71/vim-nightfly-guicolors") 
+  use("bluz71/vim-nightfly-guicolors")
 
   -- tmux & split window navigation
   use("christoomey/vim-tmux-navigator")
@@ -46,20 +46,29 @@ return packer.startup(function(use)
   -- essential plugins
   use("tpope/vim-surround")
 
+  -- use git within neovim
+  use("tpope/vim-fugitive")
+
   -- commenting single and multiple lines with 'gc'
   use("numToStr/Comment.nvim")
-  
+
   -- file explorer
   use("nvim-tree/nvim-tree.lua")
-  
+
   -- vs-code like icons
   use("nvim-tree/nvim-web-devicons")
-  
+
   -- statusline
   use("nvim-lualine/lualine.nvim")
 
   -- startscreen
   use("mhinz/vim-startify")
+
+  -- send commands to python REPL
+  use("karoliskoncevicius/vim-sendtowindow")
+
+  -- run code interactively with jupyter
+  use({"dccsillag/magma-nvim", run = ":UpdateRemotePlugins"})
 
   -- fuzzy finding w/ telescope
   use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" }) -- dependency for better sorting performance
@@ -81,9 +90,6 @@ return packer.startup(function(use)
 
   -- configuring lsp servers
   use("neovim/nvim-lspconfig") -- easily configure language servers
-
-  -- configuring lsp servers
-  use("neovim/nvim-lspconfig") -- easily configure language servers
   use("hrsh7th/cmp-nvim-lsp") -- for autocompletion
   use({
     "glepnir/lspsaga.nvim",
@@ -94,6 +100,12 @@ return packer.startup(function(use)
     },
   }) -- enhanced lsp uis
   use("onsails/lspkind.nvim") -- vs-code like icons for autocompletion
+
+  -- R support
+  use("jalvesaq/Nvim-R")
+
+  -- Latex support
+  use("lervag/vimtex")
 
 -- end of plugins list
   if packer_bootstrap then

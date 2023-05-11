@@ -32,6 +32,17 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>") -- close current tab
 keymap.set("n", "<leader>tn", ":tabn<CR>") --  go to next tab
 keymap.set("n", "<leader>tp", ":tabp<CR>") --  go to previous tab
 
+keymap.set("n", "<C-Left>", ":vertical resize +3<CR>", {silent=true})
+keymap.set("n", "<C-Right>", ":vertical resize -3<CR>", {silent=true})
+keymap.set("n", "<C-Up>", ":resize -3<CR>", {silent=true})
+keymap.set("n", "<C-Down>", ":resize +3<CR>", {silent=true})
+
+-- open ipython terminal
+keymap.set("n", "<leader>pt", ":new term://bash<CR>ipython3<CR><C-\\><C-n><C-w>k")
+
+-- open default terminal shell
+keymap.set("n", "<leader>tt", ":new | term<CR>")
+
 ----------------------
 -- Plugin Keybinds
 ----------------------
