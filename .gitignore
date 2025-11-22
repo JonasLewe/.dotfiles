@@ -1,0 +1,18 @@
+# Backup files
+*.backup.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+*.swp
+*.swo
+*~
+
+# Local machine specific
+local/
+*.local
+
+# Logs
+*.log
