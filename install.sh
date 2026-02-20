@@ -126,13 +126,82 @@ fi
 
 echo
 
+### ========== ZSHRC SYMLINK ==========
+
+zshrc_file=~/.zshrc
+
+if [[ -e "$zshrc_file" ]] || [[ -L "$zshrc_file" ]]; then
+    read -p "⚠️  .zshrc already exists. Overwrite? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -f "$zshrc_file"
+    else
+        echo "⏭️  Skipping .zshrc setup."
+    fi
+fi
+
+if [[ ! -e "$zshrc_file" ]]; then
+    ln -s "$DOTFILES_DIR/zsh/zshrc" "$zshrc_file"
+    echo "✅ .zshrc symlinked to $zshrc_file"
+fi
+
+# Create .zshrc.local if it doesn't exist
+if [[ ! -e ~/.zshrc.local ]]; then
+    cp "$DOTFILES_DIR/zsh/zshrc.local.example" ~/.zshrc.local
+    echo "✅ Created ~/.zshrc.local (add your API keys here)"
+    echo "ℹ️  Edit ~/.zshrc.local to add your API keys and machine-specific settings"
+else
+    echo "✅ ~/.zshrc.local already exists"
+fi
+
+echo
+
+### ========== GHOSTTY CONFIG (MACOS ONLY) ==========
+
+if [[ "$OS" == "macos" ]]; then
+    ghostty_dir=~/.config/ghostty
+
+    if [[ -e "$ghostty_dir" ]] || [[ -L "$ghostty_dir" ]]; then
+        read -p "⚠️  Ghostty config already exists. Overwrite? (y/n) " -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            rm -rf "$ghostty_dir"
+        else
+            echo "⏭️  Skipping Ghostty configuration setup."
+        fi
+    fi
+
+    if [[ ! -e "$ghostty_dir" ]]; then
+        mkdir -p ~/.config
+        ln -s "$DOTFILES_DIR/ghostty" "$ghostty_dir"
+        echo "✅ Ghostty configuration symlinked to $ghostty_dir"
+    fi
+
+    # Install Ghostty shaders (external repo)
+    ghostty_shaders=~/.config/ghostty/shaders
+    if [[ ! -d "$ghostty_shaders" ]]; then
+        echo "📥 Installing Ghostty shaders..."
+        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
+        echo "✅ Ghostty shaders installed"
+    else
+        echo "✅ Ghostty shaders already installed"
+    fi
+
+    echo
+else
+    echo "ℹ️  Ghostty config skipped (macOS only)"
+    echo
+fi
+
 ### ========== COMPLETION ==========
 
 echo "✨ Installation complete!"
 echo
-echo "Next steps:"
-echo "  1. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
-echo "  2. Start tmux: 'tmux'"
-echo "  3. Install tmux plugins: Press Ctrl-A + I inside tmux"
+echo "📝 Next steps:"
+echo "  1. Edit ~/.zshrc.local and add your API keys"
+echo "  2. Reload shell: 'exec zsh' or restart terminal"
+echo "  3. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
+echo "  4. Start tmux: 'tmux'"
+echo "  5. Install tmux plugins: Press Ctrl-A + I inside tmux"
 echo
 echo "Enjoy your dotfiles! 🎉"

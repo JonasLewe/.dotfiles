@@ -1,0 +1,63 @@
+# ========================================
+# GHOSTTY TERMINAL CONFIG
+# ========================================
+# Ghostty is a GPU-accelerated terminal emulator (macOS/Linux)
+# Docs: https://ghostty.org
+
+### --------- THEME ---------
+# Theme aus separatem File laden
+# config-file = themes/cyberdream
+# config-file = themes/tokyonight
+# config-file = themes/cyberpunk-neon
+config-file = themes/synthwave84
+
+### --------- STARTUP COMMAND ---------
+# Start tmux session automatically
+# NOTE: Uses 'tmux' from PATH (works on both macOS and Linux)
+command = tmux new -A -s default
+
+### --------- SHADERS ---------
+# Custom GLSL shaders for visual effects
+# Shaders repository: https://github.com/0xhckr/ghostty-shaders
+# Install with: git clone https://github.com/0xhckr/ghostty-shaders ~/.config/ghostty/shaders
+#
+# Note: Shader paths are relative to ~/.config/ghostty/
+# Daily Mode: cursor smear effect
+custom-shader = shaders/cursor_smear.glsl
+
+# Available shaders (uncomment to try):
+# custom-shader = shaders/bloom025.glsl
+# custom-shader = shaders/glow-rgbsplit-twitchy.glsl
+# custom-shader = shaders/glitchy.glsl
+# custom-shader = shaders/animated-gradient-shader.glsl
+# custom-shader = shaders/bettercrt.glsl
+# custom-shader = shaders/crt.glsl
+# custom-shader = shaders/cursor_blaze.glsl
+# custom-shader = shaders/matrix-hallway.glsl
+# custom-shader = shaders/retro-terminal.glsl
+# custom-shader = shaders/starfield.glsl
+
+custom-shader-animation = true
+
+### --------- FONT ---------
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+
+### --------- WINDOW ---------
+maximize = true
+window-padding-x = 4,2
+window-padding-y = 6,0
+confirm-close-surface = true
+
+### --------- TRANSPARENCY ---------
+background-opacity = 1
+background-blur = true
+
+### --------- KEYBINDS ---------
+keybind = cmd+r=reload_config
+keybind = cmd+ctrl+f=toggle_fullscreen
+
+### --------- MACOS-SPECIFIC SETTINGS ---------
+# These settings only apply on macOS
+macos-titlebar-style = hidden
+macos-option-as-alt = false

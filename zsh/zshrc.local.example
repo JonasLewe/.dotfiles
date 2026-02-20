@@ -1,0 +1,26 @@
+### ========================================
+### LOCAL ZSHRC - Machine-specific & Private
+### ========================================
+#
+# This file should be copied to ~/.zshrc.local
+# and customized for each machine.
+#
+# IMPORTANT: ~/.zshrc.local is in .gitignore
+# and will NOT be committed to git!
+#
+
+### --------- API KEYS & SECRETS ---------
+# Add your API keys and secrets here
+# export BAM_API_KEY="your-key-here"
+# export ICR_KEY="your-key-here"
+
+### --------- MACHINE-SPECIFIC PATHS ---------
+# Add paths specific to this machine
+# export PATH="$PATH:/custom/path"
+
+### --------- CUSTOM ALIASES ---------
+# Add machine-specific aliases
+# alias myserver="ssh user@example.com"
+
+### --------- OTHER SETTINGS ---------
+# Add any other machine-specific configuration

@@ -1,0 +1,23 @@
+# Sensitive files - DO NOT COMMIT
+zsh/zshrc.local
+.zshrc.local
+
+# External repos (installed separately)
+ghostty/shaders/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Neovim
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Local machine-specific configs
+*.local
+!*.local.example
