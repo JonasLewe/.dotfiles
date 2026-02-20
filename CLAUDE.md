@@ -125,10 +125,9 @@ Provides advanced syntax highlighting, indentation, and code understanding:
 ### Additional Modern Plugins
 - **gitsigns** - Git integration with line blame, hunk preview, and diff
 - **which-key** - Displays keybinding hints in a popup (press `<leader>` and wait)
-- **nvim-autopairs** - Auto-closes brackets, quotes, etc.
-- **indent-blankline** - Visual indent guides
-- **molten.nvim** - Full Jupyter notebook integration with inline image/plot rendering
-- **image.nvim** - Terminal image rendering for plots and graphics
+- **vim-surround** - Surround text objects with quotes, brackets, etc.
+- **Comment.nvim** - Smart commenting with `gcc`
+- **markdown-preview** - Live markdown preview in browser
 
 ## Key Bindings Reference
 
@@ -139,59 +138,15 @@ Leader key: `<Space>`
 - `<leader>e` - Toggle file explorer (NvimTree)
 - `<leader>ff` - Find files (Telescope)
 - `<leader>fs` - Live grep search (Telescope)
-- `<leader>pt` - Open IPython terminal
-- `<leader>tt` - Open default terminal
 - `<leader>sv/sh` - Split window vertically/horizontally
 
 ## Language Support
 
 ### Python Development
-- LSP: Pyright
-- Interactive REPL: vim-sendtowindow plugin
-- Jupyter integration: **molten.nvim** - Interactive Jupyter notebooks with inline output rendering
-  - Image rendering via image.nvim (matplotlib plots, charts, images)
-  - Async execution with persistent output
-  - Multiple kernel support
-  - Works with `.ipynb` files and Python scripts
-- Terminal: IPython3 accessible via `<leader>pt`
-- Auto-pairs for brackets and quotes
-
-#### Molten.nvim Setup Requirements
-
-**Python Packages** (install these first):
-```bash
-pip install pynvim jupyter_client cairosvg pillow pnglatex
-```
-
-**Terminal Emulator**:
-- **Current setup**: iTerm2 + tmux - Image rendering is **disabled by default** (text output only)
-- **For images**: Install Kitty terminal and enable `image.nvim` in config
-- See MOLTEN_SETUP.md for full instructions
-
-**Note**: Molten works great even without image rendering! You get full code execution, REPL, tables, and text output.
-
-#### Using Molten (Jupyter in Neovim)
-
-Keybindings (all start with `<leader>m`):
-- `<leader>mi` - Initialize Molten kernel for current file
-- `<leader>ml` - Evaluate current line
-- `<leader>mr` - Re-evaluate current cell (visual mode: evaluate selection)
-- `<leader>mc` - Re-evaluate cell
-- `<leader>mj` - Run cell and move to next (like Jupyter Shift+Enter)
-- `<leader>mo` - Show output window
-- `<leader>mh` - Hide output window
-- `<leader>md` - Delete cell
-- `<leader>mx` - Interrupt execution
-
-**Workflow**:
-1. Open a `.py` file or `.ipynb` file
-2. Run `<leader>mi` to initialize Jupyter kernel
-3. Write code and run cells with `<leader>ml` or `<leader>mr`
-4. Outputs appear below code cells with plots/images rendered inline
-
-### LaTeX
-- Editing: vimtex plugin
-- LSP: ltex (grammar/spell checking)
+- **LSP**: Pyright (type checking, auto-completion, go-to-definition)
+- **Formatting**: Available via LSP (configure with conform.nvim if needed)
+- **Linting**: Integrated via LSP diagnostics
+- **Debugging**: Use DAP (Debug Adapter Protocol) if needed
 
 ## Modifying Configuration Files
 

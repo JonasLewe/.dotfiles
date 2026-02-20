@@ -217,6 +217,16 @@ if [[ ! -e "$gitconfig_file" ]]; then
     echo "✅ .gitconfig symlinked to $gitconfig_file"
 fi
 
+# Global gitignore
+gitignore_global=~/.gitignore_global
+
+if [[ ! -e "$gitignore_global" ]]; then
+    ln -s "$DOTFILES_DIR/git/gitignore_global" "$gitignore_global"
+    echo "✅ .gitignore_global symlinked to $gitignore_global"
+else
+    echo "✅ .gitignore_global already exists"
+fi
+
 echo
 
 ### ========== SSH CONFIG (MANUAL SETUP) ==========

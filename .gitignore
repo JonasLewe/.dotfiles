@@ -4,6 +4,9 @@ zsh/zshrc.local
 ssh/config
 git/gitconfig.local
 
+# Claude Code local settings
+.claude/
+
 # External repos (installed separately)
 ghostty/shaders/
 

@@ -28,7 +28,8 @@ Professional development environment dotfiles for **macOS** and **Linux** (Debia
 - **Treesitter** syntax highlighting
 - **Telescope** fuzzy finding
 - **Git integration** with gitsigns + fugitive
-- **Jupyter notebooks** in Neovim (optional: molten.nvim)
+- **Auto-completion** with nvim-cmp + LuaSnip
+- **Markdown preview** live in browser
 
 ---
 
