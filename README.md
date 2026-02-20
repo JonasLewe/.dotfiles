@@ -8,15 +8,20 @@ Professional development environment dotfiles for **macOS** and **Linux** (Debia
 
 ## ✨ Features
 
+### 🎯 **Minimal & Learning-Focused**
+- **Start simple, add complexity when needed**
+- Every feature is understandable and debuggable
+- No hidden magic, no overwhelming plugins
+
 ### 🖥️ **Terminal Setup**
-- **zsh** with oh-my-zsh + Powerlevel10k theme
-- **tmux** with vim keybindings, Dracula theme, session persistence
-- **Ghostty** terminal (macOS) with custom GLSL shaders
+- **zsh** with oh-my-zsh + simple theme (only git + vi-mode plugins)
+- **tmux** with vim keybindings (no theme, no plugins)
+- **Ghostty** terminal (macOS) with cyberpunk aesthetics
 
 ### ⚡ **Performance Optimized**
-- Shell startup: **~200ms** (lazy-loaded nvm, IBM Cloud CLI)
+- Shell startup: **~200ms** (lazy-loaded nvm)
 - Neovim startup: **~150ms** (lazy.nvim plugin manager)
-- Optimized completion caching
+- Minimal plugin overhead
 
 ### 🔒 **Secure**
 - API keys separated into `.zshrc.local` (gitignored)
@@ -114,16 +119,19 @@ dotfiles/
 
 ### Zsh (Shell)
 - **Startup time**: ~200ms
-- **Theme**: Powerlevel10k
-- **Plugins**: git, vi-mode, autosuggestions, syntax-highlighting
-- **Lazy loading**: nvm, IBM Cloud CLI
+- **Theme**: robbyrussell (simple, clear)
+- **Plugins**: git, vi-mode (minimal, essential)
+- **Lazy loading**: nvm (saves ~700ms)
+- **Philosophy**: Learn the shell first, add features later
 
 ### tmux
 - **Prefix**: `Ctrl-A` (not `Ctrl-B`)
 - **Split vertical**: `Ctrl-A |`
 - **Split horizontal**: `Ctrl-A -`
 - **Navigate panes**: `Ctrl-A h/j/k/l` (vim-style)
+- **Resize panes**: `Ctrl-A H/J/K/L` (vim-style)
 - **Reload config**: `Ctrl-A r`
+- **Philosophy**: No plugins - learn tmux basics first
 
 ### Neovim
 - **Leader key**: `Space`

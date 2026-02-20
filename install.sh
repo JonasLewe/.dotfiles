@@ -111,19 +111,6 @@ fi
 
 echo
 
-### ========== TPM (TMUX PLUGIN MANAGER) INSTALLATION ==========
-
-tpm_dir=~/.tmux/plugins/tpm
-
-if [[ -d "$tpm_dir" ]]; then
-    echo "✅ TPM (Tmux Plugin Manager) is already installed."
-else
-    echo "📥 Installing TPM (Tmux Plugin Manager)..."
-    git clone https://github.com/tmux-plugins/tpm "$tpm_dir"
-    echo "✅ TPM installed successfully"
-    echo "ℹ️  After starting tmux, press Ctrl-A + I to install plugins"
-fi
-
 echo
 
 ### ========== ZSHRC SYMLINK ==========
@@ -177,26 +164,6 @@ fi
 
 echo
 
-### ========== P10K CONFIG SYMLINK ==========
-
-p10k_file=~/.p10k.zsh
-
-if [[ -e "$p10k_file" ]] || [[ -L "$p10k_file" ]]; then
-    read -p "⚠️  .p10k.zsh already exists. Overwrite? (y/n) " -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        rm -f "$p10k_file"
-    else
-        echo "⏭️  Skipping .p10k.zsh setup."
-    fi
-fi
-
-if [[ ! -e "$p10k_file" ]]; then
-    ln -s "$DOTFILES_DIR/zsh/p10k.zsh" "$p10k_file"
-    echo "✅ .p10k.zsh symlinked to $p10k_file"
-fi
-
-echo
 
 ### ========== GIT CONFIG SYMLINK ==========
 
@@ -286,10 +253,10 @@ fi
 echo "✨ Installation complete!"
 echo
 echo "📝 Next steps:"
-echo "  1. Edit ~/.zshrc.local and add your API keys"
+echo "  1. Edit ~/.zshrc.local and add your API keys (optional)"
 echo "  2. Reload shell: 'exec zsh' or restart terminal"
 echo "  3. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
-echo "  4. Start tmux: 'tmux'"
-echo "  5. Install tmux plugins: Press Ctrl-A + I inside tmux"
+echo "  4. Start tmux: 'tmux' and start learning the keybindings!"
 echo
+echo "🎯 Minimal setup complete - learn first, add features later!"
 echo "Enjoy your dotfiles! 🎉"
