@@ -1,4 +1,7 @@
-local opt = vim.opt -- for conciseness
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+local opt = vim.opt
 
 -- line numbers
 opt.relativenumber = true
@@ -37,3 +40,19 @@ opt.splitright = true
 opt.splitbelow = true
 
 opt.iskeyword:append("-")
+
+-- persistent undo
+opt.undofile = true
+
+-- faster CursorHold events and swap file writes
+opt.updatetime = 250
+
+-- faster key sequence completion (also affects which-key popup delay)
+opt.timeoutlen = 300
+
+-- force alternate screen buffer restoration on exit
+vim.api.nvim_create_autocmd("VimLeave", {
+  callback = function()
+    io.write("\27[?1049l")
+  end,
+})

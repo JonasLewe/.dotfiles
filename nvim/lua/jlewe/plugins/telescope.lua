@@ -1,26 +1,36 @@
-local telescope_setup, telescope = pcall(require, "telescope")
-if not telescope_setup then
-  return
-end
-
-local actions_setup, actions = pcall(require, "telescope.actions")
-if not actions_setup then
-  return
-end
-
--- configure telescope
-telescope.setup({
-  -- configure custom mappings
-  defaults = {
-	initial_mode = "normal",
-    mappings = {
-      i = {
-        ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-        ["<C-j>"] = actions.move_selection_next, -- move to next result
-        ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist, -- send selected to quickfixlist
-      },
-    },
+return {
+  "nvim-telescope/telescope.nvim",
+  branch = "0.1.x",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
   },
-})
+  config = function()
+    -- Compatibility shim for Neovim 0.10+ treesitter API changes
+    -- Telescope still uses old nvim-treesitter API, but it's now built into Neovim
+    local ts_parsers = require("nvim-treesitter.parsers")
+    if not ts_parsers.ft_to_lang then
+      ts_parsers.ft_to_lang = function(ft)
+        return vim.treesitter.language.get_lang(ft) or ft
+      end
+    end
 
-telescope.load_extension("fzf")
+    local telescope = require("telescope")
+    local actions = require("telescope.actions")
+
+    telescope.setup({
+      defaults = {
+        initial_mode = "normal",
+        mappings = {
+          i = {
+            ["<C-k>"] = actions.move_selection_previous,
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+          },
+        },
+      },
+    })
+
+    telescope.load_extension("fzf")
+  end,
+}
