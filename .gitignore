@@ -1,6 +1,8 @@
 # Sensitive files - DO NOT COMMIT
 zsh/zshrc.local
 .zshrc.local
+ssh/config
+git/gitconfig.local
 
 # External repos (installed separately)
 ghostty/shaders/

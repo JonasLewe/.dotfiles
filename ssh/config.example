@@ -1,0 +1,37 @@
+# ========================================
+# SSH CONFIG - Connection settings
+# ========================================
+# Copy this file to ~/.ssh/config and customize
+
+# Global settings
+Host *
+  # 1Password SSH Agent (macOS)
+  # IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+  # Keep connections alive
+  ServerAliveInterval 60
+  ServerAliveCountMax 3
+
+  # Reuse connections
+  ControlMaster auto
+  ControlPath ~/.ssh/sockets/%r@%h:%p
+  ControlPersist 600
+
+# GitHub
+Host github.com
+  AddKeysToAgent yes
+  UseKeychain yes
+  IdentityFile ~/.ssh/id_ed25519
+
+# Example: Personal server
+# Host myserver
+#   HostName example.com
+#   User yourusername
+#   IdentityFile ~/.ssh/id_ed25519
+#   Port 22
+
+# Example: Work server
+# Host workserver
+#   HostName work.example.com
+#   User workuser
+#   IdentityFile ~/.ssh/id_rsa

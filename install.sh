@@ -156,6 +156,84 @@ fi
 
 echo
 
+### ========== ZPROFILE SYMLINK ==========
+
+zprofile_file=~/.zprofile
+
+if [[ -e "$zprofile_file" ]] || [[ -L "$zprofile_file" ]]; then
+    read -p "⚠️  .zprofile already exists. Overwrite? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -f "$zprofile_file"
+    else
+        echo "⏭️  Skipping .zprofile setup."
+    fi
+fi
+
+if [[ ! -e "$zprofile_file" ]]; then
+    ln -s "$DOTFILES_DIR/zsh/zprofile" "$zprofile_file"
+    echo "✅ .zprofile symlinked to $zprofile_file"
+fi
+
+echo
+
+### ========== P10K CONFIG SYMLINK ==========
+
+p10k_file=~/.p10k.zsh
+
+if [[ -e "$p10k_file" ]] || [[ -L "$p10k_file" ]]; then
+    read -p "⚠️  .p10k.zsh already exists. Overwrite? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -f "$p10k_file"
+    else
+        echo "⏭️  Skipping .p10k.zsh setup."
+    fi
+fi
+
+if [[ ! -e "$p10k_file" ]]; then
+    ln -s "$DOTFILES_DIR/zsh/p10k.zsh" "$p10k_file"
+    echo "✅ .p10k.zsh symlinked to $p10k_file"
+fi
+
+echo
+
+### ========== GIT CONFIG SYMLINK ==========
+
+gitconfig_file=~/.gitconfig
+
+if [[ -e "$gitconfig_file" ]] || [[ -L "$gitconfig_file" ]]; then
+    read -p "⚠️  .gitconfig already exists. Overwrite? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -f "$gitconfig_file"
+    else
+        echo "⏭️  Skipping .gitconfig setup."
+    fi
+fi
+
+if [[ ! -e "$gitconfig_file" ]]; then
+    ln -s "$DOTFILES_DIR/git/gitconfig" "$gitconfig_file"
+    echo "✅ .gitconfig symlinked to $gitconfig_file"
+fi
+
+echo
+
+### ========== SSH CONFIG (MANUAL SETUP) ==========
+
+if [[ ! -e ~/.ssh/config ]]; then
+    echo "ℹ️  SSH config not found"
+    echo "📝 To set up SSH config:"
+    echo "   mkdir -p ~/.ssh"
+    echo "   cp $DOTFILES_DIR/ssh/config.example ~/.ssh/config"
+    echo "   nvim ~/.ssh/config  # Customize with your servers"
+    echo "   chmod 600 ~/.ssh/config"
+else
+    echo "✅ SSH config already exists (~/.ssh/config)"
+fi
+
+echo
+
 ### ========== GHOSTTY CONFIG (MACOS ONLY) ==========
 
 if [[ "$OS" == "macos" ]]; then

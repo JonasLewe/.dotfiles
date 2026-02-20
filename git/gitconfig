@@ -1,0 +1,34 @@
+[user]
+	name = Jonas Lewe
+	email = jonas.lewe@ibm.com
+
+[core]
+	editor = nvim
+	autocrlf = input
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+
+[credential]
+	# macOS: Use keychain
+	helper = osxkeychain
+	# Linux: Use cache (or install git-credential-libsecret)
+	# helper = cache --timeout=3600
+
+[alias]
+	st = status
+	co = checkout
+	br = branch
+	ci = commit
+	unstage = reset HEAD --
+	last = log -1 HEAD
+	visual = log --oneline --graph --decorate --all
+
+[color]
+	ui = auto
