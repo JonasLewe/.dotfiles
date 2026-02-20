@@ -52,8 +52,8 @@ The install script will:
 - ✅ Detect your OS (macOS or Linux)
 - ✅ Install Neovim and tmux (if not present)
 - ✅ Symlink all configurations
-- ✅ Install TPM (Tmux Plugin Manager)
 - ✅ Create `.zshrc.local` template for API keys
+- ✅ Install Ghostty shaders (macOS only)
 
 ### Post-Installation
 
@@ -68,16 +68,81 @@ The install script will:
    exec zsh
    ```
 
-3. **Start tmux and install plugins**:
-   ```bash
-   tmux
-   # Press: Ctrl-A + I (capital I)
-   ```
-
-4. **Start Neovim** (plugins install automatically):
+3. **Start Neovim** (plugins install automatically):
    ```bash
    nvim
+   # Wait for lazy.nvim to install all plugins
    ```
+
+4. **Start tmux**:
+   ```bash
+   tmux
+   # Learn the keybindings (no plugins to install!)
+   ```
+
+---
+
+## 🤖 For Claude Code: Automated Installation
+
+**If Claude Code is setting this up on a new machine, follow these steps:**
+
+### Step 1: Prerequisites Check
+```bash
+# Check if required tools are installed
+which git zsh curl || echo "Missing prerequisites!"
+```
+
+### Step 2: Clone & Install
+```bash
+# Clone dotfiles
+git clone git@github.com:JonasLewe/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+
+# Run installer (will prompt before overwriting)
+chmod +x install.sh
+./install.sh
+```
+
+### Step 3: Manual Steps (inform user)
+After installation, **tell the user** to:
+
+1. **Install oh-my-zsh** (required for zsh config):
+   ```bash
+   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+   ```
+
+2. **Install zsh-vi-mode plugin** (required):
+   ```bash
+   git clone https://github.com/jeffreytse/zsh-vi-mode ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-vi-mode
+   ```
+
+3. **Add API keys** to `~/.zshrc.local` (if needed)
+
+4. **Reload shell**: `exec zsh`
+
+5. **Start Neovim** to install plugins: `nvim`
+
+### Step 4: Verify Installation
+```bash
+# Check symlinks
+ls -la ~/.zshrc ~/.tmux.conf ~/.gitconfig ~/.config/nvim
+
+# Test tmux
+tmux -V
+
+# Test nvim
+nvim --version
+```
+
+### What NOT to do:
+- ❌ Don't commit `.zshrc.local` (contains secrets)
+- ❌ Don't modify configs directly in `~/.config` (edit in `~/.dotfiles` instead)
+- ❌ Don't install oh-my-zsh plugins that aren't in the config (minimal approach!)
+
+### Troubleshooting:
+- **Shell errors?** Check if oh-my-zsh is installed
+- **Neovim errors?** Run `:checkhealth` in Neovim
+- **tmux not working?** Check if symlink exists: `ls -la ~/.tmux.conf`
 
 ---
 
@@ -142,10 +207,10 @@ dotfiles/
 - **LSP code action**: `Space ca`
 
 ### Ghostty (macOS)
-- **Auto-starts tmux**: Opens default session
 - **Reload config**: `Cmd+R`
 - **Toggle fullscreen**: `Cmd+Ctrl+F`
 - **Active theme**: Synthwave84 (retro cyberpunk)
+- **Shaders**: cursor_smear + glitchy (customizable)
 
 ---
 
@@ -153,11 +218,12 @@ dotfiles/
 
 Each component has its own README with detailed documentation:
 
-- **Neovim**: See `nvim/README.md` or `NEOVIM_DETAILS.md`
-- **tmux**: See `tmux/README.md`
-- **Zsh**: See `zsh/README.md`
-- **Ghostty**: See `ghostty/README.md`
-- **Full docs**: See `CLAUDE.md` (for Claude Code AI assistant)
+- **Neovim**: See `CLAUDE.md` for full plugin list and keybindings
+- **tmux**: See `tmux/README.md` for customization
+- **Zsh**: See `zsh/README.md` for plugin management
+- **Ghostty**: See `ghostty/README.md` for themes and shaders
+- **Git**: See `git/README.md` for aliases and config
+- **Full docs**: See `CLAUDE.md` (comprehensive guide for all tools)
 
 ---
 
@@ -185,11 +251,11 @@ Each component has its own README with detailed documentation:
 ### Installed Automatically
 - **Neovim** (via AppImage/Homebrew)
 - **tmux** (via apt/Homebrew)
-- **TPM** (Tmux Plugin Manager)
+- **Ghostty shaders** (macOS only, external repo)
 
 ### Recommended
 - **oh-my-zsh**: https://ohmyz.sh/#install
-- **Powerlevel10k theme**: https://github.com/romkatv/powerlevel10k
+- **zsh-vi-mode plugin**: https://github.com/jeffreytse/zsh-vi-mode
 - **JetBrainsMono Nerd Font**: `brew install font-jetbrains-mono-nerd-font`
 
 ---
@@ -237,6 +303,6 @@ MIT License - Use freely!
 - **oh-my-zsh**: https://ohmyz.sh
 - **Ghostty**: https://ghostty.org
 - **lazy.nvim**: https://github.com/folke/lazy.nvim
-- **Dracula theme**: https://draculatheme.com
+- **Ghostty Shaders**: https://github.com/0xhckr/ghostty-shaders
 
-Built with ❤️ for developer productivity.
+Built with ❤️ for minimal, learning-focused development.
