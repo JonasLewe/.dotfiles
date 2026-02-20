@@ -37,7 +37,7 @@ Professional development environment dotfiles for **macOS** and **Linux** (Debia
 ### One-Command Setup
 
 ```bash
-git clone git@github.com:JonasLewe/.dotfiles2023.git ~/.dotfiles
+git clone git@github.com:JonasLewe/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install.sh
 ```
