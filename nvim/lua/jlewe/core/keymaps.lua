@@ -96,9 +96,8 @@ keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" 
 -- PLUGIN KEYBINDS
 -- =============================================================================
 
--- NVIM-TREE (file explorer sidebar)
--- <leader>e toggles the tree open/closed
-keymap.set("n", "<leader>e", ":NvimTreeToggle<CR>", { desc = "Toggle file explorer" })
+-- NVIM-TREE: keymap is defined in nvim-tree.lua (inside the lazy `keys` spec)
+-- so that lazy.nvim loads the plugin before executing the command.
 
 -- TELESCOPE (fuzzy finder — find anything, fast)
 -- ff = find files by name

@@ -56,6 +56,11 @@ source $ZSH/oh-my-zsh.sh
 
 alias ll="ls -lah"   # list files: long format + hidden files + human sizes
 
+# Suppress Qt Wayland warning from the nvim AppImage.
+# The AppImage bundles Qt but only with the xcb (X11) plugin — not Wayland.
+# Setting QT_QPA_PLATFORM=xcb for nvim only (not globally) silences the warning.
+alias nvim='QT_QPA_PLATFORM=xcb command nvim'
+
 # ==============================================================================
 # PATH
 # ==============================================================================
