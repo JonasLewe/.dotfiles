@@ -10,6 +10,10 @@ git/gitconfig.local
 # External repos (installed separately)
 ghostty/shaders/
 
+# Neovim binaries (downloaded/extracted by install.sh, not part of dotfiles)
+nvim-linux-x86_64/
+nvim-linux-arm64/
+
 # macOS
 .DS_Store
 .AppleDouble
