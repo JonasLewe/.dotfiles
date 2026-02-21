@@ -1,31 +1,51 @@
-# ========================================
-# ZPROFILE - Login shell initialization
-# ========================================
-# This file is sourced on login shells (once per session)
+# ==============================================================================
+# ZPROFILE — LOGIN SHELL INITIALIZATION
+# ==============================================================================
+# This file runs ONCE when you log in (login shell).
+# Use it for things that only need to be set once per session:
+#   • Package manager paths (Homebrew)
+#   • Environment variables that should persist across all shells
+#   • Programs that are slow to initialize
+#
+# It does NOT run for every new terminal/tmux pane — that's .zshrc's job.
+# On Linux: a new tmux pane is NOT a login shell → .zprofile doesn't run.
+# Ghostty → tmux → zsh: only .zshrc runs for each pane.
 
-# Homebrew setup (macOS only)
+# ==============================================================================
+# HOMEBREW
+# ==============================================================================
+# Homebrew is a package manager. Primarily used on macOS, but also available
+# on Linux (as "Linuxbrew"). Sets up PATH, MANPATH, INFOPATH.
+
+# macOS: Apple Silicon (M1/M2/M3) uses /opt/homebrew, Intel uses /usr/local
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # Apple Silicon (M1/M2/M3)
-    if [[ -f /opt/homebrew/bin/brew ]]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    # Intel Mac
-    elif [[ -f /usr/local/bin/brew ]]; then
-        eval "$(/usr/local/bin/brew shellenv)"
-    fi
+  if [[ -f /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"    # Apple Silicon
+  elif [[ -f /usr/local/bin/brew ]]; then
+    eval "$(/usr/local/bin/brew shellenv)"       # Intel Mac
+  fi
 fi
 
-# Linux: Add common paths if they exist
+# Linux: Linuxbrew lives at /home/linuxbrew/.linuxbrew
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    [[ -d /home/linuxbrew/.linuxbrew/bin ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-    [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+  [[ -d /home/linuxbrew/.linuxbrew/bin ]] && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+  [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
 fi
 
-# Load nvm and add Node.js to PATH (needed for Neovim LSP servers)
+# ==============================================================================
+# NVM — NODE VERSION MANAGER (login shell init)
+# ==============================================================================
+# Load nvm here so that Node.js is in PATH for login shells and programs
+# that start from a login shell (like GUI apps on macOS launching terminals).
+# The --no-use flag loads nvm without activating any version yet (faster).
+# The PATH manipulation below does the actual version activation.
+
 export NVM_DIR="$HOME/.config/nvm"
 if [[ -s "$NVM_DIR/nvm.sh" ]]; then
-    \. "$NVM_DIR/nvm.sh" --no-use  # Load nvm but don't auto-use (faster)
-    # Add default node version to PATH
-    if [[ -d "$NVM_DIR/versions/node" ]]; then
-        export PATH="$NVM_DIR/versions/node/$(ls $NVM_DIR/versions/node | tail -1)/bin:$PATH"
-    fi
+  \. "$NVM_DIR/nvm.sh" --no-use  # load nvm infrastructure without activating a version
+
+  # Add the latest installed Node.js version to PATH
+  if [[ -d "$NVM_DIR/versions/node" ]]; then
+    export PATH="$NVM_DIR/versions/node/$(ls $NVM_DIR/versions/node | tail -1)/bin:$PATH"
+  fi
 fi

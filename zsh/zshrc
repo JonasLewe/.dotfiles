@@ -1,61 +1,109 @@
-### ========================================
-### MINIMAL ZSHRC - Learning-focused setup
-### ========================================
+# ==============================================================================
+# ZSHRC — INTERACTIVE SHELL CONFIGURATION
+# ==============================================================================
+# This file is sourced every time you open a new terminal or tmux pane.
+# (Interactive, non-login shells)
+#
+# The difference between .zshrc and .zprofile:
+#   .zprofile  → runs once at login (PATH, environment variables)
+#   .zshrc     → runs for every new shell (aliases, plugins, prompt)
 
-### --------- OH-MY-ZSH SETUP ---------
+# ==============================================================================
+# OH-MY-ZSH
+# ==============================================================================
+# oh-my-zsh is a framework that manages zsh plugins and themes.
+# Docs: https://ohmyz.sh
+# Plugin list: https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins
+
 export ZSH="$HOME/.oh-my-zsh"
 
-# Simple, clean theme (not Powerlevel10k)
+# THEME
+# robbyrussell is the default oh-my-zsh theme: simple and shows git branch.
+# Browse others: https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 
-# Minimal plugins - only essentials
+# PLUGINS
+# Keep this list short — every plugin adds startup time.
+#
+#   git         → git aliases: gst=git status, gco=git checkout, gp=git push...
+#                 Run: alias | grep "^g"  to see all git aliases
+#   zsh-vi-mode → vim keybindings in the shell
+#                 Press Escape to enter normal mode (hjkl navigation, etc.)
+#                 Press i or a to go back to insert mode
+#                 External plugin, installed at: ~/.oh-my-zsh/custom/plugins/zsh-vi-mode
 plugins=(
-	git          # Git aliases and prompt info
-	zsh-vi-mode  # Vim keybindings in shell
+  git
+  zsh-vi-mode
 )
 
-# Performance: Cache completions once per day
+# COMPLETION CACHING
+# Regenerate the completion cache at most once per 24 hours (faster startup).
 ZSH_COMPDUMP="${HOME}/.zcompdump"
 autoload -Uz compinit
 if [[ -n ${ZSH_COMPDUMP}(#qN.mh+24) ]]; then
-  compinit -d "${ZSH_COMPDUMP}"
+  compinit -d "${ZSH_COMPDUMP}"    # cache older than 24h → regenerate
 else
-  compinit -C -d "${ZSH_COMPDUMP}"
+  compinit -C -d "${ZSH_COMPDUMP}" # cache is fresh → load without check (-C)
 fi
 
 source $ZSH/oh-my-zsh.sh
 
-### --------- ALIASES ---------
-# Add your personal aliases here
-alias ll="ls -lah"
+# ==============================================================================
+# ALIASES
+# ==============================================================================
+# Shortcuts for commands you run often. Run `alias` to see all active aliases.
+# The git plugin (above) adds many more: gst, gco, gp, gl, etc.
 
-### --------- PATH ---------
-# Add custom paths if needed
+alias ll="ls -lah"   # list files: long format + hidden files + human sizes
+
+# ==============================================================================
+# PATH
+# ==============================================================================
+# PATH is the list of directories searched when you run a command.
+# ~/.local/bin is the standard location for user-installed tools on Linux.
 export PATH="$PATH:$HOME/.local/bin"
 
-### --------- NVM (NODE) ---------
-# Load nvm and add Node.js to PATH (for both login and non-login shells)
+# ==============================================================================
+# NVM — NODE VERSION MANAGER
+# ==============================================================================
+# nvm lets you install and switch between Node.js versions.
+# Docs: https://github.com/nvm-sh/nvm
+#
+# Useful commands:
+#   nvm install 20          → install Node.js v20
+#   nvm use 18              → switch to Node.js v18
+#   nvm ls                  → list installed versions
+#   nvm alias default 20    → set v20 as default
+
 export NVM_DIR="$HOME/.config/nvm"
 
-# Add Node.js to PATH if not already present
+# Add the active Node.js version to PATH directly (fast — no full nvm load).
+# This makes `node` and `npm` immediately available in every shell.
 if [[ -d "$NVM_DIR/versions/node" ]] && [[ ":$PATH:" != *":$NVM_DIR/versions/node"* ]]; then
-    NODE_VERSION=$(ls "$NVM_DIR/versions/node" 2>/dev/null | tail -1)
-    if [[ -n "$NODE_VERSION" ]]; then
-        export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
-    fi
+  NODE_VERSION=$(ls "$NVM_DIR/versions/node" 2>/dev/null | tail -1)
+  if [[ -n "$NODE_VERSION" ]]; then
+    export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
+  fi
 fi
 
-# Lazy-load full nvm functionality when needed
+# Lazy-load: full nvm only loads when you actually run the `nvm` command.
+# Saves ~200ms on every shell startup.
 nvm() {
   unset -f nvm
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
   nvm "$@"
 }
 
-### --------- PYTHON ---------
+# ==============================================================================
+# PYTHON
+# ==============================================================================
+# Don't write __pycache__ / .pyc bytecode files into source directories.
 export PYTHONDONTWRITEBYTECODE=1
 
-### --------- LOCAL OVERRIDES ---------
-# Machine-specific settings (API keys, etc.)
-# This file is gitignored
+# ==============================================================================
+# LOCAL OVERRIDES
+# ==============================================================================
+# ~/.zshrc.local is for machine-specific config: API keys, work aliases, etc.
+# It is NOT committed to git (.gitignore) — safe for secrets.
+# Copy the template: cp ~/.dotfiles/zsh/zshrc.local.example ~/.zshrc.local
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
