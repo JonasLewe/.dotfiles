@@ -28,6 +28,7 @@ opt.scrolloff = 8
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
+vim.cmd("colorscheme habamax")
 
 -- backspace
 opt.backspace = "indent,eol,start"
