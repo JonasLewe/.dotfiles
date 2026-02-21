@@ -8,6 +8,38 @@
 # Start tmux session automatically
 command = tmux new -A -s default
 
+### --------- THEME ---------
+# Uncomment to enable a theme:
+# config-file = themes/cyberdream
+# config-file = themes/tokyonight
+# config-file = themes/cyberpunk-neon
+# config-file = themes/synthwave84
+
+### --------- SHADERS ---------
+# Shaders repo: https://github.com/0xhckr/ghostty-shaders
+# Install: git clone https://github.com/0xhckr/ghostty-shaders ~/.config/ghostty/shaders
+# Paths are relative to ~/.config/ghostty/
+# NOTE: glitchy.glsl is too heavy for Intel iGPU (ThinkPad)
+#
+# custom-shader = shaders/cursor_blaze.glsl
+# custom-shader = shaders/glow-rgbsplit-twitchy.glsl
+# custom-shader = shaders/animated-gradient-shader.glsl
+# custom-shader = shaders/bettercrt.glsl
+# custom-shader = shaders/bloom.glsl
+# custom-shader = shaders/crt.glsl
+# custom-shader = shaders/dither.glsl
+# custom-shader = shaders/galaxy.glsl
+# custom-shader = shaders/gradient-background.glsl
+# custom-shader = shaders/in-game-crt.glsl
+# custom-shader = shaders/matrix-hallway.glsl
+# custom-shader = shaders/negative.glsl
+# custom-shader = shaders/retro-terminal.glsl
+# custom-shader = shaders/starfield.glsl
+# custom-shader = shaders/tft.glsl
+# custom-shader = shaders/underwater.glsl
+# custom-shader = shaders/water.glsl
+# custom-shader-animation = true
+
 ### --------- FONT ---------
 font-family = "JetBrainsMono Nerd Font"
 font-size = 14
