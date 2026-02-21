@@ -14,6 +14,7 @@ return {
         "pyright",
         "ts_ls",
         "yamlls",
+        "helm_ls",
         "dockerls",
         "lua_ls",
       },
@@ -69,6 +70,7 @@ return {
       "pyright",
       "ts_ls",
       "yamlls",
+      "helm_ls",
       "dockerls",
       "lua_ls",
     })
