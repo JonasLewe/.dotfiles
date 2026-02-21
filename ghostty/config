@@ -80,8 +80,12 @@ background-opacity = 1
 background-blur = true
 
 ### --------- KEYBINDS ---------
+# macOS
 keybind = cmd+r=reload_config
 keybind = cmd+ctrl+f=toggle_fullscreen
+# Linux
+keybind = ctrl+shift+comma=reload_config
+keybind = ctrl+enter=toggle_fullscreen
 
 ### --------- MACOS-SPECIFIC SETTINGS ---------
 # These settings only apply on macOS

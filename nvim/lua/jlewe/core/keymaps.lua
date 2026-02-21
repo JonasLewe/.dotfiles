@@ -25,6 +25,12 @@ keymap.set("n", "<leader>sh", "<C-w>s")       -- split horizontal
 keymap.set("n", "<leader>se", "<C-w>=")       -- splits gleich gross
 keymap.set("n", "<leader>sx", ":close<CR>")   -- split schliessen
 
+-- navigate splits
+keymap.set("n", "<C-h>", "<C-w>h")
+keymap.set("n", "<C-j>", "<C-w>j")
+keymap.set("n", "<C-k>", "<C-w>k")
+keymap.set("n", "<C-l>", "<C-w>l")
+
 -- tabs
 keymap.set("n", "<leader>to", ":tabnew<CR>")
 keymap.set("n", "<leader>tx", ":tabclose<CR>")

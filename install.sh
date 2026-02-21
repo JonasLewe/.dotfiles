@@ -143,6 +143,40 @@ fi
 
 echo
 
+### ========== ZSH PLUGINS ==========
+
+# Install zsh-vi-mode plugin (required by zshrc)
+if [[ ! -d ~/.oh-my-zsh/custom/plugins/zsh-vi-mode ]]; then
+    echo "📥 Installing zsh-vi-mode plugin..."
+    git clone https://github.com/jeffreytse/zsh-vi-mode ~/.oh-my-zsh/custom/plugins/zsh-vi-mode
+    echo "✅ zsh-vi-mode plugin installed"
+else
+    echo "✅ zsh-vi-mode plugin already installed"
+fi
+
+echo
+
+### ========== NVM (NODE VERSION MANAGER) ==========
+
+# Install nvm (required for Node.js LSP servers: ts_ls, yamlls)
+if [[ ! -d ~/.config/nvm ]]; then
+    echo "📥 Installing nvm (Node Version Manager)..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+
+    # Source nvm and install LTS Node.js
+    export NVM_DIR="$HOME/.config/nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+    echo "📥 Installing Node.js LTS..."
+    nvm install --lts
+    nvm use --lts
+    echo "✅ Node.js installed: $(node --version)"
+else
+    echo "✅ nvm already installed"
+fi
+
+echo
+
 ### ========== ZPROFILE SYMLINK ==========
 
 zprofile_file=~/.zprofile

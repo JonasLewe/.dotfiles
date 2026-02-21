@@ -34,8 +34,18 @@ alias ll="ls -lah"
 export PATH="$PATH:$HOME/.local/bin"
 
 ### --------- NVM (NODE) ---------
-# Lazy load nvm - only loads when needed (saves ~700ms!)
-export NVM_DIR="$HOME/.nvm"
+# Load nvm and add Node.js to PATH (for both login and non-login shells)
+export NVM_DIR="$HOME/.config/nvm"
+
+# Add Node.js to PATH if not already present
+if [[ -d "$NVM_DIR/versions/node" ]] && [[ ":$PATH:" != *":$NVM_DIR/versions/node"* ]]; then
+    NODE_VERSION=$(ls "$NVM_DIR/versions/node" 2>/dev/null | tail -1)
+    if [[ -n "$NODE_VERSION" ]]; then
+        export PATH="$NVM_DIR/versions/node/$NODE_VERSION/bin:$PATH"
+    fi
+fi
+
+# Lazy-load full nvm functionality when needed
 nvm() {
   unset -f nvm
   [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
