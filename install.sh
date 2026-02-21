@@ -245,42 +245,37 @@ fi
 
 echo
 
-### ========== GHOSTTY CONFIG (MACOS ONLY) ==========
+### ========== GHOSTTY CONFIG ==========
 
-if [[ "$OS" == "macos" ]]; then
-    ghostty_dir=~/.config/ghostty
+ghostty_dir=~/.config/ghostty
 
-    if [[ -e "$ghostty_dir" ]] || [[ -L "$ghostty_dir" ]]; then
-        read -p "⚠️  Ghostty config already exists. Overwrite? (y/n) " -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            rm -rf "$ghostty_dir"
-        else
-            echo "⏭️  Skipping Ghostty configuration setup."
-        fi
-    fi
-
-    if [[ ! -e "$ghostty_dir" ]]; then
-        mkdir -p ~/.config
-        ln -s "$DOTFILES_DIR/ghostty" "$ghostty_dir"
-        echo "✅ Ghostty configuration symlinked to $ghostty_dir"
-    fi
-
-    # Install Ghostty shaders (external repo)
-    ghostty_shaders=~/.config/ghostty/shaders
-    if [[ ! -d "$ghostty_shaders" ]]; then
-        echo "📥 Installing Ghostty shaders..."
-        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
-        echo "✅ Ghostty shaders installed"
+if [[ -e "$ghostty_dir" ]] || [[ -L "$ghostty_dir" ]]; then
+    read -p "⚠️  Ghostty config already exists. Overwrite? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -rf "$ghostty_dir"
     else
-        echo "✅ Ghostty shaders already installed"
+        echo "⏭️  Skipping Ghostty configuration setup."
     fi
-
-    echo
-else
-    echo "ℹ️  Ghostty config skipped (macOS only)"
-    echo
 fi
+
+if [[ ! -e "$ghostty_dir" ]]; then
+    mkdir -p ~/.config
+    ln -s "$DOTFILES_DIR/ghostty" "$ghostty_dir"
+    echo "✅ Ghostty configuration symlinked to $ghostty_dir"
+fi
+
+# Install Ghostty shaders (external repo)
+ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
+if [[ ! -d "$ghostty_shaders" ]]; then
+    echo "📥 Installing Ghostty shaders..."
+    git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
+    echo "✅ Ghostty shaders installed"
+else
+    echo "✅ Ghostty shaders already installed"
+fi
+
+echo
 
 ### ========== COMPLETION ==========
 
