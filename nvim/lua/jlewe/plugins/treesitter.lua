@@ -6,10 +6,9 @@ return {
     require("nvim-treesitter").setup({
       -- List of parsers to install
       ensure_installed = {
-        "python", "java", "typescript", "javascript", "lua",
-        "yaml", "json", "html", "css", "bash",
-        "dockerfile", "markdown", "markdown_inline",
-        "vim", "vimdoc", "helm",
+        "python", "typescript", "javascript", "lua",
+        "yaml", "json", "bash",
+        "markdown", "vim", "vimdoc",
       },
 
       -- Install parsers synchronously (only applied to `ensure_installed`)
@@ -29,16 +28,6 @@ return {
         enable = true,
       },
 
-      -- Enable incremental selection
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
-      },
     })
   end,
 }

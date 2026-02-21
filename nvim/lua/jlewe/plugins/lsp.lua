@@ -12,10 +12,8 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = {
         "pyright",
-        "jdtls",
         "ts_ls",
         "yamlls",
-        "helm_ls",
         "dockerls",
         "lua_ls",
       },
@@ -69,10 +67,8 @@ return {
     -- Enable all servers
     vim.lsp.enable({
       "pyright",
-      "jdtls",
       "ts_ls",
       "yamlls",
-      "helm_ls",
       "dockerls",
       "lua_ls",
     })
