@@ -1,6 +1,15 @@
 return {
   "nvim-telescope/telescope.nvim",
   branch = "0.1.x",
+  cmd = "Telescope",
+  keys = {
+    { "<leader>ff" },
+    { "<leader>fs" },
+    { "<leader>fc" },
+    { "<leader>fb" },
+    { "<leader>fh" },
+    { "<leader>fr" },
+  },
   dependencies = {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },

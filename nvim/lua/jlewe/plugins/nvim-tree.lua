@@ -1,5 +1,7 @@
 return {
   "nvim-tree/nvim-tree.lua",
+  cmd = { "NvimTreeToggle", "NvimTreeFocus" },
+  keys = { { "<leader>e" } },
   dependencies = { "nvim-tree/nvim-web-devicons" },
   config = function()
     vim.g.loaded_netrw = 1
@@ -15,6 +17,7 @@ return {
       },
       filters = {
         dotfiles = false,
+        git_ignored = false,
       },
       actions = {
         open_file = {
