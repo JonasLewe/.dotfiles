@@ -20,9 +20,14 @@
 return {
   "nvim-tree/nvim-tree.lua",
 
-  -- Only load when the keymap or command triggers it
+  -- Only load when the keymap or command triggers it.
+  -- Defining the full action here lets lazy.nvim own the keymap — it loads
+  -- the plugin first, then executes the command. If defined in keymaps.lua
+  -- instead, the command fires before the plugin is loaded and fails.
   cmd = { "NvimTreeToggle", "NvimTreeFocus" },
-  keys = { { "<leader>e" } },
+  keys = {
+    { "<leader>e", "<cmd>NvimTreeToggle<CR>", desc = "Toggle file explorer" },
+  },
 
   -- Provides file type icons (requires a Nerd Font in your terminal)
   dependencies = { "nvim-tree/nvim-web-devicons" },
