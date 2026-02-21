@@ -27,13 +27,14 @@ if which nvim >/dev/null; then
 else
     echo "📥 Installing Neovim..."
     if [[ "$OS" == "linux" ]]; then
-        # FUSE is required for AppImages
-        if ! dpkg -s fuse >/dev/null 2>&1; then
-            sudo apt install -y fuse
-        fi
-        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
-        chmod u+x nvim.appimage
-        sudo mv nvim.appimage /usr/local/bin/nvim
+        # Install via tarball (not AppImage) — AppImage bundles Qt which causes
+        # a harmless but annoying Wayland warning on every launch.
+        # The tarball is a plain binary with no extra dependencies.
+        curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+        tar -xzf nvim-linux-x86_64.tar.gz -C ~/.local/
+        rm nvim-linux-x86_64.tar.gz
+        mkdir -p ~/bin
+        ln -sf ~/.local/nvim-linux-x86_64/bin/nvim ~/bin/nvim
         echo "✅ Neovim installed successfully"
     elif [[ "$OS" == "macos" ]]; then
         if which brew >/dev/null; then
