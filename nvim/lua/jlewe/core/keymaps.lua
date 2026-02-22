@@ -7,7 +7,7 @@
 --   rhs:  what happens (a command string or a Lua function)
 --   opts: table of options, most useful ones:
 --     { silent = true }  → don't echo the command to the command line
---     { desc = "..." }   → description shown in which-key popup
+--     { desc = "..." }   → description (shown by :map)
 --
 -- The leader key (<leader>) is set to Space in options.lua.
 -- So <leader>ff means: press Space, then f, then f.
@@ -93,22 +93,16 @@ keymap.set("n", "<leader>tp", ":tabp<CR>",     { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" })
 
 -- =============================================================================
--- PLUGIN KEYBINDS
+-- FILE NAVIGATION (VANILLA)
 -- =============================================================================
+-- Use Neovim's built-in tools instead of plugins:
+--   :Ex      → open file explorer (netrw) in current window
+--   :Vex     → open explorer in vertical split
+--   :Lex     → open explorer as left sidebar
+--   :find    → find files by name (uses 'path' option, Tab to autocomplete)
+--   :ls      → list open buffers
+--   :b name  → switch to buffer by partial name (Tab to autocomplete)
+--   :vimgrep → search inside files, results go to quickfix list
 
--- NVIM-TREE: keymap is defined in nvim-tree.lua (inside the lazy `keys` spec)
--- so that lazy.nvim loads the plugin before executing the command.
-
--- TELESCOPE (fuzzy finder — find anything, fast)
--- ff = find files by name
--- fs = search text inside files (like grep)
--- fc = search for the word currently under the cursor
--- fb = switch between open buffers
--- fh = search Neovim's built-in help documentation
--- fr = recently opened files
-keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>",  { desc = "Find files" })
-keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>",   { desc = "Search in files" })
-keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Search word under cursor" })
-keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>",     { desc = "Find open buffers" })
-keymap.set("n", "<leader>fh", "<cmd>Telescope help_tags<cr>",   { desc = "Search Neovim help" })
-keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>",    { desc = "Recent files" })
+keymap.set("n", "<leader>e", ":Lex<CR>",  { desc = "Toggle file explorer (netrw)" })
+keymap.set("n", "<leader>fb", ":ls<CR>:b ", { desc = "List buffers and switch" })

@@ -1,0 +1,71 @@
+/* =============================================================================
+ * WAYBAR STYLE
+ * =============================================================================
+ * CSS styling for the waybar status bar.
+ * Docs: https://github.com/Alexays/Waybar/wiki/Styling
+ *
+ * Customize colors here to match your rice.
+ * No specific color scheme — neutral dark defaults.
+ * Replace the colors below when you pick a theme.
+ */
+
+/* --- GLOBAL --- */
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: rgba(20, 20, 20, 0.9);
+    color: #cccccc;
+}
+
+/* --- MODULES (shared styling) --- */
+#cpu,
+#memory,
+#network,
+#pulseaudio,
+#clock {
+    padding: 0 10px;
+}
+
+/* --- WORKSPACES --- */
+#workspaces button {
+    padding: 0 6px;
+    color: #666666;
+    background: transparent;
+    border: none;
+    border-radius: 4px;
+}
+
+#workspaces button.active {
+    color: #ffffff;
+    background-color: #444444;
+}
+
+#workspaces button:hover {
+    background-color: #333333;
+}
+
+/* --- WINDOW TITLE --- */
+#window {
+    color: #999999;
+    font-weight: bold;
+}
+
+/* --- CLOCK --- */
+#clock {
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* --- NETWORK --- */
+#network.disconnected {
+    color: #ff5555;
+}
+
+/* --- AUDIO --- */
+#pulseaudio.muted {
+    color: #666666;
+}
