@@ -72,10 +72,13 @@ Tipp: `<leader>fb` ist als Keymap konfiguriert — zeigt Buffer-Liste und lässt
 
 In deiner `options.lua` ist netrw bereits konfiguriert:
 - Kein Banner (cleaner Look)
-- Tree-Ansicht (eingerückte Hierarchie)
+- Long-Listing (Name + Größe + Datum) — `liststyle=1`
+- Tree-Modus (`liststyle=3`) ist deaktiviert weil er einen `E471`-Bug beim Navigieren hat
 - 25% Breite bei Splits
 
 `<leader>e` öffnet `:Lex` — dein Dateiexplorer-Toggle.
+
+**Hinweis:** `<C-h/j/k/l>` zum Wechseln zwischen Splits funktioniert auch innerhalb von netrw, weil ein Autocmd in `keymaps.lua` die netrw-internen Mappings überschreibt (netrw belegt `<C-l>` sonst für Refresh).
 
 ### Navigation in netrw
 

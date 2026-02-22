@@ -232,7 +232,7 @@ SUPER + d              App-Launcher öffnen
 ```
 Tippen                 Suchen (fuzzy matching)
 Enter                  App starten
-Escape / Ctrl+c        Schließen
+Escape                 Schließen
 Ctrl+j / Ctrl+k        Navigation (vim-style!)
 Pfeil hoch/runter      Navigation (alternativ)
 ```
