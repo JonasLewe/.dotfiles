@@ -1,0 +1,67 @@
+# ==============================================================================
+# DUNST — NOTIFICATION DAEMON
+# ==============================================================================
+# Dunst shows desktop notifications (the little popups in the corner).
+# Docs: https://dunst-project.org/documentation/
+#
+# USAGE:
+#   Notifications appear automatically when apps send them.
+#   Test with: notify-send "Title" "Body text"
+#
+# KEYBINDS (when notification is visible):
+#   Middle-click     → dismiss notification
+#   Ctrl+Shift+.     → show notification history
+#   Ctrl+Shift+Space → dismiss all notifications
+
+[global]
+    # --- POSITION ---
+    origin = top-right          # corner of the screen
+    offset = 12x12              # pixels from edge
+    width = 350                 # notification width
+    height = 100                # max notification height
+
+    # --- APPEARANCE ---
+    font = JetBrainsMono Nerd Font 10
+    frame_width = 2             # border thickness
+    frame_color = "#555555"     # border color
+    corner_radius = 6
+
+    # Spacing between notifications
+    gap_size = 4
+    padding = 12
+    horizontal_padding = 12
+
+    # --- BEHAVIOR ---
+    idle_threshold = 120        # pause notifications if idle for 2 min
+    show_age_threshold = 30     # show age after 30 seconds
+    sort = yes                  # sort by urgency
+
+    # --- ICONS ---
+    icon_position = left
+    max_icon_size = 32
+
+    # --- MOUSE ---
+    mouse_left_click = do_action
+    mouse_middle_click = close_current
+    mouse_right_click = close_all
+
+# --- URGENCY LEVELS ---
+# Customize colors to match your rice.
+
+[urgency_low]
+    background = "#1a1a1a"
+    foreground = "#999999"
+    frame_color = "#333333"
+    timeout = 3
+
+[urgency_normal]
+    background = "#1a1a1a"
+    foreground = "#cccccc"
+    frame_color = "#555555"
+    timeout = 5
+
+[urgency_critical]
+    background = "#1a1a1a"
+    foreground = "#ff5555"
+    frame_color = "#ff5555"
+    timeout = 0                 # critical notifications don't auto-dismiss

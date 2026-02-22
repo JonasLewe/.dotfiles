@@ -1,0 +1,77 @@
+// =============================================================================
+// WAYBAR CONFIGURATION
+// =============================================================================
+// Waybar is a status bar for Wayland compositors (Hyprland, sway, etc.)
+// Docs: https://github.com/Alexays/Waybar/wiki
+//
+// Structure:
+//   modules-left    → shown on the left side of the bar
+//   modules-center  → shown in the center
+//   modules-right   → shown on the right side
+//
+// Each module is configured below with its own section.
+// Add or remove modules by editing the arrays above.
+
+{
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "spacing": 8,
+
+    // Which modules to show and where
+    "modules-left": ["hyprland/workspaces"],
+    "modules-center": ["hyprland/window"],
+    "modules-right": ["cpu", "memory", "network", "pulseaudio", "clock"],
+
+    // --- WORKSPACES ---
+    // Shows workspace buttons (1-9). Click to switch.
+    "hyprland/workspaces": {
+        "format": "{id}",
+        "on-click": "activate"
+    },
+
+    // --- WINDOW TITLE ---
+    // Shows the title of the focused window.
+    "hyprland/window": {
+        "max-length": 50
+    },
+
+    // --- CPU ---
+    "cpu": {
+        "format": "  {usage}%",
+        "interval": 5,
+        "tooltip": true
+    },
+
+    // --- MEMORY ---
+    "memory": {
+        "format": "  {percentage}%",
+        "interval": 5,
+        "tooltip-format": "{used:0.1f}G / {total:0.1f}G"
+    },
+
+    // --- NETWORK ---
+    "network": {
+        "format-wifi": "  {essid}",
+        "format-ethernet": "  {ifname}",
+        "format-disconnected": "  disconnected",
+        "tooltip-format": "{ipaddr}/{cidr}"
+    },
+
+    // --- AUDIO ---
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "  muted",
+        "format-icons": {
+            "default": ["", "", ""]
+        },
+        "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
+    // --- CLOCK ---
+    "clock": {
+        "format": "  {:%H:%M}",
+        "format-alt": "  {:%Y-%m-%d %H:%M}",
+        "tooltip-format": "{calendar}"
+    }
+}

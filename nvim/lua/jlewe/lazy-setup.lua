@@ -43,5 +43,7 @@ require("lazy").setup(
     checker = { enabled = false },
     -- Don't show a notification when config files change
     change_detection = { notify = false },
+    -- No plugins require luarocks; disable completely to suppress warnings
+    rocks = { enabled = false },
   }
 )

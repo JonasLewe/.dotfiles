@@ -1,0 +1,106 @@
+/* =============================================================================
+ * ROFI CONFIGURATION
+ * =============================================================================
+ * Rofi is an application launcher for Wayland/X11.
+ * Open with: SUPER + d (configured in hyprland.conf)
+ * Docs: https://davatorium.github.io/rofi/
+ *
+ * USAGE:
+ *   Type to search → Enter to launch
+ *   Escape to close
+ *   Arrow keys or Tab/Shift+Tab to navigate
+ *
+ * MODI:
+ *   drun   → launch .desktop applications
+ *   run    → run arbitrary commands
+ *   window → switch between open windows
+ */
+
+configuration {
+    modi: "drun,run,window";
+    show-icons: true;
+    icon-theme: "Papirus";
+    font: "JetBrainsMono Nerd Font 12";
+    display-drun: " Apps";
+    display-run: " Run";
+    display-window: " Windows";
+    drun-display-format: "{name}";
+
+    /* Vim-style navigation */
+    kb-row-down: "Down,Control+j";
+    kb-row-up: "Up,Control+k";
+    kb-accept-entry: "Return";
+    kb-cancel: "Escape,Control+c";
+    kb-remove-to-eol: "";           /* unbind Ctrl+k from delete (used for nav) */
+}
+
+/* =============================================================================
+ * THEME — Neutral dark, customize colors for your rice
+ * ============================================================================= */
+
+* {
+    bg:       #1a1a1a;
+    bg-alt:   #252525;
+    fg:       #cccccc;
+    fg-dim:   #666666;
+    accent:   #888888;
+    urgent:   #ff5555;
+
+    background-color: @bg;
+    text-color:       @fg;
+}
+
+window {
+    width:            500px;
+    border:           2px;
+    border-color:     @accent;
+    border-radius:    8px;
+    padding:          0;
+}
+
+mainbox {
+    padding: 8px;
+}
+
+inputbar {
+    padding:          8px 12px;
+    background-color: @bg-alt;
+    border-radius:    4px;
+    children:         [ prompt, entry ];
+    spacing:          8px;
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    placeholder:       "Search...";
+    placeholder-color: @fg-dim;
+}
+
+listview {
+    lines:    8;
+    columns:  1;
+    padding:  8px 0 0 0;
+    spacing:  4px;
+}
+
+element {
+    padding:       6px 12px;
+    border-radius: 4px;
+}
+
+element selected {
+    background-color: @bg-alt;
+    text-color:       #ffffff;
+}
+
+element-icon {
+    size: 20px;
+    padding: 0 8px 0 0;
+}
+
+element-text {
+    vertical-align: 0.5;
+}

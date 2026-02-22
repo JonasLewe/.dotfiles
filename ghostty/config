@@ -83,8 +83,9 @@ font-size = 14
 # ==============================================================================
 # Padding: add breathing room around the terminal content.
 # Format: window-padding-x = left,right  (or single value for both)
-window-padding-x = 4,2
-window-padding-y = 6,0
+window-padding-x = 0
+window-padding-y = 0
+window-padding-color = extend
 
 # Show a confirmation dialog before closing a pane (prevents accidental closes)
 confirm-close-surface = true
@@ -96,12 +97,12 @@ confirm-close-surface = true
 # On macOS: super = Cmd. On Linux: super = Windows key (often intercepted by WM).
 
 # Reload config without restarting Ghostty
-keybind = cmd+r=reload_config          # macOS
-keybind = ctrl+shift+comma=reload_config  # Linux
+# keybind = cmd+r=reload_config          (macOS only)
+keybind = ctrl+shift+comma=reload_config
 
 # Toggle fullscreen
-keybind = cmd+ctrl+f=toggle_fullscreen  # macOS
-keybind = ctrl+enter=toggle_fullscreen  # Linux
+# keybind = cmd+ctrl+f=toggle_fullscreen  (macOS only)
+keybind = ctrl+enter=toggle_fullscreen
 
 # ==============================================================================
 # MACOS-SPECIFIC SETTINGS

@@ -70,9 +70,8 @@ opt.scrolloff = 8
 opt.termguicolors = true
 opt.background = "dark"
 
--- signcolumn: always reserve a column on the left for signs (git changes,
--- LSP diagnostics). "yes" prevents the text from jumping left/right
--- when signs appear or disappear.
+-- signcolumn: always reserve a column on the left for signs.
+-- "yes" prevents the text from jumping left/right when signs appear.
 opt.signcolumn = "yes"
 
 -- Built-in colorscheme. No plugin needed.
@@ -111,6 +110,28 @@ opt.splitbelow = true
 opt.iskeyword:append("-")
 
 -- -----------------------------------------------------------------------------
+-- FILE FINDING
+-- -----------------------------------------------------------------------------
+-- path+=** lets :find search recursively through subdirectories.
+-- wildmenu shows a visual menu when pressing Tab to autocomplete commands.
+-- wildignorecase makes :find case-insensitive on filenames.
+opt.path:append("**")
+opt.wildmenu = true
+opt.wildignorecase = true
+opt.wildignore:append("**/node_modules/**,**/.git/**,**/venv/**,**/__pycache__/**")
+
+-- -----------------------------------------------------------------------------
+-- NETRW (BUILT-IN FILE EXPLORER)
+-- -----------------------------------------------------------------------------
+-- netrw is Vim's built-in file browser. Open with :Ex, :Vex, :Lex
+-- banner=0 hides the info banner at the top (cleaner look)
+-- liststyle=3 shows files as a tree (indented hierarchy)
+-- winsize=25 sets the explorer width to 25% when used in a split (:Lex, :Vex)
+vim.g.netrw_banner = 0
+vim.g.netrw_liststyle = 3
+vim.g.netrw_winsize = 25
+
+-- -----------------------------------------------------------------------------
 -- PERSISTENT UNDO
 -- -----------------------------------------------------------------------------
 -- Save undo history to disk so you can undo changes even after closing a file.
@@ -118,15 +139,24 @@ opt.iskeyword:append("-")
 opt.undofile = true
 
 -- -----------------------------------------------------------------------------
+-- GREP PROGRAM
+-- -----------------------------------------------------------------------------
+-- Use ripgrep for :grep if available (much faster than default grep).
+-- Results populate the quickfix list: :copen, :cn, :cp to navigate.
+if vim.fn.executable("rg") == 1 then
+  opt.grepprg = "rg --vimgrep --smart-case"
+  opt.grepformat = "%f:%l:%c:%m"
+end
+
+-- -----------------------------------------------------------------------------
 -- PERFORMANCE
 -- -----------------------------------------------------------------------------
 -- updatetime: milliseconds of inactivity before CursorHold event fires.
--- Lower value = faster LSP diagnostics and git signs updates.
 -- Default is 4000ms (4 seconds) which feels slow. 250ms is snappy.
 opt.updatetime = 250
 
 -- timeoutlen: milliseconds to wait for a key sequence to complete.
--- Affects which-key popup delay and multi-key mappings like "kj".
+-- Affects multi-key mappings like "kj" (insert→normal mode).
 -- Lower = faster, but too low can make it hard to type key combos.
 opt.timeoutlen = 300
 

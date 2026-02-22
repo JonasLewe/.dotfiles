@@ -4,286 +4,185 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a personal dotfiles repository for development environment setup. It includes:
-- **Neovim** - Modern text editor with LSP, treesitter, and autocompletion
-- **tmux** - Terminal multiplexer with vim keybindings and session persistence
+This is a personal dotfiles repository for CachyOS (Arch Linux). It covers the full desktop stack: window manager, terminal, editor, shell, and multiplexer. The philosophy is **vanilla first** — use native features before adding plugins. Learn the fundamentals, then extend.
 
-The configuration is optimized for development work with Python, LaTeX, and general text editing, with a focus on performance and ergonomics.
+It includes:
+- **Hyprland** — Tiling Wayland compositor with vim-style keybindings
+- **Waybar** — Minimal status bar
+- **Rofi** — Application launcher
+- **Dunst** — Notification daemon
+- **Ghostty** — GPU-accelerated terminal emulator
+- **Neovim** — Minimal config with treesitter and vim-surround (no LSP, no autocompletion plugins)
+- **tmux** — Vanilla config with vim keybindings (no plugin manager)
+- **zsh** — Plain zsh with vi-mode (no frameworks)
+- **Git** — Minimal gitconfig with global gitignore
 
 ## Installation & Setup
 
-### Initial Setup
+**Requires:** CachyOS or any Arch-based distro (pacman).
+
 ```bash
-# Install Neovim, tmux, and configure dotfiles
+git clone <repo> ~/.dotfiles
+cd ~/.dotfiles
 ./install.sh
 ```
 
 The install script:
-- **Detects OS** (Linux/Debian or macOS) and installs accordingly
-- **Neovim**: Installs via AppImage (Linux) or Homebrew (macOS)
-- **tmux**: Installs via apt (Linux) or Homebrew (macOS)
-- **Symlinks configurations**:
+- Installs core tools via pacman: neovim, tmux, zsh, ghostty, ripgrep, fd, ctags
+- Optionally installs Hyprland + rice tools: waybar, rofi, dunst, hyprpaper, hyprlock, etc.
+- Symlinks all configurations:
   - `./nvim/` → `~/.config/nvim/`
   - `./tmux/tmux.conf` → `~/.tmux.conf`
-- **TPM**: Installs Tmux Plugin Manager for theme and plugins
-- lazy.nvim auto-bootstraps on first Neovim launch
+  - `./zsh/zshrc` → `~/.zshrc`
+  - `./zsh/zprofile` → `~/.zprofile`
+  - `./git/gitconfig` → `~/.gitconfig`
+  - `./ghostty/` → `~/.config/ghostty/`
+  - `./hyprland/` → `~/.config/hypr/`
+  - `./waybar/` → `~/.config/waybar/`
+  - `./rofi/` → `~/.config/rofi/`
+  - `./dunst/` → `~/.config/dunst/`
+- Sets zsh as default shell
 - Prompts before overwriting existing configurations
-
-### Font Installation
-```bash
-# Install DroidSansMono Nerd Font (optional but recommended for icons)
-./install_nerd_font.sh
-```
 
 ### Reset Configuration
 ```bash
 # WARNING: Completely removes Neovim, plugins, and all config files
 ./reset.sh
 ```
-This removes:
-- `~/.local/share/nvim` (plugin data)
-- `~/.local/state/nvim` (state files)
-- `~/.cache/nvim` (cache)
-- `~/.config/nvim` (configuration)
-- `/usr/local/bin/nvim` (binary)
 
 ## Configuration Architecture
 
-### Module Structure
-The Neovim configuration follows a modular architecture located in `nvim/lua/jlewe/`:
-
+### Directory Structure
 ```
-nvim/
-├── init.lua                          # Entry point, loads core settings and lazy.nvim
-├── lua/jlewe/
-│   ├── core/                         # Core Neovim settings
-│   │   ├── options.lua              # Editor options
-│   │   ├── keymaps.lua              # Key mappings
-│   │   └── colorscheme.lua          # Color scheme setup
-│   ├── plugins/                      # Plugin configurations
-│   │   ├── lsp/                     # LSP-related configs
-│   │   │   ├── mason.lua            # LSP server management
-│   │   │   ├── lspconfig.lua        # LSP server configurations
-│   │   │   └── lspsaga.lua          # Enhanced LSP UI
-│   │   ├── nvim-cmp.lua             # Autocompletion
-│   │   ├── telescope.lua             # Fuzzy finder
-│   │   ├── nvim-tree.lua            # File explorer
-│   │   ├── lualine.lua              # Status line
-│   │   └── treesitter.lua           # Syntax highlighting & parsing
-│   └── lazy-setup.lua                # lazy.nvim plugin manager setup
-└── plugin/
-    └── packer_compiled.lua           # Legacy file (no longer used)
+~/.dotfiles/
+├── nvim/                    # Neovim config
+│   ├── init.lua
+│   └── lua/jlewe/
+│       ├── core/
+│       │   ├── options.lua  # Editor options, netrw, path/grep setup
+│       │   └── keymaps.lua  # Key mappings
+│       ├── plugins/
+│       │   ├── editor.lua   # vim-surround
+│       │   └── treesitter.lua
+│       └── lazy-setup.lua
+├── tmux/tmux.conf           # tmux config
+├── zsh/
+│   ├── zshrc                # Interactive shell config
+│   └── zprofile             # Login shell (PATH)
+├── ghostty/config           # Terminal emulator
+├── hyprland/hyprland.conf   # Window manager
+├── waybar/
+│   ├── config.jsonc         # Bar modules
+│   └── style.css            # Bar styling
+├── rofi/config.rasi         # App launcher
+├── dunst/dunstrc            # Notifications
+├── git/
+│   ├── gitconfig
+│   └── gitignore_global
+├── install.sh               # Installer (Arch/pacman)
+└── docs/
+    ├── vanilla-vim-guide.md # Native Vim alternatives tutorial
+    └── rice-guide.md        # Hyprland rice setup tutorial
 ```
 
 ### Key Design Patterns
 
-**Module Loading**: Core settings load first, then lazy.nvim bootstraps and loads all plugins, finally colorscheme is applied (nvim/init.lua:1-9).
+**Vanilla First**: Native features over plugins:
+- `:Ex`/`:Lex` instead of nvim-tree
+- `:find` + `path+=**` instead of Telescope
+- `<C-x><C-n>` instead of nvim-cmp
+- `ctags` + `<C-]>` instead of LSP
+- Visual Block Mode (`<C-v>`) instead of Comment.nvim
+- `:grep` with ripgrep instead of Telescope live_grep
 
-**Plugin Management**: lazy.nvim auto-bootstraps on first launch and provides lazy loading for better startup performance. Plugin specs are defined in `lazy-setup.lua` with event-based and filetype-based lazy loading.
+**Vim keybindings everywhere**: Hyprland (SUPER+hjkl), tmux (prefix+hjkl), Neovim (Ctrl+hjkl), zsh (bindkey -v).
 
-**Safe Configuration**: All plugin configurations use `pcall()` to prevent errors if plugins aren't installed yet.
+## Neovim
 
-**Lazy Loading**: Plugins load based on events (e.g., `BufReadPre`, `InsertEnter`) or filetypes (e.g., `python`, `tex`) to optimize startup time.
+### Installed Plugins (intentionally minimal)
+- **lazy.nvim** — Plugin manager (auto-bootstraps)
+- **vim-surround** — Add/change/delete surroundings (`ys`, `ds`, `cs`)
+- **treesitter** — AST-based syntax highlighting
 
-## Plugin Management with lazy.nvim
-
-### Working with Plugins
-
-When modifying `nvim/lua/jlewe/lazy-setup.lua`:
-1. Add/remove plugin specs in the `require("lazy").setup({})` table
-2. Save and restart Neovim
-3. Run `:Lazy` to open the lazy.nvim UI
-4. Use `:Lazy sync` to install/update/clean plugins
-
-### Lazy.nvim Commands
-- `:Lazy` - Open plugin manager UI
-- `:Lazy sync` - Install missing plugins, update and clean
-- `:Lazy update` - Update plugins
-- `:Lazy clean` - Remove unused plugins
-- `:Lazy check` - Check for updates
-
-### Installed LSP Servers
-
-The following LSP servers are auto-installed via Mason (nvim/lua/jlewe/plugins/lsp/mason.lua:18-24):
-- `jsonls` - JSON
-- `marksman` - Markdown
-- `ltex` - LaTeX
-- `lua_ls` - Lua
-- `pyright` - Python
-
-To add new LSP servers, update the `ensure_installed` table in `nvim/lua/jlewe/plugins/lsp/mason.lua`.
-
-## Modern Features (Added in 2026 Update)
-
-### Treesitter
-Provides advanced syntax highlighting, indentation, and code understanding:
-- Auto-installs language parsers
-- Incremental selection with `<C-space>`
-- Better syntax highlighting than regex-based vim syntax
-- Configuration: `nvim/lua/jlewe/plugins/treesitter.lua`
-
-### Additional Modern Plugins
-- **gitsigns** - Git integration with line blame, hunk preview, and diff
-- **which-key** - Displays keybinding hints in a popup (press `<leader>` and wait)
-- **vim-surround** - Surround text objects with quotes, brackets, etc.
-- **Comment.nvim** - Smart commenting with `gcc`
-- **markdown-preview** - Live markdown preview in browser
-
-## Key Bindings Reference
-
-Leader key: `<Space>`
-
-### Important Custom Keymaps (nvim/lua/jlewe/core/keymaps.lua)
-- `kj` - Exit insert/visual/terminal mode (alternative to ESC)
-- `<leader>e` - Toggle file explorer (NvimTree)
-- `<leader>ff` - Find files (Telescope)
-- `<leader>fs` - Live grep search (Telescope)
-- `<leader>sv/sh` - Split window vertically/horizontally
-
-## Language Support
-
-### Python Development
-- **LSP**: Pyright (type checking, auto-completion, go-to-definition)
-- **Formatting**: Available via LSP (configure with conform.nvim if needed)
-- **Linting**: Integrated via LSP diagnostics
-- **Debugging**: Use DAP (Debug Adapter Protocol) if needed
-
-## Modifying Configuration Files
+### Key Bindings (Leader: `<Space>`)
+- `kj` — Exit insert/visual/terminal mode
+- `<leader>e` — Toggle file explorer (netrw)
+- `<leader>fb` — List buffers and switch
+- `<leader>sv/sh` — Split vertically/horizontally
+- `<C-h/j/k/l>` — Navigate splits
+- `<leader>+/-` — Increment/decrement number
+- `<leader>nh` — Clear search highlights
+- `<leader>tt` — Terminal split
 
 ### Adding New Keymaps
-Edit `nvim/lua/jlewe/core/keymaps.lua` and use the `vim.keymap.set()` function following existing patterns.
-
-### Adding New LSP Servers
-1. Add server name to `ensure_installed` in `nvim/lua/jlewe/plugins/lsp/mason.lua`
-2. Add server configuration in `nvim/lua/jlewe/plugins/lsp/lspconfig.lua`
+Edit `nvim/lua/jlewe/core/keymaps.lua` using `vim.keymap.set()`.
 
 ### Changing Editor Options
-Edit `nvim/lua/jlewe/core/options.lua` - use `vim.opt` or `vim.g` for settings.
+Edit `nvim/lua/jlewe/core/options.lua` — use `vim.opt` or `vim.g`.
 
 ### Adding New Plugins
-1. Add plugin spec to `nvim/lua/jlewe/lazy-setup.lua`
-2. Optionally create a dedicated config file in `nvim/lua/jlewe/plugins/`
-3. Reference the config in the plugin spec using the `config` function
-4. Run `:Lazy sync` to install
-
-Example plugin spec:
-```lua
-{
-  "plugin/name",
-  event = "BufReadPre",  -- Lazy load on event
-  dependencies = { "other/plugin" },
-  config = function()
-    require("jlewe.plugins.plugin-name")
-  end,
-}
-```
+1. Add plugin spec to a file in `nvim/lua/jlewe/plugins/`
+2. Run `:Lazy sync` to install
 
 ---
 
-## tmux Configuration
+## tmux
 
-### Overview
-
-The tmux configuration provides a productive terminal multiplexer setup with:
-- **Vim-style keybindings** for navigation and pane management
-- **Custom prefix key**: `Ctrl-A` (instead of default `Ctrl-B`)
-- **Dracula theme** with status bar customization
-- **Session persistence** via tmux-resurrect and tmux-continuum
-- **Mouse support** for easy pane resizing and scrolling
-- **TPM** (Tmux Plugin Manager) for plugin management
-
-### Configuration File
-
-Location: `tmux/tmux.conf` → symlinked to `~/.tmux.conf`
+Vanilla config. No plugin manager. Prefix: `Ctrl-A`.
 
 ### Key Bindings
+- `Ctrl-A |` / `Ctrl-A -` — Split vertical/horizontal
+- `Ctrl-A h/j/k/l` — Navigate panes
+- `Ctrl-A H/J/K/L` — Resize panes
+- `Ctrl-A c` — New window
+- `Ctrl-A [` → `v` → `y` — Copy mode (vim-style)
+- `Ctrl-A r` — Reload config
 
-**Prefix Key**: `Ctrl-A` (instead of default `Ctrl-B`)
+---
 
-#### Pane Management
-- `Ctrl-A |` - Split pane vertically (opens in current directory)
-- `Ctrl-A -` - Split pane horizontally (opens in current directory)
-- `Ctrl-A h/j/k/l` - Navigate panes (vim-style)
-- `Ctrl-A H/J/K/L` - Resize panes (vim-style, repeatable)
+## zsh
 
-#### Window Management
-- `Ctrl-A c` - Create new window (opens in home directory)
+Plain zsh, no framework. Vi-mode via `bindkey -v`.
 
-#### Copy Mode (vim-style)
-- `Ctrl-A [` - Enter copy mode
-- `v` - Begin selection (in copy mode)
-- `y` - Copy selection and exit (in copy mode)
-- `Escape` - Exit copy mode
+- Prompt: directory (green) + git branch (yellow)
+- Completion: case-insensitive, menu selection
+- History: 10,000 lines, shared across panes
+- Files: `zsh/zshrc`, `zsh/zprofile`, `~/.zshrc.local` (secrets)
 
-#### Configuration & Sessions
-- `Ctrl-A r` - Reload tmux configuration
-- `Ctrl-A R` - Restore saved session (tmux-resurrect)
+---
 
-### Installed Plugins (via TPM)
+## Hyprland (Window Manager)
 
-Plugins are managed by TPM and defined in `tmux/tmux.conf`:
+Tiling Wayland compositor. Config: `hyprland/hyprland.conf`.
 
-1. **tmux-sensible** - Sensible default settings
-2. **tmux-resurrect** - Save/restore tmux sessions
-3. **tmux-continuum** - Automatic session save/restore (auto-save enabled)
-4. **dracula/tmux** - Dracula color theme with customizable status bar
+### Key Bindings (Mod: `SUPER`)
+- `SUPER + Enter` — Ghostty terminal
+- `SUPER + d` — Rofi app launcher
+- `SUPER + q` — Close window
+- `SUPER + h/j/k/l` — Move focus
+- `SUPER + Shift + h/j/k/l` — Move window
+- `SUPER + Ctrl + h/j/k/l` — Resize window
+- `SUPER + f` — Fullscreen
+- `SUPER + v` — Toggle floating
+- `SUPER + 1-9` — Switch workspace
+- `SUPER + Shift + 1-9` — Move window to workspace
+- `Print` — Screenshot (region select)
+- `SUPER + Shift + x` — Lock screen
 
-### Plugin Management with TPM
+### Waybar
+Config: `waybar/config.jsonc` (modules), `waybar/style.css` (styling).
+Modules: workspaces, window title, CPU, memory, network, audio, clock.
 
-After installation, install plugins:
-```bash
-# Inside tmux, press:
-Ctrl-A + I  # Install plugins (capital I)
+### Rofi
+Config: `rofi/config.rasi`. Modi: drun (apps), run (commands), window (switch).
+Vim navigation: `Ctrl+j/k`.
 
-# Other TPM commands:
-Ctrl-A + U  # Update plugins
-Ctrl-A + alt + u  # Uninstall plugins not in config
-```
+### Dunst
+Config: `dunst/dunstrc`. Test: `notify-send "Title" "Body"`.
 
-### Status Bar Configuration
+---
 
-The Dracula theme status bar shows:
-- Network bandwidth
-- Network status
-- Battery status
-- Time (24-hour format: `YYYY-MM-DD HH:MM`)
-- Current session name (left icon)
+## Guides
 
-### Session Persistence
-
-Sessions are automatically saved and restored:
-- **Auto-save**: Every 15 minutes (tmux-continuum)
-- **Auto-restore**: Sessions restore on tmux start
-- **Pane contents**: Captured and restored
-
-### Modifying tmux Configuration
-
-1. Edit `tmux/tmux.conf`
-2. Reload config: `Ctrl-A r` (inside tmux)
-3. Or restart tmux: `tmux kill-server && tmux`
-
-### Platform-Specific Notes
-
-**macOS**:
-- Uses `reattach-to-user-namespace` for clipboard integration
-- Default shell: `/bin/zsh`
-
-**Linux/Debian**:
-- May need to adjust shell path in config if using different shell
-- `reattach-to-user-namespace` line can be removed (macOS-specific)
-
-### Troubleshooting
-
-**Colors look wrong:**
-- Ensure terminal supports 256 colors and true color
-- For iTerm2/Alacritty/Kitty: Should work out of the box
-- Test with: `echo $TERM` (should show `screen-256color` inside tmux)
-
-**Plugins not loading:**
-1. Install TPM: `git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm`
-2. Press `Ctrl-A + I` inside tmux to install plugins
-3. Restart tmux
-
-**Mouse not working:**
-- Mouse support is enabled by default in config
-- Some terminal emulators may need additional configuration
+- `docs/vanilla-vim-guide.md` — Native Vim alternatives to common plugins
+- `docs/rice-guide.md` — Full Hyprland rice setup tutorial (CachyOS)
