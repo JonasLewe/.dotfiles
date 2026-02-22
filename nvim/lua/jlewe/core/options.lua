@@ -125,10 +125,11 @@ opt.wildignore:append("**/node_modules/**,**/.git/**,**/venv/**,**/__pycache__/*
 -- -----------------------------------------------------------------------------
 -- netrw is Vim's built-in file browser. Open with :Ex, :Vex, :Lex
 -- banner=0 hides the info banner at the top (cleaner look)
--- liststyle=3 shows files as a tree (indented hierarchy)
+-- liststyle=1 shows files as a long listing (name + size + date)
+-- liststyle=3 (tree mode) is NOT used — it has a bug causing E471 errors when navigating
 -- winsize=25 sets the explorer width to 25% when used in a split (:Lex, :Vex)
 vim.g.netrw_banner = 0
-vim.g.netrw_liststyle = 3
+vim.g.netrw_liststyle = 1
 vim.g.netrw_winsize = 25
 
 -- -----------------------------------------------------------------------------
