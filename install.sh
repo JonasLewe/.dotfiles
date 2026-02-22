@@ -49,7 +49,7 @@ install_pkg ghostty
 install_pkg git
 install_pkg ripgrep        # fast grep, used by :grep in neovim
 install_pkg fd             # fast find, useful for :find alternatives
-install_pkg universal-ctags # code navigation with <C-]> in neovim
+install_pkg ctags           # code navigation with <C-]> in neovim
 
 echo
 
@@ -149,6 +149,21 @@ if [[ "$INSTALL_RICE" == true ]]; then
 
     echo
 fi
+
+# ==============================================================================
+# LAZY.NVIM (Neovim Plugin Manager)
+# ==============================================================================
+
+lazypath="$HOME/.local/share/nvim/lazy/lazy.nvim"
+if [[ ! -d "$lazypath" ]]; then
+    echo "📥 Installing lazy.nvim..."
+    git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
+    echo "✅ lazy.nvim installed"
+else
+    echo "✅ lazy.nvim already installed"
+fi
+
+echo
 
 # ==============================================================================
 # GHOSTTY SHADERS
