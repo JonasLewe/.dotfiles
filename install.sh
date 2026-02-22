@@ -72,6 +72,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     install_pkg grim            # screenshot tool
     install_pkg slurp           # region selection for screenshots
     install_pkg wl-clipboard    # clipboard for Wayland (needed by neovim)
+    install_pkg wl-clip-persist # keep clipboard alive after app exits (Wayland bug fix)
     install_pkg ttf-jetbrains-mono-nerd  # Nerd Font
 
     INSTALL_RICE=true
