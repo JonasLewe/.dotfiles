@@ -74,7 +74,9 @@ The install script:
 ├── waybar/
 │   ├── config.jsonc         # Bar modules
 │   └── style.css            # Bar styling
-├── rofi/config.rasi         # App launcher
+├── rofi/
+│   ├── config.rasi          # App launcher
+│   └── powermenu.sh         # Power menu (lock/logout/reboot/shutdown)
 ├── dunst/dunstrc            # Notifications
 ├── git/
 │   ├── gitconfig
@@ -167,7 +169,8 @@ Tiling Wayland compositor. Config: `hyprland/hyprland.conf`.
 - `SUPER + 1-9` — Switch workspace
 - `SUPER + Shift + 1-9` — Move window to workspace
 - `Print` — Screenshot (region select)
-- `SUPER + Shift + x` — Lock screen
+- `` SUPER + ` `` — Lock screen (hyprlock)
+- `SUPER + Delete` — Power menu (lock/logout/reboot/shutdown)
 
 ### Waybar
 Config: `waybar/config.jsonc` (modules), `waybar/style.css` (styling).
@@ -176,6 +179,7 @@ Modules: workspaces, window title, CPU, memory, network, audio, clock.
 ### Rofi
 Config: `rofi/config.rasi`. Modi: drun (apps), run (commands), window (switch).
 Vim navigation: `Ctrl+j/k`.
+Power menu: `rofi/powermenu.sh` — standalone theme (breeze-dark icons), vim navigation (j/k).
 
 ### Dunst
 Config: `dunst/dunstrc`. Test: `notify-send "Title" "Body"`.

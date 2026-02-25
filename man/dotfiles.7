@@ -20,6 +20,7 @@ Setting|Config File
 Window Manager|hyprland/hyprland.conf
 Status Bar|waybar/config.jsonc + style.css
 App Launcher|rofi/config.rasi
+Power Menu|rofi/powermenu.sh
 Notifications|dunst/dunstrc
 Wallpaper|~/.config/hypr/hyprpaper.conf
 Lock Screen|~/.config/hypr/hyprlock.conf
@@ -92,7 +93,8 @@ SUPER + 1-9|Switch workspace
 SUPER + Shift + 1-9|Move to workspace
 Print|Screenshot (region)
 Shift + Print|Screenshot (full)
-SUPER + Shift + x|Lock screen
+SUPER + `|Lock screen (hyprlock)
+SUPER + Delete|Power menu (lock/logout/reboot/shutdown)
 SUPER + Shift + e|Quit Hyprland
 .TE
 .SS tmux (Prefix: Ctrl-A)
