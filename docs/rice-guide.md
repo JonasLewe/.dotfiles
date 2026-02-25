@@ -14,13 +14,13 @@ Die Komponenten eines Rice:
 ┌──────────────────────────────────────────────────────┐
 │ Window Manager    → Hyprland (verwaltet Fenster)     │
 │ Status Bar        → Waybar (oben am Bildschirm)      │
-│ App Launcher      → Rofi (wie Spotlight/Alfred)       │
-│ Notifications     → Dunst (Popup-Benachrichtigungen)  │
-│ Terminal          → Ghostty (wo du arbeitest)         │
-│ Shell             → zsh (Kommandozeile)               │
-│ Editor            → Neovim (Texteditor)               │
-│ Wallpaper         → hyprpaper (Hintergrundbild)       │
-│ Lock Screen       → hyprlock (Sperrbildschirm)        │
+│ App Launcher      → Rofi (wie Spotlight/Alfred)      │
+│ Notifications     → Dunst (Popup-Benachrichtigungen) │
+│ Terminal          → Ghostty (wo du arbeitest)        │
+│ Shell             → zsh (Kommandozeile)              │
+│ Editor            → Neovim (Texteditor)              │
+│ Wallpaper         → hyprpaper (Hintergrundbild)      │
+│ Lock Screen       → hyprlock (Sperrbildschirm)       │
 └──────────────────────────────────────────────────────┘
 ```
 
