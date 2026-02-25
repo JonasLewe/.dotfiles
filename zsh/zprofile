@@ -14,3 +14,9 @@
 # ==============================================================================
 # ~/.local/bin is the standard location for user-installed tools
 [[ -d "$HOME/.local/bin" ]] && export PATH="$HOME/.local/bin:$PATH"
+
+# ==============================================================================
+# MANPATH
+# ==============================================================================
+# Include local man pages (e.g. dotfiles man page: man dotfiles)
+export MANPATH="$HOME/.local/share/man:$(manpath -q 2>/dev/null)"
