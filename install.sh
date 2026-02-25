@@ -225,7 +225,7 @@ echo "  1. Log out and back in (to activate zsh as default shell)"
 echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
 echo "  3. Start tmux: 'tmux'"
 if [[ "$INSTALL_RICE" == true ]]; then
-    echo "  4. Start Hyprland: select it from your display manager, or run 'Hyprland'"
+    echo "  4. Start Hyprland: log in on TTY1 (Hyprland starts automatically via zprofile)"
     echo "  5. Read the rice guide: docs/rice-guide.md"
 fi
 echo "  📖 Read the vanilla vim guide: docs/vanilla-vim-guide.md"

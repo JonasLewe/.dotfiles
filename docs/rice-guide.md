@@ -75,26 +75,111 @@ Nach der Installation: **Ausloggen und wieder einloggen.**
 
 ---
 
-## 3. Hyprland starten
+## 3. Boot-Setup (kein Bootloader-Menü, kein Display Manager)
 
-### Vom Display Manager
+CachyOS installiert standardmäßig Limine als Bootloader und SDDM als Login-Screen.
+Beides brauchen wir nicht — systemd-boot ist simpler und Hyprland startet automatisch via zprofile.
 
-Wenn CachyOS einen Display Manager (SDDM) installiert hat:
-- Am Login-Screen unten links "Hyprland" als Session wählen
-- Einloggen
+> **Hinweis:** Dieser Abschnitt ist für CachyOS / Arch Linux mit UEFI und systemd geschrieben.
+> UUIDs und Kernel-Namen sind maschinenspezifisch — du musst sie anpassen.
 
-### Ohne Display Manager
+### systemd-boot installieren
 
 ```bash
-# Direkt aus dem TTY starten:
-Hyprland
+sudo bootctl install
 ```
+
+### Loader konfigurieren (kein Menü)
+
+```bash
+sudo tee /boot/loader/loader.conf << 'EOF'
+default cachyos.conf
+timeout 0
+console-mode auto
+EOF
+```
+
+> **Tipp:** Auch mit `timeout 0` kannst du jederzeit `Space` beim Booten drücken, um das
+> systemd-boot Menü manuell aufzurufen (z.B. um den LTS-Kernel zu wählen).
+
+### Boot-Entries anlegen
+
+UUIDs und Kernel-Namen findest du so:
+
+```bash
+sudo blkid | grep nvme    # UUIDs deiner Partitionen
+cat /proc/cmdline          # Aktuelle Boot-Parameter (zum Abgleichen)
+ls /boot/vmlinuz*          # Verfügbare Kernel
+```
+
+Haupt-Kernel:
+
+```bash
+sudo tee /boot/loader/entries/cachyos.conf << 'EOF'
+title   CachyOS
+linux   /vmlinuz-linux-cachyos
+initrd  /intel-ucode.img
+initrd  /initramfs-linux-cachyos.img
+options rd.luks.uuid=DEINE-LUKS-UUID root=/dev/mapper/luks-DEINE-LUKS-UUID rootflags=subvol=/@ rw quiet splash nowatchdog
+EOF
+```
+
+LTS-Fallback (falls der Haupt-Kernel mal Probleme macht):
+
+```bash
+sudo tee /boot/loader/entries/cachyos-lts.conf << 'EOF'
+title   CachyOS LTS (Fallback)
+linux   /vmlinuz-linux-cachyos-lts
+initrd  /intel-ucode.img
+initrd  /initramfs-linux-cachyos-lts.img
+options rd.luks.uuid=DEINE-LUKS-UUID root=/dev/mapper/luks-DEINE-LUKS-UUID rootflags=subvol=/@ rw quiet splash nowatchdog
+EOF
+```
+
+> Ersetze `DEINE-LUKS-UUID` mit der UUID aus `sudo blkid` (die `crypto_LUKS` Partition).
+> Bei AMD-CPUs: `intel-ucode.img` durch `amd-ucode.img` ersetzen.
+> Ohne Verschlüsselung: `rd.luks.uuid=...` und `root=/dev/mapper/...` ersetzen durch `root=UUID=DEINE-ROOT-UUID`.
+
+### Limine entfernen
+
+```bash
+# EFI-Eintrag entfernen (Nummer mit efibootmgr prüfen)
+sudo efibootmgr                   # Limine-Eintrag finden (z.B. 0001)
+sudo efibootmgr -b 0001 -B        # Limine-Eintrag löschen
+
+# Pakete deinstallieren
+sudo pacman -Rns limine limine-mkinitcpio-hook limine-snapper-sync
+
+# Falls mkinitcpio Fehler wirft (sd-btrfs-overlayfs Hook nicht gefunden):
+sudo rm /etc/mkinitcpio.conf.d/10-limine-snapper-sync.conf
+sudo mkinitcpio -P
+```
+
+### SDDM deaktivieren
+
+Hyprland startet automatisch auf TTY1 via `zsh/zprofile` — kein Display Manager nötig.
+
+```bash
+sudo systemctl disable sddm
+```
+
+### Boot-Ablauf danach
+
+```
+UEFI → systemd-boot (unsichtbar) → LUKS-Passwort → TTY-Login → Hyprland (auto)
+```
+
+---
+
+## 4. Hyprland starten
+
+Nach dem Boot-Setup startet Hyprland automatisch wenn du dich auf TTY1 einloggst.
 
 Du siehst: Einen leeren Bildschirm mit Waybar oben. Das ist richtig — jetzt fängst du an.
 
 ---
 
-## 4. Hyprland Keybindings
+## 5. Hyprland Keybindings
 
 Die Keybindings sind **vim-inspiriert**. `SUPER` (Windows/Meta-Taste) ist dein Prefix — wie `Ctrl-A` in tmux.
 
@@ -179,7 +264,7 @@ Neovim       <Space>      Ctrl+hjkl      <leader>sv  <leader>sh
 
 ---
 
-## 5. Waybar anpassen
+## 6. Waybar anpassen
 
 Waybar ist die Statusleiste oben am Bildschirm.
 
@@ -217,7 +302,7 @@ Oder in Hyprland config reloaden: Datei speichern → Hyprland lädt automatisch
 
 ---
 
-## 6. Rofi benutzen
+## 7. Rofi benutzen
 
 Rofi ist dein App-Launcher (wie Spotlight auf macOS).
 
@@ -251,7 +336,7 @@ Im Rofi-Fenster: Klicke auf den Modus-Namen oben oder nutze `Ctrl+Tab` zum Wechs
 
 ---
 
-## 7. Dunst (Notifications)
+## 8. Dunst (Notifications)
 
 Dunst zeigt Benachrichtigungen als Popup oben rechts.
 
@@ -281,7 +366,7 @@ notify-send "Test" "Dunst neugestartet"
 
 ---
 
-## 8. Wallpaper setzen
+## 9. Wallpaper setzen
 
 ### hyprpaper (statisches Wallpaper)
 
@@ -308,7 +393,7 @@ killall hyprpaper && hyprpaper &
 
 ---
 
-## 9. Farbschema durchziehen
+## 10. Farbschema durchziehen
 
 Ein Rice sieht dann gut aus, wenn alles farblich zusammenpasst. Wähle EIN Schema und wende es überall an:
 
@@ -343,7 +428,7 @@ Dunst          → dunst/dunstrc ([urgency_*] Sektionen)
 
 ---
 
-## 10. Nächste Schritte
+## 11. Nächste Schritte
 
 Wenn du die Grundlagen beherrschst, kannst du tiefer gehen:
 
@@ -399,9 +484,11 @@ windowrulev2 = center, class:^(imv)$
 # 1. Dotfiles installieren
 cd ~/.dotfiles && ./install.sh     # "y" bei Hyprland-Frage
 
-# 2. Ausloggen, Hyprland als Session wählen, einloggen
+# 2. Boot-Setup (siehe Sektion 3): systemd-boot, SDDM deaktivieren, Limine entfernen
 
-# 3. Terminal öffnen
+# 3. Neu einloggen auf TTY1 → Hyprland startet automatisch
+
+# 4. Terminal öffnen
 SUPER + Enter
 
 # 4. Testen
@@ -410,13 +497,13 @@ SUPER + d                          # Rofi öffnen
 SUPER + 2                          # Workspace 2
 SUPER + 1                          # Zurück zu 1
 
-# 5. Zweites Fenster öffnen
+# 6. Zweites Fenster öffnen
 SUPER + Enter                      # Zweites Terminal
 SUPER + h / SUPER + l              # Zwischen Fenstern wechseln
 
-# 6. tmux innerhalb von Ghostty
+# 7. tmux innerhalb von Ghostty
 tmux                               # tmux startet automatisch via Ghostty
 
-# 7. Neovim innerhalb von tmux
+# 8. Neovim innerhalb von tmux
 nvim                               # lazy.nvim installiert Plugins beim ersten Start
 ```
