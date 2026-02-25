@@ -25,7 +25,9 @@ window#waybar {
 #cpu,
 #memory,
 #network,
+#backlight,
 #pulseaudio,
+#battery,
 #clock {
     padding: 0 10px;
 }
@@ -68,4 +70,13 @@ window#waybar {
 /* --- AUDIO --- */
 #pulseaudio.muted {
     color: #666666;
+}
+
+/* --- BATTERY --- */
+#battery.warning {
+    color: #f0c674;
+}
+
+#battery.critical {
+    color: #ff5555;
 }

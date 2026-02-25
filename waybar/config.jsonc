@@ -21,7 +21,7 @@
     // Which modules to show and where
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["hyprland/window"],
-    "modules-right": ["cpu", "memory", "network", "pulseaudio", "clock"],
+    "modules-right": ["cpu", "memory", "network", "backlight", "pulseaudio", "battery", "clock"],
 
     // --- WORKSPACES ---
     // Shows workspace buttons (1-9). Click to switch.
@@ -38,14 +38,14 @@
 
     // --- CPU ---
     "cpu": {
-        "format": "  {usage}%",
+        "format": "CPU {usage}%",
         "interval": 5,
         "tooltip": true
     },
 
     // --- MEMORY ---
     "memory": {
-        "format": "  {percentage}%",
+        "format": "MEM {percentage}%",
         "interval": 5,
         "tooltip-format": "{used:0.1f}G / {total:0.1f}G"
     },
@@ -58,14 +58,35 @@
         "tooltip-format": "{ipaddr}/{cidr}"
     },
 
+    // --- BACKLIGHT ---
+    // Display brightness. Requires brightnessctl.
+    "backlight": {
+        "format": " {percent}%",
+        "tooltip": false
+    },
+
     // --- AUDIO ---
     "pulseaudio": {
         "format": "{icon} {volume}%",
-        "format-muted": "  muted",
+        "format-muted": " muted",
         "format-icons": {
             "default": ["", "", ""]
         },
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
+    },
+
+    // --- BATTERY ---
+    // Shows charge level with charging indicator.
+    "battery": {
+        "interval": 30,
+        "states": {
+            "warning": 30,
+            "critical": 15
+        },
+        "format": " {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-full": " full",
+        "tooltip-format": "{timeTo}"
     },
 
     // --- CLOCK ---
