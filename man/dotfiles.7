@@ -1,0 +1,161 @@
+.TH DOTFILES 7 "2026-02-25" "dotfiles" "Dotfiles Reference"
+.SH NAME
+dotfiles \- personal system configuration reference
+.SH DESCRIPTION
+Quick reference for which config file controls what in this dotfiles setup.
+All config files live in
+.B ~/.dotfiles/
+and are symlinked to their expected locations.
+.
+.SH CONFIGURATION FILES
+All paths are relative to
+.BR ~/.dotfiles/ .
+.P
+.TS
+box tab(|);
+cb | cb
+l | l .
+Setting|Config File
+=
+Window Manager|hyprland/hyprland.conf
+Status Bar|waybar/config.jsonc + style.css
+App Launcher|rofi/config.rasi
+Notifications|dunst/dunstrc
+Wallpaper|~/.config/hypr/hyprpaper.conf
+Lock Screen|~/.config/hypr/hyprlock.conf
+Terminal|ghostty/config
+Editor|nvim/
+Shell|zsh/zshrc
+Login Shell (PATH)|zsh/zprofile
+Local Overrides|~/.zshrc.local
+Multiplexer|tmux/tmux.conf
+Git|git/gitconfig
+Man Page|man/dotfiles.7
+.TE
+.
+.SH SYMLINKS
+Created by
+.B install.sh
+\(em maps repo files to where the system expects them.
+.P
+.TS
+box tab(|);
+cb | cb
+l | l .
+Repository Source|Symlink Target
+=
+nvim/|~/.config/nvim
+tmux/tmux.conf|~/.tmux.conf
+zsh/zshrc|~/.zshrc
+zsh/zprofile|~/.zprofile
+git/gitconfig|~/.gitconfig
+git/gitignore_global|~/.gitignore_global
+ghostty/|~/.config/ghostty
+hyprland/|~/.config/hypr
+waybar/|~/.config/waybar
+rofi/|~/.config/rofi
+dunst/|~/.config/dunst
+man/dotfiles.7|~/.local/share/man/man7/dotfiles.7
+.TE
+.
+.SH GUI & TUI TOOLS
+.TS
+box tab(|);
+cb | cb
+l | l .
+Tool|Purpose
+=
+pavucontrol|Audio mixer (per-app volume, input/output)
+nmtui|WiFi / network connections (TUI)
+bluetuith|Bluetooth manager (TUI)
+nwg-look|GTK theme, icons, cursor
+qt5ct|Qt theme settings
+.TE
+.
+.SH KEYBINDINGS
+.SS Hyprland (Mod: SUPER / Windows key)
+.TS
+box tab(|);
+cb | cb
+l | l .
+Keys|Action
+=
+SUPER + Enter|Terminal (Ghostty)
+SUPER + d|App launcher (Rofi)
+SUPER + q|Close window
+SUPER + h/j/k/l|Move focus
+SUPER + Shift + h/j/k/l|Move window
+SUPER + Ctrl + h/j/k/l|Resize window
+SUPER + f|Fullscreen
+SUPER + v|Toggle floating
+SUPER + 1-9|Switch workspace
+SUPER + Shift + 1-9|Move to workspace
+Print|Screenshot (region)
+Shift + Print|Screenshot (full)
+SUPER + Shift + x|Lock screen
+SUPER + Shift + e|Quit Hyprland
+.TE
+.SS tmux (Prefix: Ctrl-A)
+.TS
+box tab(@);
+cb | cb
+l | l .
+Keys@Action
+=
+Ctrl-A |@Split vertical
+Ctrl-A -@Split horizontal
+Ctrl-A h/j/k/l@Navigate panes
+Ctrl-A H/J/K/L@Resize panes
+Ctrl-A c@New window
+Ctrl-A [, v, y@Copy mode (vim-style)
+Ctrl-A r@Reload config
+.TE
+.SS Neovim (Leader: Space)
+.TS
+box tab(|);
+cb | cb
+l | l .
+Keys|Action
+=
+kj|Exit insert/visual mode
+Space + e|File explorer (netrw)
+Space + fb|List buffers
+Space + sv / sh|Split vertical / horizontal
+Ctrl + h/j/k/l|Navigate splits
+Space + tt|Terminal split
+.TE
+.
+.SH EDITING CONFIGURATIONS
+To edit a config, open the file in Neovim and reload:
+.P
+.RS 4
+.nf
+nvim ~/.dotfiles/hyprland/hyprland.conf
+hyprctl reload
+.fi
+.RE
+.P
+Waybar requires a restart:
+.P
+.RS 4
+.nf
+killall waybar && waybar &
+.fi
+.RE
+.
+.SH FILES
+.TP
+.B ~/.dotfiles/
+Repository root (all configs)
+.TP
+.B ~/.dotfiles/install.sh
+Installer script
+.TP
+.B ~/.dotfiles/docs/vanilla-vim-guide.md
+Native Vim alternatives guide
+.TP
+.B ~/.dotfiles/docs/rice-guide.md
+Hyprland rice setup tutorial
+.
+.SH AUTHOR
+Managed with dotfiles.

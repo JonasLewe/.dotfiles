@@ -118,6 +118,10 @@ link_config "$DOTFILES_DIR/zsh/zprofile"    ~/.zprofile
 link_config "$DOTFILES_DIR/git/gitconfig"   ~/.gitconfig
 link_config "$DOTFILES_DIR/ghostty"         ~/.config/ghostty
 
+# Man page (system config reference: man dotfiles)
+mkdir -p ~/.local/share/man/man7
+link_config "$DOTFILES_DIR/man/dotfiles.7" ~/.local/share/man/man7/dotfiles.7
+
 # Global gitignore (no prompt, doesn't overwrite)
 if [[ ! -e ~/.gitignore_global ]]; then
     ln -s "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
