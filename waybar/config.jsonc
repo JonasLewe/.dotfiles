@@ -61,17 +61,14 @@
     // --- BACKLIGHT ---
     // Display brightness. Requires brightnessctl.
     "backlight": {
-        "format": " {percent}%",
+        "format": "DSP {percent}%",
         "tooltip": false
     },
 
     // --- AUDIO ---
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-muted": " muted",
-        "format-icons": {
-            "default": ["", "", ""]
-        },
+        "format": "VOL {volume}%",
+        "format-muted": "VOL muted",
         "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"
     },
 
@@ -83,9 +80,9 @@
             "warning": 30,
             "critical": 15
         },
-        "format": " {capacity}%",
-        "format-charging": " {capacity}%",
-        "format-full": " full",
+        "format": "BAT {capacity}%",
+        "format-charging": "BAT {capacity}% +",
+        "format-full": "BAT full",
         "tooltip-format": "{timeTo}"
     },
 
