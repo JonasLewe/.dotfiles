@@ -68,7 +68,7 @@ The install script:
 ├── tmux/tmux.conf           # tmux config
 ├── zsh/
 │   ├── zshrc                # Interactive shell config
-│   └── zprofile             # Login shell (PATH)
+│   └── zprofile             # Login shell (PATH, Hyprland auto-start)
 ├── ghostty/config           # Terminal emulator
 ├── hyprland/hyprland.conf   # Window manager
 ├── waybar/
@@ -150,6 +150,7 @@ Plain zsh, no framework. Vi-mode via `bindkey -v`.
 - Completion: case-insensitive, menu selection
 - History: 10,000 lines, shared across panes
 - Files: `zsh/zshrc`, `zsh/zprofile`, `~/.zshrc.local` (secrets)
+- Hyprland auto-starts on TTY1 login (no display manager needed)
 
 ---
 

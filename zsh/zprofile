@@ -20,3 +20,11 @@
 # ==============================================================================
 # Include local man pages (e.g. dotfiles man page: man dotfiles)
 export MANPATH="$HOME/.local/share/man:$(manpath -q 2>/dev/null)"
+
+# ==============================================================================
+# AUTO-START HYPRLAND
+# ==============================================================================
+# Start Hyprland automatically on TTY1 login (no display manager needed)
+if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+    exec Hyprland
+fi
