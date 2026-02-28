@@ -12,7 +12,7 @@ It includes:
 - **Rofi** — Application launcher
 - **Dunst** — Notification daemon
 - **Ghostty** — GPU-accelerated terminal emulator
-- **Neovim** — Minimal config with treesitter and vim-surround (no LSP, no autocompletion plugins)
+- **Neovim** — Config with LSP, treesitter, telescope.nvim, aerial.nvim, trouble.nvim, and vim-surround
 - **tmux** — Vanilla config with vim keybindings (no plugin manager)
 - **zsh** — Plain zsh with vi-mode (no frameworks)
 - **Git** — Minimal gitconfig with global gitignore
@@ -28,7 +28,7 @@ cd ~/.dotfiles
 ```
 
 The install script:
-- Installs core tools via pacman: neovim, tmux, zsh, ghostty, ripgrep, fd, ctags
+- Installs core tools via pacman: neovim, tmux, zsh, ghostty, ripgrep, fd, ctags, nodejs, npm
 - Optionally installs Hyprland + rice tools: waybar, rofi, dunst, hyprpaper, hyprlock, etc.
 - Symlinks all configurations:
   - `./nvim/` → `~/.config/nvim/`
@@ -62,7 +62,10 @@ The install script:
 │       │   ├── options.lua  # Editor options, netrw, path/grep setup
 │       │   └── keymaps.lua  # Key mappings
 │       ├── plugins/
-│       │   ├── editor.lua   # vim-surround
+│       │   ├── editor.lua      # vim-surround
+│       │   ├── lsp.lua         # mason + lspconfig (LSP setup)
+│       │   ├── navigation.lua  # aerial.nvim + trouble.nvim
+│       │   ├── telescope.lua   # telescope.nvim + fzf-native
 │       │   └── treesitter.lua
 │       └── lazy-setup.lua
 ├── tmux/tmux.conf           # tmux config
@@ -91,30 +94,50 @@ The install script:
 
 **Vanilla First**: Native features over plugins:
 - `:Ex`/`:Lex` instead of nvim-tree
-- `:find` + `path+=**` instead of Telescope
+- `:find` + `path+=**` as vanilla alternative to Telescope (telescope.nvim now installed for fuzzy finding)
 - `<C-x><C-n>` instead of nvim-cmp
-- `ctags` + `<C-]>` instead of LSP
 - Visual Block Mode (`<C-v>`) instead of Comment.nvim
-- `:grep` with ripgrep instead of Telescope live_grep
+- `:grep` with ripgrep as vanilla alternative to Telescope live_grep
 
 **Vim keybindings everywhere**: Hyprland (SUPER+hjkl), tmux (prefix+hjkl), Neovim (Ctrl+hjkl), zsh (bindkey -v).
 
 ## Neovim
 
-### Installed Plugins (intentionally minimal)
+### Installed Plugins
 - **lazy.nvim** — Plugin manager (auto-bootstraps)
 - **vim-surround** — Add/change/delete surroundings (`ys`, `ds`, `cs`)
 - **treesitter** — AST-based syntax highlighting
+- **mason.nvim** — Installs LSP servers automatically
+- **mason-lspconfig.nvim** — Bridge between mason and lspconfig
+- **nvim-lspconfig** — Configures LSP clients (pyright for Python)
+- **telescope.nvim** — Fuzzy finder (files, grep, buffers, recent files)
+- **telescope-fzf-native.nvim** — Compiled C fzf algorithm for faster fuzzy matching
+- **aerial.nvim** — Symbol sidebar (functions, classes, variables)
+- **trouble.nvim** — Diagnostics panel (errors, warnings)
 
 ### Key Bindings (Leader: `<Space>`)
 - `kj` — Exit insert/visual/terminal mode
 - `<leader>e` — Toggle file explorer (netrw)
-- `<leader>fb` — List buffers and switch
+- `<leader>ff` — Find files (telescope)
+- `<leader>fr` — Recent files (telescope)
+- `<leader>fg` — Live grep (telescope)
+- `<leader>fb` — Buffers (telescope)
 - `<leader>sv/sh` — Split vertically/horizontally
 - `<C-h/j/k/l>` — Navigate splits
 - `<leader>+/-` — Increment/decrement number
 - `<leader>nh` — Clear search highlights
 - `<leader>tt` — Terminal split
+- `<leader>cs` — Toggle symbol sidebar (aerial)
+- `<leader>xx` — Toggle diagnostics panel (trouble)
+
+### LSP Key Bindings (active in files with LSP)
+- `gd` — Go to definition
+- `gr` — Show references
+- `K` — Hover documentation
+- `<leader>ca` — Code action (quick fixes)
+- `<leader>rn` — Rename symbol
+- `<leader>d` — Line diagnostics
+- `[d` / `]d` — Previous/next diagnostic
 
 ### Adding New Keymaps
 Edit `nvim/lua/jlewe/core/keymaps.lua` using `vim.keymap.set()`.
