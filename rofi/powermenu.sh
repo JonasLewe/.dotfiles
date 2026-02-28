@@ -28,7 +28,7 @@ chosen=$(printf 'Lock\0icon\x1fsystem-lock-screen\nLogout\0icon\x1fsystem-log-ou
     | "${rofi_cmd[@]}" -theme-str 'listview { lines: 4; }')
 
 confirm() {
-    printf 'Yes\nNo\n' | "${rofi_cmd[@]}" \
+    printf 'Yes\0icon\x1femblem-ok-symbolic\nNo\0icon\x1fdialog-cancel\n' | "${rofi_cmd[@]}" \
         -theme-str 'listview { lines: 2; }'
 }
 
