@@ -247,7 +247,8 @@ SUPER + Rechtsklick    Fenster resizen (drag)
 ```
 Print                  Screenshot (Region auswählen → Clipboard)
 Shift + Print          Screenshot (ganzer Bildschirm → Clipboard)
-SUPER + Shift + x      Bildschirm sperren (hyprlock)
+SUPER + `              Bildschirm sperren (hyprlock)
+SUPER + Delete         Power Menu (lock/logout/reboot/shutdown)
 ```
 
 ### Parallele zu deinen anderen Tools

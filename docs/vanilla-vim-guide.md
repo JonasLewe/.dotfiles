@@ -4,7 +4,7 @@ Dieses Dokument zeigt dir die nativen Neovim/Vim-Alternativen zu den Plugins, di
 
 ---
 
-## 1. Dateien finden (ersetzt Telescope)
+## 1. Dateien finden (native Alternative zu Telescope)
 
 ### Dateien nach Name finden: `:find`
 
@@ -55,7 +55,7 @@ N               " Vorheriger Treffer
 :bd              " Buffer schließen (Datei bleibt gespeichert)
 ```
 
-Tipp: `<leader>fb` ist als Keymap konfiguriert — zeigt Buffer-Liste und lässt dich wechseln.
+Tipp: `<leader>fb` öffnet Telescope Buffers — fuzzy Buffer-Suche. Die vanilla Alternative `:ls` + `:b` funktioniert genauso.
 
 ---
 
@@ -351,7 +351,7 @@ git commit     " Commit schreiben (öffnet Neovim!)
 
 **Dateien:**
 - `<leader>e` — Dateiexplorer (netrw) toggle
-- `<leader>fb` — Buffer-Liste
+- `<leader>fb` — Buffer-Liste (Telescope)
 
 **Terminal:**
 - `<leader>tt` — Terminal-Split öffnen

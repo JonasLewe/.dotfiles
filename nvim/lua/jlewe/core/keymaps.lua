@@ -20,7 +20,7 @@ local keymap = vim.keymap
 
 -- EXIT INSERT/VISUAL/TERMINAL MODE
 -- "kj" pressed quickly is much more ergonomic than reaching for Escape.
--- The key sequence must be typed fast (within timeoutlen = 300ms).
+-- The key sequence must be typed fast (within timeoutlen = 500ms).
 -- You can still use Escape — this is just an additional shortcut.
 keymap.set("i", "kj", "<ESC>",        { desc = "Exit insert mode" })
 keymap.set("v", "kj", "<ESC>",        { desc = "Exit visual mode" })
@@ -116,4 +116,3 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<C-l>", "<C-w>l", { buffer = true })
   end,
 })
-keymap.set("n", "<leader>fb", ":ls<CR>:b ", { desc = "List buffers and switch" })
