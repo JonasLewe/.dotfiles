@@ -49,6 +49,7 @@ setopt hist_ignore_dups       # don't store consecutive duplicates
 setopt hist_find_no_dups      # skip duplicates when searching history
 setopt share_history          # share history between tmux panes/terminals
 setopt append_history         # append to history file, don't overwrite
+setopt AUTO_CD
 
 # ==============================================================================
 # ALIASES
@@ -56,7 +57,7 @@ setopt append_history         # append to history file, don't overwrite
 # Keep aliases minimal — type full commands to learn them.
 # Run `alias` to see all active aliases.
 
-alias ll="ls -lah"   # list files: long format + hidden files + human sizes
+alias la="ls -lah"   # list files: long format + hidden files + human sizes
 
 # ==============================================================================
 # PATH

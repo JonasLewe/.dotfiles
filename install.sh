@@ -51,6 +51,8 @@ install_pkg ripgrep        # fast grep, used by :grep in neovim
 install_pkg fd             # fast find, useful for :find alternatives
 install_pkg ctags           # code navigation with <C-]> in neovim
 install_pkg libfido2        # FIDO2/U2F support (YubiKey, SSH ed25519-sk)
+install_pkg nodejs          # runtime for LSP servers (pyright etc. via mason.nvim)
+install_pkg npm             # package manager for LSP server installation
 
 echo
 
@@ -135,7 +137,11 @@ fi
 
 # Create .zshrc.local for machine-specific secrets
 if [[ ! -e ~/.zshrc.local ]]; then
-    cp "$DOTFILES_DIR/zsh/zshrc.local.example" ~/.zshrc.local
+    if [[ -f "$DOTFILES_DIR/zsh/zshrc.local.example" ]]; then
+        cp "$DOTFILES_DIR/zsh/zshrc.local.example" ~/.zshrc.local
+    else
+        touch ~/.zshrc.local
+    fi
     echo "✅ Created ~/.zshrc.local (edit to add API keys, work aliases, etc.)"
 else
     echo "✅ ~/.zshrc.local already exists"
