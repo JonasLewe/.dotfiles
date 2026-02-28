@@ -50,6 +50,7 @@ install_pkg git
 install_pkg ripgrep        # fast grep, used by :grep in neovim
 install_pkg fd             # fast find, useful for :find alternatives
 install_pkg ctags           # code navigation with <C-]> in neovim
+install_pkg libfido2        # FIDO2/U2F support (YubiKey, SSH ed25519-sk)
 
 echo
 
@@ -67,6 +68,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]; then
     install_pkg dunst
     install_pkg hyprpaper       # static wallpaper
     install_pkg hyprlock        # lock screen
+    install_pkg hypridle        # idle daemon (lock before sleep, idle timeout)
     install_pkg brightnessctl   # brightness control for waybar/keybinds
     install_pkg playerctl       # media control for waybar/keybinds
     install_pkg grim            # screenshot tool

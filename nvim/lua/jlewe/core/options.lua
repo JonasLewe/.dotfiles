@@ -159,7 +159,7 @@ opt.updatetime = 250
 -- timeoutlen: milliseconds to wait for a key sequence to complete.
 -- Affects multi-key mappings like "kj" (insert→normal mode).
 -- Lower = faster, but too low can make it hard to type key combos.
-opt.timeoutlen = 300
+opt.timeoutlen = 500
 
 -- -----------------------------------------------------------------------------
 -- TERMINAL FIX
