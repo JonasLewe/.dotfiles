@@ -3,8 +3,8 @@
 # ==============================================================================
 # This file runs ONCE when you log in (login shell).
 # Use it for things that only need to be set once per session:
-#   • PATH additions
-#   • Environment variables that should persist across all shells
+#   - PATH additions
+#   - Environment variables that should persist across all shells
 #
 # It does NOT run for every new terminal/tmux pane — that's .zshrc's job.
 # Ghostty → tmux → zsh: only .zshrc runs for each pane.
@@ -31,7 +31,7 @@ fi
 export MANPATH="$HOME/.local/share/man:$(manpath -q 2>/dev/null)"
 
 # ==============================================================================
-# AUTO-START HYPRLAND
+# PLATFORM-SPECIFIC
 # ==============================================================================
 # Start Hyprland automatically on TTY1 login (no display manager needed)
 # Only runs on Linux — macOS doesn't have TTYs or Wayland

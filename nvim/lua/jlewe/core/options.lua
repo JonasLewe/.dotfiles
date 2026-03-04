@@ -74,10 +74,8 @@ opt.background = "dark"
 -- "yes" prevents the text from jumping left/right when signs appear.
 opt.signcolumn = "yes"
 
--- Built-in colorscheme. No plugin needed.
--- Other good built-ins: default, slate, desert, evening, industry
--- Run :colorscheme <Tab> to browse all installed schemes.
-vim.cmd("colorscheme habamax")
+-- Colorscheme is set by the cyberdream plugin (plugins/colorscheme.lua).
+-- It loads with priority 1000 so it's available before other plugins.
 
 -- -----------------------------------------------------------------------------
 -- BACKSPACE BEHAVIOR

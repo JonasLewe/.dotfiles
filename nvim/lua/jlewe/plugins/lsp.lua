@@ -53,6 +53,7 @@ return {
         -- Add more as you need them — find names with :Mason
         ensure_installed = {
           "pyright",       -- Python
+          "lua_ls",        -- Lua (Neovim config)
         },
       })
     end,
@@ -94,11 +95,33 @@ return {
         end,
       })
 
+      -- CMP CAPABILITIES — tell LSP servers about nvim-cmp's extended features
+      -- Without this, servers won't send snippet completions or extra detail.
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+      })
+
+      -- LUA_LS CONFIG — special settings for Neovim Lua development
+      -- Without this, lua_ls would flag `vim` as an undefined global.
+      vim.lsp.config("lua_ls", {
+        settings = {
+          Lua = {
+            diagnostics = {
+              globals = { "vim" },
+            },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file("", true),
+            },
+          },
+        },
+      })
+
       -- ENABLE SERVERS — Neovim 0.11+ native API
       -- vim.lsp.enable() tells Neovim to start this server for matching filetypes.
       -- The server config (cmd, filetypes, root_dir) comes from nvim-lspconfig.
       -- Add new servers here after adding them to ensure_installed above.
-      vim.lsp.enable("pyright")
+      vim.lsp.enable({ "pyright", "lua_ls" })
     end,
   },
 }

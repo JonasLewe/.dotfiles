@@ -8,7 +8,7 @@ This is a **cross-platform** personal dotfiles repository for **macOS and Arch L
 
 ### Shared (both platforms)
 - **Ghostty** — GPU-accelerated terminal emulator (with commented Mac overrides)
-- **Neovim** — Config with LSP, treesitter, telescope.nvim, aerial.nvim, trouble.nvim, and vim-surround
+- **Neovim** — Config with LSP, treesitter, telescope.nvim, nvim-cmp, aerial.nvim, trouble.nvim, cyberdream, vim-surround
 - **tmux** — Vanilla config with vim keybindings (no plugin manager)
 - **zsh** — Plain zsh with vi-mode (no frameworks)
 - **Git** — Minimal gitconfig (email via `~/.gitconfig.local`)
@@ -73,6 +73,8 @@ The install script auto-detects the OS and:
 │       │   ├── options.lua  # Editor options, netrw, path/grep setup
 │       │   └── keymaps.lua  # Key mappings
 │       ├── plugins/
+│       │   ├── cmp.lua          # nvim-cmp + LuaSnip (autocompletion)
+│       │   ├── colorscheme.lua  # cyberdream (transparent dark theme)
 │       │   ├── editor.lua      # vim-surround
 │       │   ├── lsp.lua         # mason + lspconfig (LSP setup)
 │       │   ├── navigation.lua  # aerial.nvim + trouble.nvim
@@ -94,11 +96,13 @@ The install script auto-detects the OS and:
 ├── dunst/dunstrc            # Notifications
 ├── git/
 │   ├── gitconfig            # Shared (email in ~/.gitconfig.local)
+│   ├── gitconfig.local.example  # Template for per-machine email
 │   └── gitignore_global
 ├── aerospace/aerospace.toml  # macOS tiling WM (i3-like)
 ├── install.sh               # Unified installer (macOS + Linux)
 └── docs/
     ├── vanilla-vim-guide.md # Native Vim alternatives tutorial
+    ├── neovim-details.md    # Neovim config deep-dive (architecture, keybinds, LSP)
     └── rice-guide.md        # Hyprland rice setup tutorial
 ```
 
@@ -107,9 +111,12 @@ The install script auto-detects the OS and:
 **Vanilla First**: Native features over plugins:
 - `:Ex`/`:Lex` instead of nvim-tree
 - `:find` + `path+=**` as vanilla alternative to Telescope (telescope.nvim now installed for fuzzy finding)
-- `<C-x><C-n>` instead of nvim-cmp
 - Visual Block Mode (`<C-v>`) instead of Comment.nvim
 - `:grep` with ripgrep as vanilla alternative to Telescope live_grep
+
+**Per-machine config**: Git email and machine-specific secrets live outside the repo:
+- `~/.gitconfig.local` — git email (created by install.sh)
+- `~/.zshrc.local` — API keys, work aliases
 
 **Vim keybindings everywhere**: Hyprland (SUPER+hjkl), tmux (prefix+hjkl), Neovim (Ctrl+hjkl), zsh (bindkey -v).
 
@@ -117,11 +124,14 @@ The install script auto-detects the OS and:
 
 ### Installed Plugins
 - **lazy.nvim** — Plugin manager (auto-bootstraps)
+- **cyberdream.nvim** — Dark colorscheme with transparency support
 - **vim-surround** — Add/change/delete surroundings (`ys`, `ds`, `cs`)
 - **treesitter** — AST-based syntax highlighting
+- **nvim-cmp** — Autocompletion engine (LSP + snippets + buffer + path)
+- **LuaSnip** — Snippet engine (for LSP snippet expansion)
 - **mason.nvim** — Installs LSP servers automatically
 - **mason-lspconfig.nvim** — Bridge between mason and lspconfig
-- **nvim-lspconfig** — Configures LSP clients (pyright for Python)
+- **nvim-lspconfig** — Configures LSP clients (pyright, lua_ls)
 - **telescope.nvim** — Fuzzy finder (files, grep, buffers, recent files)
 - **telescope-fzf-native.nvim** — Compiled C fzf algorithm for faster fuzzy matching
 - **aerial.nvim** — Symbol sidebar (functions, classes, variables)
@@ -257,4 +267,5 @@ The install script prompts for this during setup.
 ## Guides
 
 - `docs/vanilla-vim-guide.md` — Native Vim alternatives to common plugins
+- `docs/neovim-details.md` — Neovim config deep-dive (architecture, keybinds, LSP, plugins)
 - `docs/rice-guide.md` — Full Hyprland rice setup tutorial (CachyOS)

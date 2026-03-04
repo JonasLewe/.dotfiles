@@ -96,3 +96,21 @@ export PYTHONDONTWRITEBYTECODE=1
 
 # Cargo/Rust environment (if installed)
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
+
+# ==============================================================================
+# NVM — LAZY LOADING
+# ==============================================================================
+# nvm's default init script adds ~700ms to shell startup. This lazy-loads it:
+# nvm, node, npm, npx are available as commands but nvm only initializes
+# when you actually call one of them for the first time.
+if [[ -d "$HOME/.nvm" ]]; then
+  export NVM_DIR="$HOME/.nvm"
+  lazy_load_nvm() {
+    unset -f nvm node npm npx
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  }
+  nvm()  { lazy_load_nvm; nvm "$@"; }
+  node() { lazy_load_nvm; node "$@"; }
+  npm()  { lazy_load_nvm; npm "$@"; }
+  npx()  { lazy_load_nvm; npx "$@"; }
+fi
