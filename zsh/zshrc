@@ -14,10 +14,25 @@
 # VI MODE
 # ==============================================================================
 # Enable vim keybindings in the shell.
-# Press Escape to enter normal mode (hjkl navigation, etc.)
+# Press Escape or kj to enter normal mode (hjkl navigation, etc.)
 # Press i or a to go back to insert mode.
 bindkey -v
-export KEYTIMEOUT=1   # 10ms delay for mode switch (snappy Escape)
+bindkey -M viins 'kj' vi-cmd-mode   # kj as Escape alternative
+export KEYTIMEOUT=20  # 200ms — enough time for kj sequence, still snappy
+
+# Cursor shape: beam (|) in insert mode, block (█) in normal mode
+zle-keymap-select() {
+  if [[ $KEYMAP == vicmd ]]; then
+    echo -ne '\e[2 q'  # block cursor
+  else
+    echo -ne '\e[6 q'  # beam cursor
+  fi
+}
+zle -N zle-keymap-select
+
+# Start each new prompt in insert mode with beam cursor
+zle-line-init() { echo -ne '\e[6 q' }
+zle -N zle-line-init
 
 # ==============================================================================
 # PROMPT
