@@ -1,5 +1,7 @@
 [user]
 	name = Jonas Lewe
+	# Email is set per-machine in ~/.gitconfig.local
+	# Run install.sh or copy git/gitconfig.local.example to ~/.gitconfig.local
 
 [include]
 	path = ~/.gitconfig.local

@@ -5,7 +5,11 @@
 # ==============================================================================
 # Usage: git clone <repo> ~/.dotfiles && cd ~/.dotfiles && ./install.sh
 #
-# This script installs and symlinks all configurations.
+# Supports:
+#   - Arch Linux (CachyOS, EndeavourOS, etc.) via pacman
+#   - macOS via Homebrew
+#
+# This script installs packages, symlinks configs, and sets up the environment.
 # It prompts before overwriting existing files.
 
 set -e  # Exit on error
@@ -28,19 +32,19 @@ link_config() {
     local dst="$2"
 
     if [[ -e "$dst" ]] || [[ -L "$dst" ]]; then
-        read -p "⚠️  $dst already exists. Overwrite? (y/n) " -r
+        read -p "$dst already exists. Overwrite? (y/n) " -r
         echo
         if [[ $REPLY =~ ^[Yy]$ ]]; then
             rm -rf "$dst"
         else
-            echo "⏭️  Skipping $dst"
+            echo "Skipping $dst"
             return
         fi
     fi
 
     mkdir -p "$(dirname "$dst")"
     ln -s "$src" "$dst"
-    echo "✅ $dst → $src"
+    echo "$dst -> $src"
 }
 
 # ==============================================================================
@@ -139,14 +143,10 @@ else
     echo "✅ ghostty/platform.conf → linux.conf"
 fi
 
-# Man page (system config reference: man dotfiles)
-mkdir -p ~/.local/share/man/man7
-link_config "$DOTFILES_DIR/man/dotfiles.7" ~/.local/share/man/man7/dotfiles.7
-
 # Global gitignore (no prompt, doesn't overwrite)
 if [[ ! -e ~/.gitignore_global ]]; then
     ln -s "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
-    echo "✅ ~/.gitignore_global → git/gitignore_global"
+    echo "~/.gitignore_global -> git/gitignore_global"
 else
     echo "✅ ~/.gitignore_global already exists"
 fi
@@ -186,11 +186,11 @@ fi
 
 lazypath="$HOME/.local/share/nvim/lazy/lazy.nvim"
 if [[ ! -d "$lazypath" ]]; then
-    echo "📥 Installing lazy.nvim..."
+    echo "Installing lazy.nvim..."
     git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
-    echo "✅ lazy.nvim installed"
+    echo "lazy.nvim installed"
 else
-    echo "✅ lazy.nvim already installed"
+    echo "lazy.nvim already installed"
 fi
 
 echo
@@ -201,28 +201,39 @@ echo
 
 ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
 if [[ ! -d "$ghostty_shaders" ]]; then
-    echo "📥 Installing Ghostty shaders..."
+    echo "Installing Ghostty shaders..."
     git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
-    echo "✅ Ghostty shaders installed"
+    echo "Ghostty shaders installed"
 else
-    echo "✅ Ghostty shaders already installed"
+    echo "Ghostty shaders already installed"
 fi
 
 echo
+
+# ==============================================================================
+# MAN PAGE (Linux only)
+# ==============================================================================
+
+if [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
+    mkdir -p ~/.local/share/man/man7
+    link_config "$DOTFILES_DIR/man/dotfiles.7" ~/.local/share/man/man7/dotfiles.7
+    echo
+fi
 
 # ==============================================================================
 # SSH CONFIG (manual setup)
 # ==============================================================================
 
-if [[ ! -e ~/.ssh/config ]]; then
-    echo "ℹ️  SSH config not found"
-    echo "   To set up: cp $DOTFILES_DIR/ssh/config.example ~/.ssh/config"
-    echo "   Then edit and chmod 600 ~/.ssh/config"
-else
-    echo "✅ SSH config already exists"
+if [[ -d "$DOTFILES_DIR/ssh" ]]; then
+    if [[ ! -e ~/.ssh/config ]]; then
+        echo "SSH config not found"
+        echo "  To set up: cp $DOTFILES_DIR/ssh/config.example ~/.ssh/config"
+        echo "  Then edit and chmod 600 ~/.ssh/config"
+    else
+        echo "SSH config already exists"
+    fi
+    echo
 fi
-
-echo
 
 # ==============================================================================
 # LOCAL CONFIG FILES
@@ -265,11 +276,11 @@ echo
 # ==============================================================================
 
 if [[ "$SHELL" != *"zsh"* ]]; then
-    echo "📥 Setting zsh as default shell..."
+    echo "Setting zsh as default shell..."
     chsh -s "$(which zsh)"
-    echo "✅ Default shell changed to zsh (takes effect on next login)"
+    echo "Default shell changed to zsh (takes effect on next login)"
 else
-    echo "✅ zsh is already the default shell"
+    echo "zsh is already the default shell"
 fi
 
 echo
@@ -302,9 +313,9 @@ fi
 # DONE
 # ==============================================================================
 
-echo "✨ Installation complete!"
+echo "Installation complete!"
 echo
-echo "📝 Next steps:"
+echo "Next steps:"
 echo "  1. Log out and back in (to activate zsh as default shell)"
 echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
 echo "  3. Start tmux: 'tmux'"
@@ -316,6 +327,5 @@ if [[ "$INSTALL_RICE" == true ]]; then
     echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
     echo "  5. Read the rice guide: docs/rice-guide.md"
 fi
-echo "  📖 Read the vanilla vim guide: docs/vanilla-vim-guide.md"
 echo
-echo "🎯 Learn the fundamentals first, add plugins later!"
+echo "Documentation: CLAUDE.md (full reference), docs/ (guides)"

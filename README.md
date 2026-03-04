@@ -5,7 +5,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 ## What's included
 
 ### Shared
-- **Neovim** — LSP, Treesitter, Telescope, aerial.nvim, trouble.nvim
+- **Neovim** — LSP, Treesitter, Telescope, nvim-cmp, aerial.nvim, trouble.nvim, cyberdream
 - **tmux** — Vanilla config, vim keybindings, no plugin manager
 - **zsh** — Plain zsh with vi-mode, no frameworks
 - **Ghostty** — GPU-accelerated terminal (with commented Mac overrides)
@@ -15,9 +15,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 - **Hyprland** — Tiling Wayland compositor (+ Waybar, Rofi, Dunst)
 
 ### macOS
-- **Yabai** — Tiling window manager
-- **SKHD** — Hotkey daemon (vim-style window management)
-- **Karabiner-Elements** — Keyboard customization
+- **AeroSpace** — i3-like tiling window manager (no SIP required)
 
 Philosophy: **vanilla first** — learn native features before adding plugins.
 
