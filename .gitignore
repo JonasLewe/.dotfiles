@@ -10,6 +10,9 @@ git/gitconfig.local
 # External repos (installed separately)
 ghostty/shaders/
 
+# Platform-specific symlink (created by install.sh)
+ghostty/platform.conf
+
 # Neovim binaries (downloaded/extracted by install.sh, not part of dotfiles)
 nvim-linux-x86_64/
 nvim-linux-arm64/
@@ -18,6 +21,9 @@ nvim-linux-arm64/
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# Karabiner automatic backups
+karabiner/automatic_backups/
 
 # Neovim
 *.swp
