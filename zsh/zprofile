@@ -10,6 +10,15 @@
 # Ghostty → tmux → zsh: only .zshrc runs for each pane.
 
 # ==============================================================================
+# HOMEBREW (macOS)
+# ==============================================================================
+# Homebrew on Apple Silicon installs to /opt/homebrew.
+# This sets PATH, MANPATH, and INFOPATH for brew and all its packages.
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# ==============================================================================
 # PATH
 # ==============================================================================
 # ~/.local/bin is the standard location for user-installed tools
@@ -25,6 +34,9 @@ export MANPATH="$HOME/.local/share/man:$(manpath -q 2>/dev/null)"
 # AUTO-START HYPRLAND
 # ==============================================================================
 # Start Hyprland automatically on TTY1 login (no display manager needed)
-if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
-    exec start-hyprland &> ~/.cache/hyprland.log
+# Only runs on Linux — macOS doesn't have TTYs or Wayland
+if [[ "$(uname)" == "Linux" ]]; then
+    if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+        exec start-hyprland &> ~/.cache/hyprland.log
+    fi
 fi
