@@ -4,22 +4,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a personal dotfiles repository for CachyOS (Arch Linux). It covers the full desktop stack: window manager, terminal, editor, shell, and multiplexer. The philosophy is **vanilla first** — use native features before adding plugins. Learn the fundamentals, then extend.
+This is a **cross-platform** personal dotfiles repository for **macOS and Arch Linux**. One repo, both platforms. The philosophy is **vanilla first** — use native features before adding plugins. Learn the fundamentals, then extend.
 
-It includes:
+### Shared (both platforms)
+- **Ghostty** — GPU-accelerated terminal emulator (with commented Mac overrides)
+- **Neovim** — Config with LSP, treesitter, telescope.nvim, aerial.nvim, trouble.nvim, and vim-surround
+- **tmux** — Vanilla config with vim keybindings (no plugin manager)
+- **zsh** — Plain zsh with vi-mode (no frameworks)
+- **Git** — Minimal gitconfig (email via `~/.gitconfig.local`)
+
+### Linux-only (Arch / CachyOS)
 - **Hyprland** — Tiling Wayland compositor with vim-style keybindings
 - **Waybar** — Minimal status bar
 - **Rofi** — Application launcher
 - **Dunst** — Notification daemon
-- **Ghostty** — GPU-accelerated terminal emulator
-- **Neovim** — Config with LSP, treesitter, telescope.nvim, aerial.nvim, trouble.nvim, and vim-surround
-- **tmux** — Vanilla config with vim keybindings (no plugin manager)
-- **zsh** — Plain zsh with vi-mode (no frameworks)
-- **Git** — Minimal gitconfig with global gitignore
+
+### macOS-only
+- **AeroSpace** — i3-like tiling window manager (no SIP required, instant workspaces)
 
 ## Installation & Setup
 
-**Requires:** CachyOS or any Arch-based distro (pacman).
+**Requires:** macOS (Homebrew) or Arch-based distro (pacman).
 
 ```bash
 git clone <repo> ~/.dotfiles
@@ -27,22 +32,28 @@ cd ~/.dotfiles
 ./install.sh
 ```
 
-The install script:
-- Installs core tools via pacman: neovim, tmux, zsh, ghostty, ripgrep, fd, ctags, nodejs, npm
-- Optionally installs Hyprland + rice tools: waybar, rofi, dunst, hyprpaper, hyprlock, etc.
-- Symlinks all configurations:
-  - `./nvim/` → `~/.config/nvim/`
-  - `./tmux/tmux.conf` → `~/.tmux.conf`
-  - `./zsh/zshrc` → `~/.zshrc`
-  - `./zsh/zprofile` → `~/.zprofile`
-  - `./git/gitconfig` → `~/.gitconfig`
-  - `./ghostty/` → `~/.config/ghostty/`
-  - `./hyprland/` → `~/.config/hypr/`
-  - `./waybar/` → `~/.config/waybar/`
-  - `./rofi/` → `~/.config/rofi/`
-  - `./dunst/` → `~/.config/dunst/`
+The install script auto-detects the OS and:
+- **macOS**: Installs via Homebrew, symlinks shared configs + AeroSpace WM
+- **Linux**: Installs via pacman, optionally installs Hyprland + rice tools
+- Prompts for git email → writes to `~/.gitconfig.local`
+- Creates `~/.zshrc.local` for machine-specific config (nvm, IBM CLI, etc.)
 - Sets zsh as default shell
-- Prompts before overwriting existing configurations
+
+### Symlink Matrix
+
+| Config | Target | Platform |
+|--------|--------|----------|
+| `nvim/` | `~/.config/nvim/` | All |
+| `tmux/tmux.conf` | `~/.tmux.conf` | All |
+| `zsh/zshrc` | `~/.zshrc` | All |
+| `zsh/zprofile` | `~/.zprofile` | All |
+| `git/gitconfig` | `~/.gitconfig` | All |
+| `ghostty/` | `~/.config/ghostty/` | All |
+| `aerospace/` | `~/.config/aerospace/` | macOS |
+| `hyprland/` | `~/.config/hypr/` | Linux |
+| `waybar/` | `~/.config/waybar/` | Linux |
+| `rofi/` | `~/.config/rofi/` | Linux |
+| `dunst/` | `~/.config/dunst/` | Linux |
 
 ### Reset Configuration
 ```bash
@@ -82,9 +93,10 @@ The install script:
 │   └── powermenu.sh         # Power menu (lock/logout/reboot/shutdown)
 ├── dunst/dunstrc            # Notifications
 ├── git/
-│   ├── gitconfig
+│   ├── gitconfig            # Shared (email in ~/.gitconfig.local)
 │   └── gitignore_global
-├── install.sh               # Installer (Arch/pacman)
+├── aerospace/aerospace.toml  # macOS tiling WM (i3-like)
+├── install.sh               # Unified installer (macOS + Linux)
 └── docs/
     ├── vanilla-vim-guide.md # Native Vim alternatives tutorial
     └── rice-guide.md        # Hyprland rice setup tutorial
@@ -173,7 +185,7 @@ Plain zsh, no framework. Vi-mode via `bindkey -v`.
 - Completion: case-insensitive, menu selection
 - History: 10,000 lines, shared across panes
 - Files: `zsh/zshrc`, `zsh/zprofile`, `~/.zshrc.local` (secrets)
-- Hyprland auto-starts on TTY1 login (no display manager needed)
+- Hyprland auto-starts on TTY1 login on Linux (guarded by `uname` check)
 
 ---
 
@@ -207,6 +219,38 @@ Power menu: `rofi/powermenu.sh` — standalone theme (breeze-dark icons), vim na
 
 ### Dunst
 Config: `dunst/dunstrc`. Test: `notify-send "Title" "Body"`.
+
+---
+
+## macOS Window Management — AeroSpace
+
+Config: `aerospace/aerospace.toml`. i3-like tiling WM. No SIP required.
+Layout: tiles. Gaps: 2px. Instant workspace switching (bypasses Mission Control).
+
+### Key Bindings
+- `Alt + h/j/k/l` — Focus window
+- `Alt + Shift + h/j/k/l` — Move/swap window
+- `Alt + Shift + m` — Fullscreen
+- `Alt + Shift + e` — Balance sizes
+- `Alt + Shift + t` — Toggle float/tiling
+- `Ctrl + 1-8` — Switch workspace (instant)
+- `Ctrl + Shift + 1-8` — Move window to workspace
+- `Alt + Shift + s/g` — Move window to left/right monitor
+- `Alt + Tab` — Workspace back-and-forth
+- `Alt + Shift + ;` — Enter service mode (r=reset, f=float, Esc=exit)
+
+### Floating Apps (not tiled)
+System Settings, Calculator, QuickTime, Finder, Cisco Secure Client, Webex.
+
+---
+
+## Git Email
+
+Git email is **not** in the shared gitconfig. Each machine sets it via `~/.gitconfig.local`:
+```bash
+git config --file ~/.gitconfig.local user.email you@example.com
+```
+The install script prompts for this during setup.
 
 ---
 
