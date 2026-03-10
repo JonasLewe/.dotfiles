@@ -24,7 +24,19 @@ local keymap = vim.keymap
 -- You can still use Escape — this is just an additional shortcut.
 keymap.set("i", "kj", "<ESC>",        { desc = "Exit insert mode" })
 keymap.set("v", "kj", "<ESC>",        { desc = "Exit visual mode" })
-keymap.set("t", "kj", "<C-\\><C-n>",  { desc = "Exit terminal mode" }) -- terminal needs special sequence
+-- "kj" to exit terminal mode, but NOT in lazygit (where j/k are navigation keys)
+vim.api.nvim_create_autocmd("TermOpen", {
+  callback = function()
+    local buf = vim.api.nvim_get_current_buf()
+    -- Delay slightly to let the terminal process start
+    vim.defer_fn(function()
+      local bufname = vim.api.nvim_buf_get_name(buf)
+      if not bufname:match("lazygit") then
+        vim.keymap.set("t", "kj", "<C-\\><C-n>", { buffer = buf, desc = "Exit terminal mode" })
+      end
+    end, 100)
+  end,
+})
 
 -- CLEAR SEARCH HIGHLIGHTS
 -- After searching with /, all matches stay highlighted until you clear them.
