@@ -1,6 +1,8 @@
 [user]
 	name = Jonas Lewe
-	email = jonas.lewe@icloud.com
+
+[include]
+	path = ~/.gitconfig.local
 
 [core]
 	editor = nvim
