@@ -287,6 +287,18 @@ if [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
 fi
 
 # ==============================================================================
+# CUSTOM CLI SCRIPTS
+# ==============================================================================
+
+if [[ -f "$DOTFILES_DIR/scripts/install.sh" ]]; then
+    read -p "🔧 Install custom CLI scripts (glab-issue-helper, etc.)? (y/n) " -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        bash "$DOTFILES_DIR/scripts/install.sh"
+    fi
+fi
+
+# ==============================================================================
 # DONE
 # ==============================================================================
 
