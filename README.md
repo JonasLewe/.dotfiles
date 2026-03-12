@@ -26,10 +26,11 @@ Requires macOS (Homebrew) or an Arch-based distro (pacman).
 ```bash
 git clone <repo> ~/.dotfiles
 cd ~/.dotfiles
-./install.sh
+./install.sh           # First install (interactive)
+./install.sh --update  # Re-run: skip prompts, install only what's missing
 ```
 
-The installer auto-detects the OS, installs packages, symlinks configs, and prompts for machine-specific settings (git email, Nerd Font, Hyprland rice on Linux).
+The installer auto-detects the OS, installs packages, symlinks configs, and prompts for machine-specific settings. Idempotent — safe to re-run.
 
 ## Documentation
 
