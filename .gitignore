@@ -13,9 +13,10 @@ ghostty/shaders/
 # Platform-specific symlink (created by install.sh)
 ghostty/platform.conf
 
-# Neovim binaries (downloaded/extracted by install.sh, not part of dotfiles)
+# Binaries (downloaded/extracted, not part of dotfiles)
 nvim-linux-x86_64/
 nvim-linux-arm64/
+lazygit
 
 # macOS
 .DS_Store
