@@ -29,7 +29,8 @@ This is a **cross-platform** personal dotfiles repository for **macOS and Arch L
 ```bash
 git clone <repo> ~/.dotfiles
 cd ~/.dotfiles
-./install.sh
+./install.sh           # First install (interactive, prompts for choices)
+./install.sh --update  # Re-run: skip prompts, install only what's missing
 ```
 
 The install script auto-detects the OS and:

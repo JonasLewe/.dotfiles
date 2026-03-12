@@ -9,13 +9,20 @@
 #   - Arch Linux (CachyOS, EndeavourOS, etc.) via pacman
 #   - macOS via Homebrew
 #
-# This script installs packages, symlinks configs, and sets up the environment.
-# It prompts before overwriting existing files.
+# This script is idempotent — safe to re-run. It skips what's already set up.
+# Use --update to skip all prompts and only install/link what's missing.
 
 set -e  # Exit on error
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname)"
+UPDATE_MODE=false
+
+if [[ "$1" == "--update" ]]; then
+    UPDATE_MODE=true
+    echo "🔄 Update mode — skipping prompts, installing only what's missing"
+    echo
+fi
 
 echo "🚀 Installing dotfiles from: $DOTFILES_DIR"
 echo "🖥️  Detected OS: $OS"
@@ -25,20 +32,31 @@ echo
 # SYMLINK HELPER
 # ==============================================================================
 
-# Creates a symlink, prompting if target already exists.
+# Creates a symlink. Skips if already pointing to the correct source.
+# In update mode, overwrites without prompting. Otherwise asks.
 # Usage: link_config <source> <target>
 link_config() {
     local src="$1"
     local dst="$2"
 
+    # Already correct — skip silently
+    if [[ -L "$dst" ]] && [[ "$(readlink "$dst")" == "$src" ]]; then
+        echo "✅ $dst (already linked)"
+        return
+    fi
+
     if [[ -e "$dst" ]] || [[ -L "$dst" ]]; then
-        read -p "$dst already exists. Overwrite? (y/n) " -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
+        if [[ "$UPDATE_MODE" == true ]]; then
             rm -rf "$dst"
         else
-            echo "Skipping $dst"
-            return
+            read -p "$dst already exists. Overwrite? (y/n) " -r
+            echo
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                rm -rf "$dst"
+            else
+                echo "Skipping $dst"
+                return
+            fi
         fi
     fi
 
@@ -96,9 +114,20 @@ elif [[ "$OS" == "Linux" ]]; then
     echo
 
     # Optional: Hyprland + Rice
-    read -p "🎨 Install Hyprland + rice tools (waybar, rofi, dunst, etc.)? (y/n) " -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
+    # In update mode: auto-install if Hyprland is already present
+    if [[ "$UPDATE_MODE" == true ]]; then
+        if pacman -Qi hyprland &>/dev/null; then
+            INSTALL_RICE=true
+        fi
+    else
+        read -p "🎨 Install Hyprland + rice tools (waybar, rofi, dunst, etc.)? (y/n) " -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            INSTALL_RICE=true
+        fi
+    fi
+
+    if [[ "$INSTALL_RICE" == true ]]; then
         echo "=== Hyprland & Rice Tools ==="
         install_pkg hyprland
         install_pkg waybar
@@ -115,7 +144,6 @@ elif [[ "$OS" == "Linux" ]]; then
         install_pkg wl-clip-persist
         install_pkg breeze-icons
 
-        INSTALL_RICE=true
         echo
     fi
 fi
@@ -150,13 +178,8 @@ else
     echo "✅ ghostty/platform.conf → linux.conf"
 fi
 
-# Global gitignore (no prompt, doesn't overwrite)
-if [[ ! -e ~/.gitignore_global ]]; then
-    ln -s "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
-    echo "~/.gitignore_global -> git/gitignore_global"
-else
-    echo "✅ ~/.gitignore_global already exists"
-fi
+# Global gitignore
+link_config "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
 
 echo
 
@@ -197,7 +220,7 @@ if [[ ! -d "$lazypath" ]]; then
     git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
     echo "lazy.nvim installed"
 else
-    echo "lazy.nvim already installed"
+    echo "✅ lazy.nvim already installed"
 fi
 
 echo
@@ -212,7 +235,7 @@ if [[ ! -d "$ghostty_shaders" ]]; then
     git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
     echo "Ghostty shaders installed"
 else
-    echo "Ghostty shaders already installed"
+    echo "✅ Ghostty shaders already installed"
 fi
 
 echo
@@ -237,7 +260,7 @@ if [[ -d "$DOTFILES_DIR/ssh" ]]; then
         echo "  To set up: cp $DOTFILES_DIR/ssh/config.example ~/.ssh/config"
         echo "  Then edit and chmod 600 ~/.ssh/config"
     else
-        echo "SSH config already exists"
+        echo "✅ SSH config already exists"
     fi
     echo
 fi
@@ -260,17 +283,22 @@ fi
 
 # .gitconfig.local — machine-specific git config (email)
 if [[ ! -e ~/.gitconfig.local ]]; then
-    echo
-    read -p "📧 Enter your Git email address: " git_email
-    if [[ -n "$git_email" ]]; then
-        cat > ~/.gitconfig.local <<EOF
+    if [[ "$UPDATE_MODE" == true ]]; then
+        touch ~/.gitconfig.local
+        echo "✅ Created empty ~/.gitconfig.local (set your email: git config --file ~/.gitconfig.local user.email you@example.com)"
+    else
+        echo
+        read -p "📧 Enter your Git email address: " git_email
+        if [[ -n "$git_email" ]]; then
+            cat > ~/.gitconfig.local <<EOF
 [user]
 	email = $git_email
 EOF
-        echo "✅ Created ~/.gitconfig.local with email: $git_email"
-    else
-        touch ~/.gitconfig.local
-        echo "✅ Created empty ~/.gitconfig.local (set your email later: git config --file ~/.gitconfig.local user.email you@example.com)"
+            echo "✅ Created ~/.gitconfig.local with email: $git_email"
+        else
+            touch ~/.gitconfig.local
+            echo "✅ Created empty ~/.gitconfig.local (set your email later: git config --file ~/.gitconfig.local user.email you@example.com)"
+        fi
     fi
 else
     echo "✅ ~/.gitconfig.local already exists"
@@ -287,20 +315,24 @@ if [[ "$SHELL" != *"zsh"* ]]; then
     chsh -s "$(which zsh)"
     echo "Default shell changed to zsh (takes effect on next login)"
 else
-    echo "zsh is already the default shell"
+    echo "✅ zsh is already the default shell"
 fi
 
 echo
 
 # ==============================================================================
-# NERD FONT
+# NERD FONT (macOS)
 # ==============================================================================
 
-if [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
-    read -p "🔤 Install JetBrainsMono Nerd Font? (y/n) " -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        bash "$DOTFILES_DIR/install_nerd_font.sh"
+if [[ "$OS" == "Darwin" ]] && [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
+    if [[ "$UPDATE_MODE" == true ]]; then
+        echo "ℹ️  Nerd Font: run install_nerd_font.sh manually if needed"
+    else
+        read -p "🔤 Install JetBrainsMono Nerd Font? (y/n) " -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            bash "$DOTFILES_DIR/install_nerd_font.sh"
+        fi
     fi
 fi
 
@@ -309,10 +341,14 @@ fi
 # ==============================================================================
 
 if [[ -f "$DOTFILES_DIR/scripts/install.sh" ]]; then
-    read -p "🔧 Install custom CLI scripts (glab-issue-helper, etc.)? (y/n) " -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        bash "$DOTFILES_DIR/scripts/install.sh"
+    if [[ "$UPDATE_MODE" == true ]]; then
+        echo "ℹ️  Custom CLI scripts: run ./scripts/install.sh manually if needed"
+    else
+        read -p "🔧 Install custom CLI scripts (glab-issue-helper, etc.)? (y/n) " -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            bash "$DOTFILES_DIR/scripts/install.sh"
+        fi
     fi
 fi
 
@@ -322,16 +358,20 @@ fi
 
 echo "Installation complete!"
 echo
-echo "Next steps:"
-echo "  1. Log out and back in (to activate zsh as default shell)"
-echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
-echo "  3. Start tmux: 'tmux'"
-if [[ "$OS" == "Darwin" ]]; then
-    echo "  4. Install AeroSpace: brew install --cask nikitabobko/tap/aerospace"
-fi
-if [[ "$INSTALL_RICE" == true ]]; then
-    echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
-    echo "  5. Read the rice guide: docs/rice-guide.md"
+if [[ "$UPDATE_MODE" == true ]]; then
+    echo "All configs are up to date."
+else
+    echo "Next steps:"
+    echo "  1. Log out and back in (to activate zsh as default shell)"
+    echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
+    echo "  3. Start tmux: 'tmux'"
+    if [[ "$OS" == "Darwin" ]]; then
+        echo "  4. Install AeroSpace: brew install --cask nikitabobko/tap/aerospace"
+    fi
+    if [[ "$INSTALL_RICE" == true ]]; then
+        echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
+        echo "  5. Read the rice guide: docs/rice-guide.md"
+    fi
 fi
 echo
 echo "Documentation: CLAUDE.md (full reference), docs/ (guides)"
