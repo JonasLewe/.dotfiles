@@ -59,7 +59,7 @@ if [[ "$OS" == "Darwin" ]]; then
         exit 1
     fi
 
-    brew install neovim tmux zsh git ripgrep fd node fzf glab jq
+    brew install neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags
 
     echo
 
@@ -113,12 +113,19 @@ elif [[ "$OS" == "Linux" ]]; then
         install_pkg slurp
         install_pkg wl-clipboard
         install_pkg wl-clip-persist
-        install_pkg ttf-jetbrains-mono-nerd
         install_pkg breeze-icons
 
         INSTALL_RICE=true
         echo
     fi
+fi
+
+# ==============================================================================
+# NERD FONT (required by Ghostty, aerial.nvim, trouble.nvim)
+# ==============================================================================
+
+if [[ "$OS" == "Linux" ]]; then
+    install_pkg ttf-jetbrains-mono-nerd
 fi
 
 # ==============================================================================
@@ -320,8 +327,7 @@ echo "  1. Log out and back in (to activate zsh as default shell)"
 echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
 echo "  3. Start tmux: 'tmux'"
 if [[ "$OS" == "Darwin" ]]; then
-    echo "  4. Uncomment macOS overrides in ~/.config/ghostty/config"
-    echo "  5. Install AeroSpace: brew install --cask nikitabobko/tap/aerospace"
+    echo "  4. Install AeroSpace: brew install --cask nikitabobko/tap/aerospace"
 fi
 if [[ "$INSTALL_RICE" == true ]]; then
     echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
