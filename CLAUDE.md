@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a **cross-platform** personal dotfiles repository for **macOS and Arch Linux**. One repo, both platforms. The philosophy is **vanilla first** — use native features before adding plugins. Learn the fundamentals, then extend.
 
 ### Shared (both platforms)
-- **Ghostty** — GPU-accelerated terminal emulator (with commented Mac overrides)
-- **Neovim** — Config with LSP, treesitter, telescope.nvim, nvim-cmp, aerial.nvim, trouble.nvim, cyberdream, vim-surround
+- **Ghostty** — GPU-accelerated terminal emulator (platform overrides via symlink)
+- **Neovim** — Config with LSP, treesitter, telescope.nvim, nvim-cmp, aerial.nvim, trouble.nvim, lazygit, cyberdream, vim-surround
 - **tmux** — Vanilla config with vim keybindings (no plugin manager)
 - **zsh** — Plain zsh with vi-mode (no frameworks)
 - **Git** — Minimal gitconfig (email via `~/.gitconfig.local`)
@@ -76,6 +76,7 @@ The install script auto-detects the OS and:
 │       │   ├── cmp.lua          # nvim-cmp + LuaSnip (autocompletion)
 │       │   ├── colorscheme.lua  # cyberdream (transparent dark theme)
 │       │   ├── editor.lua      # vim-surround
+│       │   ├── lazygit.lua    # lazygit TUI integration
 │       │   ├── lsp.lua         # mason + lspconfig (LSP setup)
 │       │   ├── navigation.lua  # aerial.nvim + trouble.nvim
 │       │   ├── telescope.lua   # telescope.nvim + fzf-native
@@ -111,7 +112,7 @@ The install script auto-detects the OS and:
 **Vanilla First**: Native features over plugins:
 - `:Ex`/`:Lex` instead of nvim-tree
 - `:find` + `path+=**` as vanilla alternative to Telescope (telescope.nvim now installed for fuzzy finding)
-- Visual Block Mode (`<C-v>`) instead of Comment.nvim
+- Native `gc`/`gcc` commenting (Neovim 0.10+) instead of Comment.nvim
 - `:grep` with ripgrep as vanilla alternative to Telescope live_grep
 
 **Per-machine config**: Git email and machine-specific secrets live outside the repo:
@@ -136,10 +137,13 @@ The install script auto-detects the OS and:
 - **telescope-fzf-native.nvim** — Compiled C fzf algorithm for faster fuzzy matching
 - **aerial.nvim** — Symbol sidebar (functions, classes, variables)
 - **trouble.nvim** — Diagnostics panel (errors, warnings)
+- **lazygit.nvim** — LazyGit TUI inside Neovim
 
 ### Key Bindings (Leader: `<Space>`)
 - `kj` — Exit insert/visual/terminal mode
+- `gcc` / `gc` — Comment line / selection (native Neovim 0.10+)
 - `<leader>e` — Toggle file explorer (netrw)
+- `<leader>dd` — Open file explorer in current file directory
 - `<leader>ff` — Find files (telescope)
 - `<leader>fr` — Recent files (telescope)
 - `<leader>fg` — Live grep (telescope)
@@ -147,10 +151,11 @@ The install script auto-detects the OS and:
 - `<leader>sv/sh` — Split vertically/horizontally
 - `<C-h/j/k/l>` — Navigate splits
 - `<leader>+/-` — Increment/decrement number
-- `<leader>nh` — Clear search highlights
+- `<leader><space>` — Clear search highlights
 - `<leader>tt` — Terminal split
 - `<leader>cs` — Toggle symbol sidebar (aerial)
 - `<leader>xx` — Toggle diagnostics panel (trouble)
+- `<leader>lg` — LazyGit
 
 ### LSP Key Bindings (active in files with LSP)
 - `gd` — Go to definition

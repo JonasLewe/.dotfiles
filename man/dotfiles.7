@@ -1,4 +1,4 @@
-.TH DOTFILES 7 "2026-02-25" "dotfiles" "Dotfiles Reference"
+.TH DOTFILES 7 "2026-03-12" "dotfiles" "Dotfiles Reference"
 .SH NAME
 dotfiles \- personal system configuration reference
 .SH DESCRIPTION
@@ -6,6 +6,8 @@ Quick reference for which config file controls what in this dotfiles setup.
 All config files live in
 .B ~/.dotfiles/
 and are symlinked to their expected locations.
+.P
+Cross-platform: macOS (Homebrew) and Arch Linux (pacman).
 .
 .SH CONFIGURATION FILES
 All paths are relative to
@@ -17,13 +19,6 @@ cb | cb
 l | l .
 Setting|Config File
 =
-Window Manager|hyprland/hyprland.conf
-Status Bar|waybar/config.jsonc + style.css
-App Launcher|rofi/config.rasi
-Power Menu|rofi/powermenu.sh
-Notifications|dunst/dunstrc
-Wallpaper|~/.config/hypr/hyprpaper.conf
-Lock Screen|~/.config/hypr/hyprlock.conf
 Terminal|ghostty/config
 Editor|nvim/
 Shell|zsh/zshrc
@@ -31,7 +26,16 @@ Login Shell (PATH)|zsh/zprofile
 Local Overrides|~/.zshrc.local
 Multiplexer|tmux/tmux.conf
 Git|git/gitconfig
+Git Email (per-machine)|~/.gitconfig.local
 Man Page|man/dotfiles.7
+Window Manager (Linux)|hyprland/hyprland.conf
+Status Bar (Linux)|waybar/config.jsonc + style.css
+App Launcher (Linux)|rofi/config.rasi
+Power Menu (Linux)|rofi/powermenu.sh
+Notifications (Linux)|dunst/dunstrc
+Wallpaper (Linux)|~/.config/hypr/hyprpaper.conf
+Lock Screen (Linux)|~/.config/hypr/hyprlock.conf
+Window Manager (macOS)|aerospace/aerospace.toml
 .TE
 .
 .SH SYMLINKS
@@ -41,22 +45,23 @@ Created by
 .P
 .TS
 box tab(|);
-cb | cb
-l | l .
-Repository Source|Symlink Target
+cb | cb | cb
+l | l | l .
+Repository Source|Symlink Target|Platform
 =
-nvim/|~/.config/nvim
-tmux/tmux.conf|~/.tmux.conf
-zsh/zshrc|~/.zshrc
-zsh/zprofile|~/.zprofile
-git/gitconfig|~/.gitconfig
-git/gitignore_global|~/.gitignore_global
-ghostty/|~/.config/ghostty
-hyprland/|~/.config/hypr
-waybar/|~/.config/waybar
-rofi/|~/.config/rofi
-dunst/|~/.config/dunst
-man/dotfiles.7|~/.local/share/man/man7/dotfiles.7
+nvim/|~/.config/nvim|All
+tmux/tmux.conf|~/.tmux.conf|All
+zsh/zshrc|~/.zshrc|All
+zsh/zprofile|~/.zprofile|All
+git/gitconfig|~/.gitconfig|All
+git/gitignore_global|~/.gitignore_global|All
+ghostty/|~/.config/ghostty|All
+aerospace/|~/.config/aerospace|macOS
+hyprland/|~/.config/hypr|Linux
+waybar/|~/.config/waybar|Linux
+rofi/|~/.config/rofi|Linux
+dunst/|~/.config/dunst|Linux
+man/dotfiles.7|~/.local/share/man/man7/dotfiles.7|Linux
 .TE
 .
 .SH GUI & TUI TOOLS
@@ -74,7 +79,61 @@ qt5ct|Qt theme settings
 .TE
 .
 .SH KEYBINDINGS
-.SS Hyprland (Mod: SUPER / Windows key)
+.SS Neovim (Leader: Space)
+.TS
+box tab(|);
+cb | cb
+l | l .
+Keys|Action
+=
+kj|Exit insert/visual/terminal mode
+gcc / gc|Comment line / selection (native)
+Space + e|File explorer (netrw)
+Space + dd|File explorer in current file dir
+Space + ff|Find files (Telescope)
+Space + fr|Recent files (Telescope)
+Space + fg|Live grep (Telescope)
+Space + fb|List buffers (Telescope)
+Space + sv / sh|Split vertical / horizontal
+Ctrl + h/j/k/l|Navigate splits
+Space + +/-|Increment / decrement number
+Space + Space|Clear search highlights
+Space + tt|Terminal split
+Space + cs|Toggle symbol sidebar (aerial)
+Space + xx|Toggle diagnostics panel (trouble)
+Space + lg|LazyGit
+.TE
+.SS Neovim LSP (active in files with LSP)
+.TS
+box tab(|);
+cb | cb
+l | l .
+Keys|Action
+=
+gd|Go to definition
+gr|Show references
+K|Hover documentation
+Space + ca|Code action (quick fixes)
+Space + rn|Rename symbol
+Space + d|Line diagnostics
+[d / ]d|Previous / next diagnostic
+.TE
+.SS tmux (Prefix: Ctrl-A)
+.TS
+box tab(@);
+cb | cb
+l | l .
+Keys@Action
+=
+Ctrl-A |@Split vertical
+Ctrl-A -@Split horizontal
+Ctrl-A h/j/k/l@Navigate panes
+Ctrl-A H/J/K/L@Resize panes
+Ctrl-A c@New window
+Ctrl-A [, v, y@Copy mode (vim-style)
+Ctrl-A r@Reload config
+.TE
+.SS Hyprland (Mod: SUPER / Windows key) \(em Linux only
 .TS
 box tab(|);
 cb | cb
@@ -97,34 +156,22 @@ SUPER + `|Lock screen (hyprlock)
 SUPER + Delete|Power menu (lock/logout/reboot/shutdown)
 SUPER + Shift + e|Quit Hyprland
 .TE
-.SS tmux (Prefix: Ctrl-A)
-.TS
-box tab(@);
-cb | cb
-l | l .
-Keys@Action
-=
-Ctrl-A |@Split vertical
-Ctrl-A -@Split horizontal
-Ctrl-A h/j/k/l@Navigate panes
-Ctrl-A H/J/K/L@Resize panes
-Ctrl-A c@New window
-Ctrl-A [, v, y@Copy mode (vim-style)
-Ctrl-A r@Reload config
-.TE
-.SS Neovim (Leader: Space)
+.SS AeroSpace (Mod: Alt) \(em macOS only
 .TS
 box tab(|);
 cb | cb
 l | l .
 Keys|Action
 =
-kj|Exit insert/visual mode
-Space + e|File explorer (netrw)
-Space + fb|List buffers
-Space + sv / sh|Split vertical / horizontal
-Ctrl + h/j/k/l|Navigate splits
-Space + tt|Terminal split
+Alt + h/j/k/l|Focus window
+Alt + Shift + h/j/k/l|Move/swap window
+Alt + Shift + m|Fullscreen
+Alt + Shift + e|Balance sizes
+Alt + Shift + t|Toggle float/tiling
+Ctrl + 1-8|Switch workspace
+Ctrl + Shift + 1-8|Move window to workspace
+Alt + Tab|Workspace back-and-forth
+Alt + Shift + ;|Enter service mode
 .TE
 .
 .SH EDITING CONFIGURATIONS
@@ -151,7 +198,10 @@ killall waybar && waybar &
 Repository root (all configs)
 .TP
 .B ~/.dotfiles/install.sh
-Installer script
+Installer script (cross-platform)
+.TP
+.B ~/.dotfiles/CLAUDE.md
+Full reference (architecture, keybindings, plugins)
 .TP
 .B ~/.dotfiles/docs/vanilla-vim-guide.md
 Native Vim alternatives guide
