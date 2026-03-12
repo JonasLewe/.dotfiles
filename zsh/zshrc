@@ -72,13 +72,13 @@ setopt AUTO_CD
 # Keep aliases minimal — type full commands to learn them.
 # Run `alias` to see all active aliases.
 
-alias la="ls -lah"   # list files: long format + hidden files + human sizes
+alias la="ls -lah --color"   # list files: long format + hidden files + human sizes
 
 # ==============================================================================
 # PATH
 # ==============================================================================
 # ~/.local/bin is the standard location for user-installed tools on Linux.
-export PATH="$PATH:$HOME/.local/bin"
+# export PATH="$PATH:$HOME/.local/bin"
 
 # ==============================================================================
 # PYTHON

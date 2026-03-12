@@ -41,7 +41,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
 -- CLEAR SEARCH HIGHLIGHTS
 -- After searching with /, all matches stay highlighted until you clear them.
 -- <leader>nh removes the highlight without changing anything else.
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+-- keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+keymap.set("n", "<leader><space>", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- DELETE WITHOUT YANKING
 -- Normally "x" cuts the character into the default register (you could paste it).
