@@ -8,7 +8,7 @@ This is a **cross-platform** personal dotfiles repository for **macOS and Arch L
 
 ### Shared (both platforms)
 - **Ghostty** — GPU-accelerated terminal emulator (platform overrides via symlink)
-- **Neovim** — Config with LSP, treesitter, telescope.nvim, nvim-cmp, aerial.nvim, trouble.nvim, lazygit, cyberdream, vim-surround
+- **Neovim** — Config with LSP, treesitter, telescope.nvim, nvim-cmp, aerial.nvim, trouble.nvim, lazygit, cyberdream, vim-surround, nvim-autopairs
 - **tmux** — Vanilla config with vim keybindings (no plugin manager)
 - **zsh** — Plain zsh with vi-mode (no frameworks)
 - **Git** — Minimal gitconfig (email via `~/.gitconfig.local`)
@@ -74,6 +74,7 @@ The install script auto-detects the OS and:
 │       │   ├── options.lua  # Editor options, netrw, path/grep setup
 │       │   └── keymaps.lua  # Key mappings
 │       ├── plugins/
+│       │   ├── autopairs.lua     # nvim-autopairs (auto-close brackets/quotes)
 │       │   ├── cmp.lua          # nvim-cmp + LuaSnip (autocompletion)
 │       │   ├── colorscheme.lua  # cyberdream (transparent dark theme)
 │       │   ├── editor.lua      # vim-surround
@@ -138,6 +139,7 @@ The install script auto-detects the OS and:
 - **telescope-fzf-native.nvim** — Compiled C fzf algorithm for faster fuzzy matching
 - **aerial.nvim** — Symbol sidebar (functions, classes, variables)
 - **trouble.nvim** — Diagnostics panel (errors, warnings)
+- **nvim-autopairs** — Auto-close brackets, quotes, etc. (with cmp integration)
 - **lazygit.nvim** — LazyGit TUI inside Neovim
 
 ### Key Bindings (Leader: `<Space>`)
