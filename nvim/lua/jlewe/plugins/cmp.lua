@@ -36,6 +36,10 @@ return {
 
     vim.opt.completeopt = "menu,menuone,noselect"
 
+    -- autopairs integration: add () after selecting a function from completion
+    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
     cmp.setup({
       snippet = {
         expand = function(args)
