@@ -28,6 +28,7 @@ Alles liegt unter nvim/ im Dotfiles-Repo.
 - cmp.lua -- Autocompletion mit LuaSnip und lspkind
 - lsp.lua -- Mason, LSP-Server-Konfiguration und Keybinds
 - navigation.lua -- aerial.nvim (Symbol-Sidebar) + trouble.nvim (Diagnostics)
+- autopairs.lua -- nvim-autopairs (Klammern/Quotes automatisch schliessen)
 - editor.lua -- vim-surround
 
 **lazy-lock.json** ist das Lockfile mit den exakten Plugin-Versionen.
@@ -117,6 +118,25 @@ Im Insert Mode:
 
 **ysiw"** -- Surround: Wort mit Anfuehrungszeichen umschliessen.
 
+## Auto Pairs (nvim-autopairs)
+
+Klammern, Anfuehrungszeichen und andere Paare werden automatisch geschlossen.
+Cursor landet zwischen dem Paar.
+
+**(**  wird zu **()**  mit Cursor dazwischen.
+
+**"**  wird zu **""**  mit Cursor dazwischen.
+
+**{**  wird zu **{}**  mit Cursor dazwischen.
+
+**)** tippen wenn Cursor vor **)** steht -- springt drueber statt doppelt einzufuegen.
+
+**Enter** zwischen **{}** -- formatiert mit Einrueckung.
+
+Funktions-Completion via nvim-cmp fuegt automatisch **()** nach dem Funktionsnamen ein.
+
+Nutzt Treesitter fuer intelligentes Matching (keine Auto-Pairs in Strings oder Kommentaren).
+
 
 # Teil 3: LSP-Server
 
@@ -163,8 +183,6 @@ Drei Schritte in plugins/lsp.lua:
 ## Plugins fuer spaeter
 
 Fuege diese erst hinzu wenn du die Basis sicher beherrschst.
-
-**nvim-autopairs** schliesst Klammern und Anfuehrungszeichen automatisch.
 
 **indent-blankline** zeigt visuelle Indent-Guides.
 
