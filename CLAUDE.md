@@ -29,8 +29,9 @@ This is a **cross-platform** personal dotfiles repository for **macOS and Arch L
 ```bash
 git clone <repo> ~/.dotfiles
 cd ~/.dotfiles
-./install.sh           # First install (interactive, prompts for choices)
-./install.sh --update  # Re-run: skip prompts, install only what's missing
+./install.sh               # First install (interactive, prompts for choices)
+./install.sh --update      # Re-run: skip prompts, install only what's missing
+./install.sh --config-only # Remote server: symlink configs only, no packages
 ```
 
 The install script auto-detects the OS and:
@@ -77,6 +78,7 @@ The install script auto-detects the OS and:
 │       │   ├── autopairs.lua     # nvim-autopairs (auto-close brackets/quotes)
 │       │   ├── cmp.lua          # nvim-cmp + LuaSnip (autocompletion)
 │       │   ├── colorscheme.lua  # cyberdream (transparent dark theme)
+│       │   ├── dap.lua          # nvim-dap + UI + virtual-text (debugging)
 │       │   ├── editor.lua      # vim-surround
 │       │   ├── lazygit.lua    # lazygit TUI integration
 │       │   ├── lsp.lua         # mason + lspconfig (LSP setup)
@@ -141,12 +143,16 @@ The install script auto-detects the OS and:
 - **trouble.nvim** — Diagnostics panel (errors, warnings)
 - **nvim-autopairs** — Auto-close brackets, quotes, etc. (with cmp integration)
 - **lazygit.nvim** — LazyGit TUI inside Neovim
+- **nvim-dap** — Debug Adapter Protocol client (same protocol as VSCode)
+- **nvim-dap-ui** — IDE-like debug panels (variables, watch, call stack, breakpoints)
+- **nvim-dap-virtual-text** — Show variable values inline in code during debugging
+- **mason-nvim-dap.nvim** — Auto-install debug adapters via Mason
 
 ### Key Bindings (Leader: `<Space>`)
 - `kj` — Exit insert/visual/terminal mode
 - `gcc` / `gc` — Comment line / selection (native Neovim 0.10+)
 - `<leader>e` — Toggle file explorer (netrw)
-- `<leader>dd` — Open file explorer in current file directory
+- `<leader>ed` — Open file explorer in current file directory
 - `<leader>ff` — Find files (telescope)
 - `<leader>fr` — Recent files (telescope)
 - `<leader>fg` — Live grep (telescope)
@@ -159,6 +165,18 @@ The install script auto-detects the OS and:
 - `<leader>cs` — Toggle symbol sidebar (aerial)
 - `<leader>xx` — Toggle diagnostics panel (trouble)
 - `<leader>lg` — LazyGit
+
+### Debug Key Bindings (DAP)
+- `<leader>db` — Toggle breakpoint
+- `<leader>dB` — Conditional breakpoint
+- `<leader>dc` — Start / Continue debugging
+- `<leader>di` — Step into
+- `<leader>do` — Step over
+- `<leader>dO` — Step out
+- `<leader>dr` — Toggle REPL
+- `<leader>dl` — Run last debug config
+- `<leader>dt` — Terminate debug session
+- `<leader>du` — Toggle debug UI
 
 ### LSP Key Bindings (active in files with LSP)
 - `gd` — Go to definition

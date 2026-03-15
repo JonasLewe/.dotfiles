@@ -28,6 +28,7 @@ Alles liegt unter nvim/ im Dotfiles-Repo.
 - cmp.lua -- Autocompletion mit LuaSnip und lspkind
 - lsp.lua -- Mason, LSP-Server-Konfiguration und Keybinds
 - navigation.lua -- aerial.nvim (Symbol-Sidebar) + trouble.nvim (Diagnostics)
+- dap.lua -- nvim-dap + dap-ui + virtual-text + mason-nvim-dap (Debugging)
 - autopairs.lua -- nvim-autopairs (Klammern/Quotes automatisch schliessen)
 - editor.lua -- vim-surround
 
@@ -107,6 +108,36 @@ Im Insert Mode:
 **Space cs** -- Symbol-Sidebar (aerial) ein-/ausblenden.
 
 **Space xx** -- Diagnostics-Panel (trouble) ein-/ausblenden.
+
+## Debugging (DAP)
+
+Neovim nutzt dasselbe Debug Adapter Protocol wie VSCode. Debug-Adapter werden
+automatisch via Mason installiert. Die UI oeffnet sich automatisch beim Start
+einer Debug-Session und schliesst sich beim Beenden.
+
+**Space db** -- Breakpoint setzen oder entfernen.
+
+**Space dB** -- Konditionalen Breakpoint setzen (mit Bedingung).
+
+**Space dc** -- Debugging starten oder fortsetzen.
+
+**Space di** -- Step Into (in Funktion hineinspringen).
+
+**Space do** -- Step Over (naechste Zeile, Funktion ueberspringen).
+
+**Space dO** -- Step Out (aus aktueller Funktion herausspringen).
+
+**Space dr** -- REPL oeffnen (Ausdruecke auswerten waehrend der Debug-Session).
+
+**Space dl** -- Letzte Debug-Konfiguration erneut ausfuehren.
+
+**Space dt** -- Debug-Session beenden.
+
+**Space du** -- Debug-UI manuell ein-/ausblenden.
+
+Neue Sprache hinzufuegen: Adapter-Name zur ensure_installed-Liste in
+plugins/dap.lua hinzufuegen. Verfuegbare Adapter:
+python (debugpy), codelldb (C/C++/Rust), js (Node.js), delve (Go), bash.
 
 ## Sonstige Plugin-Keybinds
 

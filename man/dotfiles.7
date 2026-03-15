@@ -89,7 +89,7 @@ Keys|Action
 kj|Exit insert/visual/terminal mode
 gcc / gc|Comment line / selection (native)
 Space + e|File explorer (netrw)
-Space + dd|File explorer in current file dir
+Space + ed|File explorer in current file dir
 Space + ff|Find files (Telescope)
 Space + fr|Recent files (Telescope)
 Space + fg|Live grep (Telescope)
@@ -102,6 +102,24 @@ Space + tt|Terminal split
 Space + cs|Toggle symbol sidebar (aerial)
 Space + xx|Toggle diagnostics panel (trouble)
 Space + lg|LazyGit
+.TE
+.SS Neovim Debug (DAP)
+.TS
+box tab(|);
+cb | cb
+l | l .
+Keys|Action
+=
+Space + db|Toggle breakpoint
+Space + dB|Conditional breakpoint
+Space + dc|Start / Continue debugging
+Space + di|Step into
+Space + do|Step over
+Space + dO|Step out
+Space + dr|Toggle REPL
+Space + dl|Run last debug config
+Space + dt|Terminate debug session
+Space + du|Toggle debug UI
 .TE
 .SS Neovim LSP (active in files with LSP)
 .TS
@@ -198,7 +216,7 @@ killall waybar && waybar &
 Repository root (all configs)
 .TP
 .B ~/.dotfiles/install.sh
-Installer script (cross-platform)
+Installer script (cross-platform). Flags: --update (skip prompts), --config-only (remote servers)
 .TP
 .B ~/.dotfiles/CLAUDE.md
 Full reference (architecture, keybindings, plugins)
