@@ -29,10 +29,11 @@ Alles liegt unter nvim/ im Dotfiles-Repo.
 - lsp.lua -- Mason, LSP-Server-Konfiguration und Keybinds
 - navigation.lua -- aerial.nvim (Symbol-Sidebar) + trouble.nvim (Diagnostics)
 - dap.lua -- nvim-dap + dap-ui + virtual-text + mason-nvim-dap (Debugging)
+- formatting.lua -- conform.nvim (Auto-Format on Save)
+- gitsigns.lua -- gitsigns.nvim (Git-Gutter, Hunk-Staging, Blame)
+- linting.lua -- nvim-lint (Async Linting)
 - autopairs.lua -- nvim-autopairs (Klammern/Quotes automatisch schliessen)
 - editor.lua -- vim-surround
-
-**lazy-lock.json** ist das Lockfile mit den exakten Plugin-Versionen.
 
 
 # Teil 2: Keybinds
@@ -138,6 +139,63 @@ einer Debug-Session und schliesst sich beim Beenden.
 Neue Sprache hinzufuegen: Adapter-Name zur ensure_installed-Liste in
 plugins/dap.lua hinzufuegen. Verfuegbare Adapter:
 python (debugpy), codelldb (C/C++/Rust), js (Node.js), delve (Go), bash.
+
+## Formatting (conform.nvim)
+
+Code wird automatisch beim Speichern formatiert. conform.nvim nutzt dedizierte
+Formatter statt LSP, weil die besser sind (black statt pyright, prettier statt
+ts_ls). Falls kein Formatter konfiguriert ist, wird LSP als Fallback genutzt.
+
+**Space cf** -- Code manuell formatieren (funktioniert auch auf Visual Selection).
+
+**:ConformInfo** -- Zeigt welcher Formatter fuer die aktuelle Datei aktiv ist.
+
+Konfigurierte Formatter:
+- Python: black
+- Lua: stylua
+- JS/TS/JSON/YAML/MD/CSS/HTML: prettier
+
+Formatter installieren: :MasonInstall black stylua prettier
+Oder: pacman -S python-black stylua prettier
+
+Neuen Formatter hinzufuegen: Filetype + Formatter-Name in formatters_by_ft
+in plugins/formatting.lua eintragen.
+
+## Linting (nvim-lint)
+
+Linter laufen automatisch beim Speichern, Oeffnen und Verlassen des Insert Mode.
+Diagnostics erscheinen im Gutter und in trouble.nvim (Space xx).
+
+LSP-Server liefern Typ-Fehler, aber Linter finden mehr:
+- ruff: Python Style, Import-Sortierung, Security-Probleme (ersetzt flake8+isort)
+- eslint_d: JS/TS Code-Qualitaet, Framework-spezifische Regeln
+
+Linter installieren: :MasonInstall ruff eslint_d
+
+Neuen Linter hinzufuegen: Filetype + Linter-Name in linters_by_ft
+in plugins/linting.lua eintragen.
+
+## Git Integration (gitsigns.nvim)
+
+Zeigt Git-Aenderungen live im Gutter (gruener Balken = hinzugefuegt,
+gelber Balken = geaendert, roter Marker = geloescht). Ergaenzt LazyGit
+um Inline-Informationen direkt im Editor.
+
+**]c** und **[c** -- Zum naechsten oder vorherigen Hunk (geaenderten Block) springen.
+
+**Space hs** -- Hunk stagen (wie git add fuer einzelne Zeilen). Auch in Visual Mode.
+
+**Space hr** -- Hunk zuruecksetzen (Aenderungen verwerfen).
+
+**Space hS** -- Gesamte Datei stagen.
+
+**Space hR** -- Gesamte Datei zuruecksetzen.
+
+**Space hp** -- Hunk in Popup anzeigen (was hat sich geaendert?).
+
+**Space hb** -- Git Blame fuer aktuelle Zeile (zeigt vollen Commit).
+
+**Space hB** -- Inline Blame ein-/ausschalten (wer hat jede Zeile geschrieben).
 
 ## Sonstige Plugin-Keybinds
 
