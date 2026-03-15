@@ -30,6 +30,7 @@ karabiner/automatic_backups/
 *.swp
 *.swo
 *~
+nvim/lazy-lock.json
 
 # Logs
 *.log

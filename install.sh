@@ -10,16 +10,32 @@
 #   - macOS via Homebrew
 #
 # This script is idempotent — safe to re-run. It skips what's already set up.
-# Use --update to skip all prompts and only install/link what's missing.
+#
+# Flags:
+#   --update       Skip prompts, install only what's missing
+#   --config-only  Remote server mode: symlink configs only, no package
+#                  installation, no GUI tools. Requires git, nvim, tmux,
+#                  zsh already installed on the server.
 
 set -e  # Exit on error
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname)"
 UPDATE_MODE=false
+CONFIG_ONLY=false
 
-if [[ "$1" == "--update" ]]; then
-    UPDATE_MODE=true
+for arg in "$@"; do
+    case "$arg" in
+        --update)      UPDATE_MODE=true ;;
+        --config-only) CONFIG_ONLY=true; UPDATE_MODE=true ;;
+    esac
+done
+
+if [[ "$CONFIG_ONLY" == true ]]; then
+    echo "📦 Config-only mode — symlinking configs, skipping package installation"
+    echo "   For remote servers where packages are already installed."
+    echo
+elif [[ "$UPDATE_MODE" == true ]]; then
     echo "🔄 Update mode — skipping prompts, installing only what's missing"
     echo
 fi
@@ -69,7 +85,19 @@ link_config() {
 # PACKAGE INSTALLATION
 # ==============================================================================
 
-if [[ "$OS" == "Darwin" ]]; then
+if [[ "$CONFIG_ONLY" == true ]]; then
+    echo "=== Skipping package installation (config-only mode) ==="
+    # Verify required tools are available
+    for cmd in git nvim tmux; do
+        if command -v "$cmd" &>/dev/null; then
+            echo "✅ $cmd found"
+        else
+            echo "⚠️  $cmd not found — install it manually for full functionality"
+        fi
+    done
+    echo
+
+elif [[ "$OS" == "Darwin" ]]; then
     echo "=== macOS Package Installation (Homebrew) ==="
 
     if ! command -v brew &>/dev/null; then
@@ -152,7 +180,7 @@ fi
 # NERD FONT (required by Ghostty, aerial.nvim, trouble.nvim)
 # ==============================================================================
 
-if [[ "$OS" == "Linux" ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Linux" ]]; then
     install_pkg ttf-jetbrains-mono-nerd
 fi
 
@@ -162,24 +190,27 @@ fi
 
 echo "=== Symlinking Configurations ==="
 
+# Core configs — always symlinked (local + remote)
 link_config "$DOTFILES_DIR/nvim"            ~/.config/nvim
 link_config "$DOTFILES_DIR/tmux/tmux.conf"  ~/.tmux.conf
 link_config "$DOTFILES_DIR/zsh/zshrc"       ~/.zshrc
 link_config "$DOTFILES_DIR/zsh/zprofile"    ~/.zprofile
 link_config "$DOTFILES_DIR/git/gitconfig"   ~/.gitconfig
-link_config "$DOTFILES_DIR/ghostty"         ~/.config/ghostty
-
-# Ghostty platform config — symlink platform.conf to the right file
-if [[ "$OS" == "Darwin" ]]; then
-    ln -sf "$DOTFILES_DIR/ghostty/mac.conf" "$DOTFILES_DIR/ghostty/platform.conf"
-    echo "✅ ghostty/platform.conf → mac.conf"
-else
-    ln -sf "$DOTFILES_DIR/ghostty/linux.conf" "$DOTFILES_DIR/ghostty/platform.conf"
-    echo "✅ ghostty/platform.conf → linux.conf"
-fi
-
-# Global gitignore
 link_config "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
+
+# GUI configs — only on local machines (not remote servers)
+if [[ "$CONFIG_ONLY" != true ]]; then
+    link_config "$DOTFILES_DIR/ghostty"         ~/.config/ghostty
+
+    # Ghostty platform config — symlink platform.conf to the right file
+    if [[ "$OS" == "Darwin" ]]; then
+        ln -sf "$DOTFILES_DIR/ghostty/mac.conf" "$DOTFILES_DIR/ghostty/platform.conf"
+        echo "✅ ghostty/platform.conf → mac.conf"
+    else
+        ln -sf "$DOTFILES_DIR/ghostty/linux.conf" "$DOTFILES_DIR/ghostty/platform.conf"
+        echo "✅ ghostty/platform.conf → linux.conf"
+    fi
+fi
 
 echo
 
@@ -187,7 +218,7 @@ echo
 # SYMLINKS — macOS-only (WM stack)
 # ==============================================================================
 
-if [[ "$OS" == "Darwin" ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Darwin" ]]; then
     echo "=== Symlinking macOS WM Configurations ==="
 
     link_config "$DOTFILES_DIR/aerospace"  ~/.config/aerospace
@@ -199,7 +230,7 @@ fi
 # SYMLINKS — Linux-only (Hyprland / Rice)
 # ==============================================================================
 
-if [[ "$INSTALL_RICE" == true ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ "$INSTALL_RICE" == true ]]; then
     echo "=== Symlinking Rice Configurations ==="
 
     link_config "$DOTFILES_DIR/hyprland"  ~/.config/hypr
@@ -226,25 +257,27 @@ fi
 echo
 
 # ==============================================================================
-# GHOSTTY SHADERS
+# GHOSTTY SHADERS (skip on remote servers)
 # ==============================================================================
 
-ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
-if [[ ! -d "$ghostty_shaders" ]]; then
-    echo "Installing Ghostty shaders..."
-    git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
-    echo "Ghostty shaders installed"
-else
-    echo "✅ Ghostty shaders already installed"
+if [[ "$CONFIG_ONLY" != true ]]; then
+    ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
+    if [[ ! -d "$ghostty_shaders" ]]; then
+        echo "Installing Ghostty shaders..."
+        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
+        echo "Ghostty shaders installed"
+    else
+        echo "✅ Ghostty shaders already installed"
+    fi
+
+    echo
 fi
 
-echo
-
 # ==============================================================================
-# MAN PAGE (Linux only)
+# MAN PAGE (Linux only, skip on remote servers)
 # ==============================================================================
 
-if [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
     mkdir -p ~/.local/share/man/man7
     link_config "$DOTFILES_DIR/man/dotfiles.7" ~/.local/share/man/man7/dotfiles.7
     echo
@@ -310,21 +343,39 @@ echo
 # SET DEFAULT SHELL
 # ==============================================================================
 
-if [[ "$SHELL" != *"zsh"* ]]; then
-    echo "Setting zsh as default shell..."
-    chsh -s "$(which zsh)"
-    echo "Default shell changed to zsh (takes effect on next login)"
+if [[ "$CONFIG_ONLY" == true ]]; then
+    # On remote servers: only change shell if zsh exists, don't fail if chsh unavailable
+    if command -v zsh &>/dev/null; then
+        if [[ "$SHELL" != *"zsh"* ]]; then
+            if command -v chsh &>/dev/null; then
+                echo "Setting zsh as default shell..."
+                chsh -s "$(which zsh)" 2>/dev/null || echo "⚠️  chsh failed — ask your admin or add 'exec zsh' to ~/.bashrc"
+            else
+                echo "⚠️  chsh not available — add 'exec zsh' to ~/.bashrc to use zsh"
+            fi
+        else
+            echo "✅ zsh is already the default shell"
+        fi
+    else
+        echo "ℹ️  zsh not found — shell config will apply when zsh is installed"
+    fi
 else
-    echo "✅ zsh is already the default shell"
+    if [[ "$SHELL" != *"zsh"* ]]; then
+        echo "Setting zsh as default shell..."
+        chsh -s "$(which zsh)"
+        echo "Default shell changed to zsh (takes effect on next login)"
+    else
+        echo "✅ zsh is already the default shell"
+    fi
 fi
 
 echo
 
 # ==============================================================================
-# NERD FONT (macOS)
+# NERD FONT (macOS, skip on remote servers)
 # ==============================================================================
 
-if [[ "$OS" == "Darwin" ]] && [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Darwin" ]] && [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
     if [[ "$UPDATE_MODE" == true ]]; then
         echo "ℹ️  Nerd Font: run install_nerd_font.sh manually if needed"
     else
@@ -337,10 +388,10 @@ if [[ "$OS" == "Darwin" ]] && [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; the
 fi
 
 # ==============================================================================
-# CUSTOM CLI SCRIPTS
+# CUSTOM CLI SCRIPTS (skip on remote servers)
 # ==============================================================================
 
-if [[ -f "$DOTFILES_DIR/scripts/install.sh" ]]; then
+if [[ "$CONFIG_ONLY" != true ]] && [[ -f "$DOTFILES_DIR/scripts/install.sh" ]]; then
     if [[ "$UPDATE_MODE" == true ]]; then
         echo "ℹ️  Custom CLI scripts: run ./scripts/install.sh manually if needed"
     else
@@ -358,7 +409,13 @@ fi
 
 echo "Installation complete!"
 echo
-if [[ "$UPDATE_MODE" == true ]]; then
+if [[ "$CONFIG_ONLY" == true ]]; then
+    echo "Remote server setup done. Next steps:"
+    echo "  1. Start a new shell (or run: exec zsh)"
+    echo "  2. Open Neovim: 'nvim' (plugins install automatically on first launch)"
+    echo "  3. In Neovim, run :Lazy sync to install all plugins"
+    echo "  4. Start tmux: 'tmux'"
+elif [[ "$UPDATE_MODE" == true ]]; then
     echo "All configs are up to date."
 else
     echo "Next steps:"
