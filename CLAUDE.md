@@ -80,7 +80,10 @@ The install script auto-detects the OS and:
 │       │   ├── colorscheme.lua  # cyberdream (transparent dark theme)
 │       │   ├── dap.lua          # nvim-dap + UI + virtual-text (debugging)
 │       │   ├── editor.lua      # vim-surround
+│       │   ├── formatting.lua  # conform.nvim (auto-format on save)
+│       │   ├── gitsigns.lua    # gitsigns.nvim (git gutter + hunk ops)
 │       │   ├── lazygit.lua    # lazygit TUI integration
+│       │   ├── linting.lua     # nvim-lint (async linting)
 │       │   ├── lsp.lua         # mason + lspconfig (LSP setup)
 │       │   ├── navigation.lua  # aerial.nvim + trouble.nvim
 │       │   ├── telescope.lua   # telescope.nvim + fzf-native
@@ -147,6 +150,9 @@ The install script auto-detects the OS and:
 - **nvim-dap-ui** — IDE-like debug panels (variables, watch, call stack, breakpoints)
 - **nvim-dap-virtual-text** — Show variable values inline in code during debugging
 - **mason-nvim-dap.nvim** — Auto-install debug adapters via Mason
+- **conform.nvim** — Auto-format on save (black, prettier, stylua)
+- **nvim-lint** — Async linting (ruff, eslint_d)
+- **gitsigns.nvim** — Git gutter signs, hunk staging, inline blame
 
 ### Key Bindings (Leader: `<Space>`)
 - `kj` — Exit insert/visual/terminal mode
@@ -165,6 +171,17 @@ The install script auto-detects the OS and:
 - `<leader>cs` — Toggle symbol sidebar (aerial)
 - `<leader>xx` — Toggle diagnostics panel (trouble)
 - `<leader>lg` — LazyGit
+- `<leader>cf` — Format code (manual, also works on visual selection)
+
+### Git Key Bindings (gitsigns)
+- `]c` / `[c` — Next / previous hunk (changed block)
+- `<leader>hs` — Stage hunk
+- `<leader>hr` — Reset hunk (discard changes)
+- `<leader>hS` — Stage entire buffer
+- `<leader>hR` — Reset entire buffer
+- `<leader>hp` — Preview hunk in popup
+- `<leader>hb` — Blame line (show full commit)
+- `<leader>hB` — Toggle inline blame
 
 ### Debug Key Bindings (DAP)
 - `<leader>db` — Toggle breakpoint
