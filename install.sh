@@ -19,7 +19,7 @@
 
 set -e  # Exit on error
 
-DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 OS="$(uname)"
 UPDATE_MODE=false
 CONFIG_ONLY=false
@@ -28,6 +28,7 @@ for arg in "$@"; do
     case "$arg" in
         --update)      UPDATE_MODE=true ;;
         --config-only) CONFIG_ONLY=true; UPDATE_MODE=true ;;
+        *)             echo "❌ Unknown flag: $arg"; echo "Usage: ./install.sh [--update] [--config-only]"; exit 1 ;;
     esac
 done
 
@@ -55,6 +56,12 @@ link_config() {
     local src="$1"
     local dst="$2"
 
+    # Source must exist — skip if missing (prevents broken symlinks)
+    if [[ ! -e "$src" ]]; then
+        echo "⚠️  Source not found, skipping: $src"
+        return
+    fi
+
     # Already correct — skip silently
     if [[ -L "$dst" ]] && [[ "$(readlink "$dst")" == "$src" ]]; then
         echo "✅ $dst (already linked)"
@@ -62,7 +69,22 @@ link_config() {
     fi
 
     if [[ -e "$dst" ]] || [[ -L "$dst" ]]; then
-        if [[ "$UPDATE_MODE" == true ]]; then
+        # Warn if target is a real directory (not a symlink) — potential data loss
+        if [[ -d "$dst" ]] && [[ ! -L "$dst" ]]; then
+            if [[ "$UPDATE_MODE" == true ]]; then
+                echo "⚠️  $dst is a directory (not a symlink) — backing up to ${dst}.bak"
+                mv "$dst" "${dst}.bak"
+            else
+                read -p "$dst is a directory with files. Back up and replace? (y/n) " -r
+                echo
+                if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    mv "$dst" "${dst}.bak"
+                else
+                    echo "Skipping $dst"
+                    return
+                fi
+            fi
+        elif [[ "$UPDATE_MODE" == true ]]; then
             rm -rf "$dst"
         else
             read -p "$dst already exists. Overwrite? (y/n) " -r
@@ -245,16 +267,80 @@ fi
 # LAZY.NVIM (Neovim Plugin Manager)
 # ==============================================================================
 
-lazypath="$HOME/.local/share/nvim/lazy/lazy.nvim"
-if [[ ! -d "$lazypath" ]]; then
-    echo "Installing lazy.nvim..."
-    git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
-    echo "lazy.nvim installed"
+if command -v nvim &>/dev/null; then
+    lazypath="$HOME/.local/share/nvim/lazy/lazy.nvim"
+    if [[ ! -d "$lazypath" ]]; then
+        echo "Installing lazy.nvim..."
+        git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
+        echo "lazy.nvim installed"
+    else
+        echo "✅ lazy.nvim already installed"
+    fi
 else
-    echo "✅ lazy.nvim already installed"
+    echo "ℹ️  nvim not found — skipping plugin setup"
 fi
 
 echo
+
+# ==============================================================================
+# NEOVIM PLUGINS & TOOLS (headless install)
+# ==============================================================================
+# Installs all plugins via lazy.nvim and all formatters/linters via Mason.
+# Runs Neovim in headless mode — no UI needed.
+
+if command -v nvim &>/dev/null; then
+    echo "=== Installing Neovim Plugins ==="
+    if nvim --headless "+Lazy! sync" +qa 2>/tmp/nvim-lazy-sync.log; then
+        echo "✅ Neovim plugins installed"
+    else
+        echo "⚠️  Lazy sync had issues (continuing anyway). Log: /tmp/nvim-lazy-sync.log"
+    fi
+
+    echo "Installing Mason tools (formatters, linters)..."
+    # Write Mason install script to temp file (Lua heredoc doesn't work in -c mode)
+    mason_script=$(mktemp /tmp/mason-install.XXXXXX.lua)
+    trap "rm -f '$mason_script'" EXIT
+    cat > "$mason_script" << 'LUAEOF'
+local ok, registry = pcall(require, "mason-registry")
+if not ok then vim.cmd("qa!") return end
+
+-- Timeout: quit after 120s regardless (network issues, etc.)
+vim.defer_fn(function() vim.cmd("qa!") end, 120000)
+
+registry.refresh(function()
+  local tools = { "black", "stylua", "prettier", "ruff", "eslint_d" }
+  local to_install = {}
+  for _, name in ipairs(tools) do
+    local found, pkg = pcall(registry.get_package, name)
+    if found and not pkg:is_installed() then
+      table.insert(to_install, pkg)
+    end
+  end
+  if #to_install == 0 then
+    vim.schedule(function() vim.cmd("qa!") end)
+    return
+  end
+  local done = 0
+  for _, pkg in ipairs(to_install) do
+    pkg:install():once("closed", vim.schedule_wrap(function()
+      done = done + 1
+      if done >= #to_install then
+        vim.cmd("qa!")
+      end
+    end))
+  end
+end)
+LUAEOF
+    if nvim --headless -c "luafile $mason_script" 2>/tmp/nvim-mason.log; then
+        echo "✅ Mason tools installed"
+    else
+        echo "⚠️  Some Mason tools may have failed (continuing). Log: /tmp/nvim-mason.log"
+    fi
+    rm -f "$mason_script"
+    trap - EXIT
+
+    echo
+fi
 
 # ==============================================================================
 # GHOSTTY SHADERS (skip on remote servers)
@@ -264,8 +350,7 @@ if [[ "$CONFIG_ONLY" != true ]]; then
     ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
     if [[ ! -d "$ghostty_shaders" ]]; then
         echo "Installing Ghostty shaders..."
-        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders"
-        echo "Ghostty shaders installed"
+        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders" || echo "⚠️  Could not clone Ghostty shaders (cosmetic only, continuing)"
     else
         echo "✅ Ghostty shaders already installed"
     fi
@@ -362,7 +447,7 @@ if [[ "$CONFIG_ONLY" == true ]]; then
 else
     if [[ "$SHELL" != *"zsh"* ]]; then
         echo "Setting zsh as default shell..."
-        chsh -s "$(which zsh)"
+        chsh -s "$(which zsh)" || echo "⚠️  chsh failed — you may need to run it manually or log in again"
         echo "Default shell changed to zsh (takes effect on next login)"
     else
         echo "✅ zsh is already the default shell"
@@ -412,9 +497,8 @@ echo
 if [[ "$CONFIG_ONLY" == true ]]; then
     echo "Remote server setup done. Next steps:"
     echo "  1. Start a new shell (or run: exec zsh)"
-    echo "  2. Open Neovim: 'nvim' (plugins install automatically on first launch)"
-    echo "  3. In Neovim, run :Lazy sync to install all plugins"
-    echo "  4. Start tmux: 'tmux'"
+    echo "  2. Open Neovim: 'nvim' (plugins and tools are already installed)"
+    echo "  3. Start tmux: 'tmux'"
 elif [[ "$UPDATE_MODE" == true ]]; then
     echo "All configs are up to date."
 else

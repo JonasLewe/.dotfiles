@@ -36,7 +36,7 @@ export MANPATH="$HOME/.local/share/man:$(manpath -q 2>/dev/null)"
 # Start Hyprland automatically on TTY1 login (no display manager needed)
 # Only runs on Linux — macOS doesn't have TTYs or Wayland
 if [[ "$(uname)" == "Linux" ]]; then
-    if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" -eq 1 ]; then
+    if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
         exec start-hyprland &> ~/.cache/hyprland.log
     fi
 fi
