@@ -14,8 +14,8 @@
 # ==============================================================================
 # Homebrew sets PATH, MANPATH, and INFOPATH for brew and all its packages.
 # Works on both Apple Silicon (/opt/homebrew) and Intel (/usr/local).
-if command -v brew &>/dev/null; then
-    eval "$(brew shellenv)"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
 # ==============================================================================
