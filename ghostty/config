@@ -74,9 +74,10 @@ command = tmux new -A -s default
 # ==============================================================================
 # Nerd Fonts are patched fonts with extra icons used by aerial.nvim, trouble.nvim, etc.
 # JetBrainsMono is a monospace font designed for code readability.
-# Install: ~/.dotfiles/install_nerd_font.sh
+# Install: ./install.sh (auto-installs via brew/pacman)
 font-family = "JetBrainsMono Nerd Font"
 font-size = 14
+font-thicken = true
 
 # ==============================================================================
 # WINDOW

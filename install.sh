@@ -202,8 +202,17 @@ fi
 # NERD FONT (required by Ghostty, aerial.nvim, trouble.nvim)
 # ==============================================================================
 
-if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Linux" ]]; then
-    install_pkg ttf-jetbrains-mono-nerd
+if [[ "$CONFIG_ONLY" != true ]]; then
+    if [[ "$OS" == "Linux" ]]; then
+        install_pkg ttf-jetbrains-mono-nerd
+    elif [[ "$OS" == "Darwin" ]]; then
+        if brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
+            echo "✅ JetBrainsMono Nerd Font already installed"
+        else
+            echo "📥 Installing JetBrainsMono Nerd Font..."
+            brew install --cask font-jetbrains-mono-nerd-font
+        fi
+    fi
 fi
 
 # ==============================================================================
@@ -456,21 +465,6 @@ fi
 
 echo
 
-# ==============================================================================
-# NERD FONT (macOS, skip on remote servers)
-# ==============================================================================
-
-if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Darwin" ]] && [[ -f "$DOTFILES_DIR/install_nerd_font.sh" ]]; then
-    if [[ "$UPDATE_MODE" == true ]]; then
-        echo "ℹ️  Nerd Font: run install_nerd_font.sh manually if needed"
-    else
-        read -p "🔤 Install JetBrainsMono Nerd Font? (y/n) " -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            bash "$DOTFILES_DIR/install_nerd_font.sh"
-        fi
-    fi
-fi
 
 # ==============================================================================
 # CUSTOM CLI SCRIPTS (skip on remote servers)
