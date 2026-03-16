@@ -118,7 +118,7 @@ keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" 
 --   :vimgrep → search inside files, results go to quickfix list
 
 keymap.set("n", "<leader>e", ":Lex<CR>",  { desc = "Toggle file explorer (netrw)" })
-keymap.set("n", "<leader>ed", ":Lex %:p:h<CR>",  { desc = "Open file explorer in current file dir (netrw)" })
+keymap.set("n", "<leader>E", ":Lex %:p:h<CR>",  { desc = "Open file explorer in current file dir (netrw)" })
 
 -- netrw overrides <C-l> (uses it for refresh), so re-apply split navigation inside netrw
 vim.api.nvim_create_autocmd("FileType", {

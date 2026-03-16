@@ -158,7 +158,7 @@ The install script auto-detects the OS and:
 - `kj` — Exit insert/visual/terminal mode
 - `gcc` / `gc` — Comment line / selection (native Neovim 0.10+)
 - `<leader>e` — Toggle file explorer (netrw)
-- `<leader>ed` — Open file explorer in current file directory
+- `<leader>E` — Open file explorer in current file directory
 - `<leader>ff` — Find files (telescope)
 - `<leader>fr` — Recent files (telescope)
 - `<leader>fg` — Live grep (telescope)
