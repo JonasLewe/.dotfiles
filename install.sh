@@ -245,17 +245,6 @@ fi
 
 echo
 
-# ==============================================================================
-# SYMLINKS — macOS-only (WM stack)
-# ==============================================================================
-
-if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Darwin" ]]; then
-    echo "=== Symlinking macOS WM Configurations ==="
-
-    link_config "$DOTFILES_DIR/aerospace"  ~/.config/aerospace
-
-    echo
-fi
 
 # ==============================================================================
 # SYMLINKS — Linux-only (Hyprland / Rice)
@@ -501,7 +490,6 @@ else
     echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
     echo "  3. Start tmux: 'tmux'"
     if [[ "$OS" == "Darwin" ]]; then
-        echo "  4. Install AeroSpace: brew install --cask nikitabobko/tap/aerospace"
     fi
     if [[ "$INSTALL_RICE" == true ]]; then
         echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
