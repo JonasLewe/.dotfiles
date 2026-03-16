@@ -14,9 +14,6 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 ### Linux (Arch / CachyOS)
 - **Hyprland** — Tiling Wayland compositor (+ Waybar, Rofi, Dunst)
 
-### macOS
-- **AeroSpace** — i3-like tiling window manager (no SIP required)
-
 Philosophy: **vanilla first** — learn native features before adding plugins.
 
 ## Installation

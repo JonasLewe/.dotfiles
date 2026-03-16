@@ -19,9 +19,6 @@ This is a **cross-platform** personal dotfiles repository for **macOS and Arch L
 - **Rofi** — Application launcher
 - **Dunst** — Notification daemon
 
-### macOS-only
-- **AeroSpace** — i3-like tiling window manager (no SIP required, instant workspaces)
-
 ## Installation & Setup
 
 **Requires:** macOS (Homebrew) or Arch-based distro (pacman).
@@ -35,7 +32,7 @@ cd ~/.dotfiles
 ```
 
 The install script auto-detects the OS and:
-- **macOS**: Installs via Homebrew, symlinks shared configs + AeroSpace WM
+- **macOS**: Installs via Homebrew, symlinks shared configs
 - **Linux**: Installs via pacman, optionally installs Hyprland + rice tools
 - Prompts for git email → writes to `~/.gitconfig.local`
 - Creates `~/.zshrc.local` for machine-specific config (nvm, IBM CLI, etc.)
@@ -51,7 +48,6 @@ The install script auto-detects the OS and:
 | `zsh/zprofile` | `~/.zprofile` | All |
 | `git/gitconfig` | `~/.gitconfig` | All |
 | `ghostty/` | `~/.config/ghostty/` | All |
-| `aerospace/` | `~/.config/aerospace/` | macOS |
 | `hyprland/` | `~/.config/hypr/` | Linux |
 | `waybar/` | `~/.config/waybar/` | Linux |
 | `rofi/` | `~/.config/rofi/` | Linux |
@@ -106,7 +102,6 @@ The install script auto-detects the OS and:
 │   ├── gitconfig            # Shared (email in ~/.gitconfig.local)
 │   ├── gitconfig.local.example  # Template for per-machine email
 │   └── gitignore_global
-├── aerospace/aerospace.toml  # macOS tiling WM (i3-like)
 ├── install.sh               # Unified installer (macOS + Linux)
 └── docs/
     ├── vanilla-vim-guide.md # Native Vim alternatives tutorial
@@ -272,28 +267,6 @@ Power menu: `rofi/powermenu.sh` — standalone theme (breeze-dark icons), vim na
 
 ### Dunst
 Config: `dunst/dunstrc`. Test: `notify-send "Title" "Body"`.
-
----
-
-## macOS Window Management — AeroSpace
-
-Config: `aerospace/aerospace.toml`. i3-like tiling WM. No SIP required.
-Layout: tiles. Gaps: 2px. Instant workspace switching (bypasses Mission Control).
-
-### Key Bindings
-- `Alt + h/j/k/l` — Focus window
-- `Alt + Shift + h/j/k/l` — Move/swap window
-- `Alt + Shift + m` — Fullscreen
-- `Alt + Shift + e` — Balance sizes
-- `Alt + Shift + t` — Toggle float/tiling
-- `Ctrl + 1-8` — Switch workspace (instant)
-- `Ctrl + Shift + 1-8` — Move window to workspace
-- `Alt + Shift + s/g` — Move window to left/right monitor
-- `Alt + Tab` — Workspace back-and-forth
-- `Alt + Shift + ;` — Enter service mode (r=reset, f=float, Esc=exit)
-
-### Floating Apps (not tiled)
-System Settings, Calculator, QuickTime, Finder, Cisco Secure Client, Webex.
 
 ---
 
