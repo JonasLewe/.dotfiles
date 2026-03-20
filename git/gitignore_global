@@ -1,5 +1,9 @@
 # Global gitignore for all repositories
 # Configure with: git config --global core.excludesfile ~/.gitignore_global
+#
+# IMPORTANT: Only OS junk and editor files belong here.
+# Language-specific patterns (node_modules, __pycache__, vendor/, etc.)
+# belong in each project's own .gitignore.
 
 ### Operating System Files ###
 
@@ -39,7 +43,7 @@ $RECYCLE.BIN/
 
 ### Editor Files ###
 
-# Vim
+# Vim / Neovim
 [._]*.s[a-v][a-z]
 [._]*.sw[a-p]
 [._]s[a-rt-v][a-z]
@@ -48,15 +52,11 @@ $RECYCLE.BIN/
 Session.vim
 Sessionx.vim
 .netrwhist
-*~
 tags
 [._]*.un~
-
-# Neovim
 .nvimlog
 
 # Emacs
-*~
 \#*\#
 /.emacs.desktop
 /.emacs.desktop.lock
@@ -85,100 +85,7 @@ tramp
 *.sublime-workspace
 *.sublime-project
 
-### Language-specific ###
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-*.manifest
-*.spec
-pip-log.txt
-pip-delete-this-directory.txt
-.pytest_cache/
-.mypy_cache/
-.dmypy.json
-dmypy.json
-.pyre/
-.pytype/
-.venv/
-venv/
-ENV/
-env/
-
-# Node.js
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.npm
-.eslintcache
-.node_repl_history
-*.tgz
-.yarn-integrity
-
-# Java
-*.class
-*.log
-*.ctxt
-.mtj.tmp/
-*.jar
-*.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
-hs_err_pid*
-
-# Go
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-*.test
-*.out
-vendor/
-
-### Build & Dependency Directories ###
-.cache/
-.tmp/
-tmp/
-temp/
-
-### Logs ###
-*.log
-logs/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-### Environment Variables ###
-.env
-.env.local
-.env.*.local
-
 ### Backup Files ###
 *.bak
 *.swp
 *.swo
-*~
