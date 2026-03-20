@@ -23,6 +23,7 @@ DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 OS="$(uname)"
 UPDATE_MODE=false
 CONFIG_ONLY=false
+INSTALL_RICE=false
 
 for arg in "$@"; do
     case "$arg" in
@@ -445,7 +446,7 @@ if [[ "$CONFIG_ONLY" == true ]]; then
 else
     if [[ "$SHELL" != *"zsh"* ]]; then
         echo "Setting zsh as default shell..."
-        chsh -s "$(which zsh)" || echo "⚠️  chsh failed — you may need to run it manually or log in again"
+        chsh -s "$(command -v zsh)" || echo "⚠️  chsh failed — you may need to run it manually or log in again"
         echo "Default shell changed to zsh (takes effect on next login)"
     else
         echo "✅ zsh is already the default shell"
@@ -489,8 +490,6 @@ else
     echo "  1. Log out and back in (to activate zsh as default shell)"
     echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
     echo "  3. Start tmux: 'tmux'"
-    if [[ "$OS" == "Darwin" ]]; then
-    fi
     if [[ "$INSTALL_RICE" == true ]]; then
         echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
         echo "  5. Read the rice guide: docs/rice-guide.md"
