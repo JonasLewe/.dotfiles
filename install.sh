@@ -457,22 +457,6 @@ echo
 
 
 # ==============================================================================
-# CUSTOM CLI SCRIPTS (skip on remote servers)
-# ==============================================================================
-
-if [[ "$CONFIG_ONLY" != true ]] && [[ -f "$DOTFILES_DIR/scripts/install.sh" ]]; then
-    if [[ "$UPDATE_MODE" == true ]]; then
-        echo "ℹ️  Custom CLI scripts: run ./scripts/install.sh manually if needed"
-    else
-        read -p "🔧 Install custom CLI scripts (glab-issue-helper, etc.)? (y/n) " -r
-        echo
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-            bash "$DOTFILES_DIR/scripts/install.sh"
-        fi
-    fi
-fi
-
-# ==============================================================================
 # DONE
 # ==============================================================================
 
