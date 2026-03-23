@@ -43,6 +43,7 @@ autoload -Uz vcs_info add-zsh-hook
 add-zsh-hook precmd vcs_info
 setopt prompt_subst
 PROMPT='%F{green}%~%f ${vcs_info_msg_0_}%# '
+RPROMPT='%F{8}%*%f'
 zstyle ':vcs_info:git:*' formats '%F{yellow}(%b)%f '
 
 # ==============================================================================
@@ -90,6 +91,9 @@ if ls --color=auto / &>/dev/null; then
 else
   alias la="ls -lahG"
 fi
+
+# Web search via w3m (text browser)
+ddg() { w3m "https://html.duckduckgo.com/html/?q=$(echo "$*" | sed 's/ /+/g')"; }
 
 # ==============================================================================
 # PATH
