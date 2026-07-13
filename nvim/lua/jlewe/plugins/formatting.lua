@@ -35,7 +35,7 @@ return {
     {
       "<leader>cf",
       function()
-        require("conform").format({ lsp_format = "fallback", timeout_ms = 1000 })
+        require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 })
       end,
       mode = { "n", "v" },
       desc = "Format code",
@@ -58,7 +58,7 @@ return {
 
     -- Format on save: runs the configured formatter, falls back to LSP
     format_on_save = {
-      timeout_ms = 1000,
+      timeout_ms = 5000,
       lsp_format = "fallback",
     },
   },
