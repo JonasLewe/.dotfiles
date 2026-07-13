@@ -44,7 +44,7 @@ command = tmux new -A -s default
 # ⚠️  glitchy.glsl is too GPU-intensive for Intel integrated graphics (ThinkPad)
 #
 # Light effects (safe for any GPU):
-# custom-shader = shaders/cursor_blaze.glsl
+custom-shader = shaders/cursor_blaze.glsl
 # custom-shader = shaders/dither.glsl
 # custom-shader = shaders/negative.glsl
 # custom-shader = shaders/tft.glsl
