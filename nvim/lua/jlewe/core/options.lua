@@ -166,6 +166,8 @@ opt.timeoutlen = 650
 -- Prevents the editor content from lingering in the terminal after :q
 vim.api.nvim_create_autocmd("VimLeave", {
   callback = function()
-    io.write("\27[?1049l")
+    if #vim.api.nvim_list_uis() > 0 then
+      io.write("\27[?1049l")
+    end
   end,
 })
