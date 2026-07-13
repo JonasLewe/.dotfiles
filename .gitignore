@@ -35,6 +35,9 @@ nvim/lazy-lock.json
 # Logs
 *.log
 
+# Local Python environments
+.venv/
+
 # Local machine-specific configs
 *.local
 !*.local.example
