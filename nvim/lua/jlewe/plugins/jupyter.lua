@@ -22,6 +22,8 @@ return {
     image_renderer = "placeholder",
     auto_venv = true,
     log_level = "info",
+    -- Preserve the global netrw mappings, especially <leader>E for %:p:h.
+    explorer_keys = {},
     -- Keep the global Ctrl-j/Ctrl-k split navigation available in notebooks.
     keymaps = {
       enter_output_dn = "<leader>no",
