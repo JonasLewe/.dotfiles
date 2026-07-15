@@ -10,6 +10,13 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- No configured plugin needs legacy remote-plugin hosts. Disabling them avoids
+-- useless provider discovery and keeps :checkhealth focused on real features.
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 local opt = vim.opt
 
 -- -----------------------------------------------------------------------------
@@ -30,6 +37,8 @@ opt.number = true
 -- Keep both in sync to avoid confusing mixed-indent files.
 opt.tabstop = 4
 opt.shiftwidth = 4
+opt.softtabstop = 4
+opt.expandtab = true
 
 -- smarttab: pressing <Tab> at line start inserts shiftwidth spaces
 -- smartindent: auto-indent new lines based on previous line's syntax
@@ -103,9 +112,23 @@ opt.splitbelow = true
 -- -----------------------------------------------------------------------------
 -- WORD CHARACTERS
 -- -----------------------------------------------------------------------------
--- Treat hyphen as part of a word. Useful for CSS classes (e.g. "my-class"),
--- kebab-case variables, etc. — "dw" deletes the whole word including hyphens.
-opt.iskeyword:append("-")
+-- Hyphen is a word character only in formats where kebab-case is idiomatic.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "css", "html", "helm", "sass", "scss", "yaml" },
+  callback = function()
+    vim.opt_local.iskeyword:append("-")
+  end,
+})
+
+-- Use ecosystem defaults while retaining four spaces for Python and shell.
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "helm", "json", "jsonc", "lua", "markdown", "yaml" },
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.softtabstop = 2
+  end,
+})
 
 -- -----------------------------------------------------------------------------
 -- FILE FINDING
@@ -155,7 +178,7 @@ end
 opt.updatetime = 250
 
 -- timeoutlen: milliseconds to wait for a key sequence to complete.
--- Affects multi-key mappings like "kj" (insert→normal mode).
+-- Affects leader mappings and the kj escape sequence.
 -- Lower = faster, but too low can make it hard to type key combos.
 opt.timeoutlen = 650
 

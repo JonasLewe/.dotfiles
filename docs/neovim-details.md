@@ -25,10 +25,10 @@ Alles liegt unter nvim/ im Dotfiles-Repo.
 - colorscheme.lua -- cyberdream (transparent, dark)
 - telescope.lua -- Fuzzy Finder mit fzf-native Extension
 - treesitter.lua -- Syntax Highlighting via AST-Parsing
-- cmp.lua -- Autocompletion mit LuaSnip und lspkind
-- lsp.lua -- Mason, LSP-Server-Konfiguration und Keybinds
-- navigation.lua -- aerial.nvim (Symbol-Sidebar) + trouble.nvim (Diagnostics)
+- lsp.lua -- Mason, LSP-Server und native Neovim-Completion
+- navigation.lua -- trouble.nvim (Diagnostics und Symbol-Liste)
 - dap.lua -- nvim-dap + dap-ui + virtual-text + mason-nvim-dap (Debugging)
+- jupyter.lua -- JupyNvim fuer native .ipynb-Notebooks
 - formatting.lua -- conform.nvim (Auto-Format on Save)
 - gitsigns.lua -- gitsigns.nvim (Git-Gutter, Hunk-Staging, Blame)
 - linting.lua -- nvim-lint (Async Linting)
@@ -42,11 +42,11 @@ Leader-Key ist Space.
 
 ## Allgemein
 
-**kj** -- Escape aus Insert, Visual und Terminal Mode.
+**kj** -- Escape aus Insert, Visual und Terminal Mode (ausser LazyGit).
 
-**Space nh** -- Search Highlights loeschen.
+**Space Space** -- Search Highlights loeschen.
 
-**x** -- Einzelnes Zeichen loeschen ohne es ins Register zu kopieren.
+**x** -- Einzelnes Zeichen loeschen, ohne das Standard-Register zu ueberschreiben.
 
 **Space +** und **Space -** -- Zahl unter dem Cursor erhoehen oder verringern.
 
@@ -80,33 +80,41 @@ Diese Keybinds sind nur aktiv wenn ein LSP-Server laeuft.
 
 **gr** -- References anzeigen.
 
-**K** -- Hover Documentation.
-
 **Space ca** -- Code Action.
 
-**Space rn** -- Rename.
-
-**[d** und **]d** -- Zum vorherigen oder naechsten Diagnostic springen.
+**Space rn** -- Symbol umbenennen.
 
 **Space d** -- Diagnostic-Float oeffnen.
 
-## Autocompletion (nvim-cmp)
+Die nativen Neovim-Aliase bleiben ebenfalls verfuegbar:
+
+**grr** fuer References, **gri** fuer Implementierungen, **grn** fuer Rename,
+**gra** fuer Code Actions, **gO** fuer Dokument-Symbole und **Ctrl-w d** fuer
+das Diagnostic-Float.
+
+**K** -- Hover Documentation.
+
+**[d** und **]d** -- Zum vorherigen oder naechsten Diagnostic springen.
+
+## Autocompletion (nativ)
 
 Im Insert Mode:
 
-**Tab** -- Naechsten Vorschlag auswaehlen.
+**Tab** und **Shift-Tab** -- Naechsten oder vorherigen Vorschlag auswaehlen.
 
-**Shift-Tab** -- Vorherigen Vorschlag auswaehlen.
+**Enter** -- Explizit ausgewaehlten Vorschlag bestaetigen.
 
-**Enter** -- Vorschlag bestaetigen (nur wenn explizit ausgewaehlt).
+**Ctrl-Space** -- LSP-Completion manuell ausloesen.
 
-**Ctrl-Space** -- Completion manuell ausloesen.
-
-**Ctrl-e** -- Completion abbrechen.
+Die vertrauten Tasten liegen auf Neovims nativer Completion. Ctrl-n/Ctrl-p und
+Ctrl-y funktionieren weiterhin als native Alternativen; nvim-cmp und LuaSnip
+sind dafuer nicht mehr notwendig.
 
 ## Navigation
 
-**Space cs** -- Symbol-Sidebar (aerial) ein-/ausblenden.
+**Space cs** -- Dokument-Symbole mit Trouble ein-/ausblenden.
+
+**Space xs** -- Zusaetzlicher Alias fuer dieselbe Symbol-Liste.
 
 **Space xx** -- Diagnostics-Panel (trouble) ein-/ausblenden.
 
@@ -143,8 +151,8 @@ python (debugpy), codelldb (C/C++/Rust), js (Node.js), delve (Go), bash.
 ## Formatting (conform.nvim)
 
 Code wird automatisch beim Speichern formatiert. conform.nvim nutzt dedizierte
-Formatter statt LSP, weil die besser sind (black statt pyright, prettier statt
-ts_ls). Falls kein Formatter konfiguriert ist, wird LSP als Fallback genutzt.
+Formatter statt LSP, weil die fuer reproduzierbare Formatierung spezialisiert
+sind. Falls kein Formatter konfiguriert ist, wird LSP als Fallback genutzt.
 
 **Space cf** -- Code manuell formatieren (funktioniert auch auf Visual Selection).
 
@@ -153,7 +161,8 @@ ts_ls). Falls kein Formatter konfiguriert ist, wird LSP als Fallback genutzt.
 Konfigurierte Formatter:
 - Python: black
 - Lua: stylua
-- JS/TS/JSON/YAML/MD/CSS/HTML: prettier
+- Bash: shfmt
+- JSON/YAML/Markdown: prettier
 
 Formatter installieren: :MasonInstall black stylua prettier
 Oder: pacman -S python-black stylua prettier
@@ -163,14 +172,15 @@ in plugins/formatting.lua eintragen.
 
 ## Linting (nvim-lint)
 
-Linter laufen automatisch beim Speichern, Oeffnen und Verlassen des Insert Mode.
-Diagnostics erscheinen im Gutter und in trouble.nvim (Space xx).
+Linter laufen automatisch beim Speichern und Verlassen des Insert Mode. Der
+erste Start bleibt frei von externen Linter-Prozessen. Diagnostics erscheinen
+im Gutter und in Trouble (Space xx).
 
 LSP-Server liefern Typ-Fehler, aber Linter finden mehr:
 - ruff: Python Style, Import-Sortierung, Security-Probleme (ersetzt flake8+isort)
-- eslint_d: JS/TS Code-Qualitaet, Framework-spezifische Regeln
+- shellcheck: Bash-Korrektheit und Portabilitaet
 
-Linter installieren: :MasonInstall ruff eslint_d
+Linter installieren: :MasonInstall ruff shellcheck
 
 Neuen Linter hinzufuegen: Filetype + Linter-Name in linters_by_ft
 in plugins/linting.lua eintragen.
@@ -222,8 +232,6 @@ Cursor landet zwischen dem Paar.
 
 **Enter** zwischen **{}** -- formatiert mit Einrueckung.
 
-Funktions-Completion via nvim-cmp fuegt automatisch **()** nach dem Funktionsnamen ein.
-
 Nutzt Treesitter fuer intelligentes Matching (keine Auto-Pairs in Strings oder Kommentaren).
 
 
@@ -231,9 +239,10 @@ Nutzt Treesitter fuer intelligentes Matching (keine Auto-Pairs in Strings oder K
 
 Alle Server werden automatisch via Mason installiert.
 
-**pyright** fuer Python.
-
-**lua_ls** fuer Lua, mit Neovim-Runtime konfiguriert damit vim-Globals erkannt werden.
+Aktiv sind **pyright** fuer Python, **bashls** fuer Bash, **marksman** fuer
+Markdown, **yamlls** fuer YAML, **helm_ls** fuer Helm und **lua_ls** fuer die
+Neovim-Konfiguration. Treesitter-Parser sind auf Python, Bash, Markdown, YAML,
+Helm sowie Lua und JSON begrenzt.
 
 Neue Server hinzufuegen: drei Schritte in plugins/lsp.lua:
 
@@ -271,13 +280,9 @@ Drei Schritte in plugins/lsp.lua:
 
 ## Plugins fuer spaeter
 
-Fuege diese erst hinzu wenn du die Basis sicher beherrschst.
-
-**indent-blankline** zeigt visuelle Indent-Guides.
-
-**conform.nvim** fuehrt Auto-Formatter aus (black, prettier, stylua).
-
-**nvim-lint** integriert Linter die kein LSP haben.
+Fuege weitere Plugins erst hinzu, wenn ein wiederkehrendes Problem den Nutzen
+messbar rechtfertigt. Der aktuelle Stack deckt Navigation, LSP, Completion,
+Formatting, Linting, Git, Debugging und Notebooks bereits ab.
 
 **harpoon** ermoeglicht schnelles Wechseln zwischen markierten Dateien.
 
