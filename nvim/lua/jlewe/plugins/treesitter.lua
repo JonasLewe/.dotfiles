@@ -14,62 +14,81 @@
 -- HOW IT WORKS:
 --   Each language has a "parser" — a compiled .so file that Treesitter uses
 --   to analyze code. Parsers are downloaded and compiled automatically.
---   Stored in: ~/.local/share/nvim/lazy/nvim-treesitter/parser/
+--   Stored in: ~/.local/share/nvim/site/parser/
 --
 -- USEFUL COMMANDS:
 --   :TSInstall <language>    → install a specific parser
---   :TSInstallInfo           → list all available parsers and their status
 --   :TSUpdate                → update all installed parsers
 --   :InspectTree             → visualize the syntax tree of the current file (cool!)
 
 return {
   "nvim-treesitter/nvim-treesitter",
-
-  -- Run :TSUpdate after install/update to keep parsers current
+  -- The Neovim 0.12 rewrite explicitly does not support lazy-loading.
+  lazy = false,
   build = ":TSUpdate",
-
-  -- Only load when actually opening a file (not on the empty start screen)
-  event = { "BufReadPre", "BufNewFile" },
-
   config = function()
-    require("nvim-treesitter").setup({
+    local treesitter = require("nvim-treesitter")
+    local parsers = {
+      "bash",
+      "helm",
+      "json",
+      "lua",
+      "markdown",
+      "python",
+      "yaml",
+    }
 
-      -- Parsers to install automatically.
-      -- Add more as you need them — full list: :TSInstallInfo
-      ensure_installed = {
-        "python",      -- Python
-        "typescript",  -- TypeScript
-        "javascript",  -- JavaScript
-        "lua",         -- Lua (for this config!)
-        "yaml",        -- YAML (Kubernetes, CI/CD)
-        "json",        -- JSON
-        "bash",        -- Shell scripts
-        "markdown",    -- Markdown docs
-        "vim",         -- Vimscript
-        "vimdoc",      -- Neovim :help documentation
+    treesitter.setup()
+
+    -- Install only missing configured parsers, asynchronously after startup.
+    local installed = treesitter.get_installed("parsers")
+    local missing = vim.tbl_filter(function(lang)
+      return not vim.list_contains(installed, lang)
+    end, parsers)
+    if #missing > 0 then
+      vim.schedule(function()
+        treesitter.install(missing, { summary = true })
+      end)
+    end
+
+    -- Helm templates look like YAML by extension. Only promote files inside a
+    -- chart's templates/ directory when a Chart.yaml exists above them.
+    vim.filetype.add({
+      pattern = {
+        [".*/templates/.*"] = {
+          function(path)
+            local chart = vim.fs.find("Chart.yaml", {
+              path = vim.fs.dirname(path),
+              upward = true,
+              type = "file",
+            })[1]
+            return chart and "helm" or nil
+          end,
+          { priority = 100 },
+        },
       },
+    })
 
-      -- Install parsers asynchronously in the background (false = don't block)
-      sync_install = false,
-
-      -- Automatically install a parser when you open a file whose language
-      -- isn't installed yet. Requires a C compiler (gcc) on the system.
-      auto_install = true,
-
-      -- SYNTAX HIGHLIGHTING
-      -- Replaces the old regex-based Vim syntax highlighting.
-      -- additional_vim_regex_highlighting = false avoids double-processing.
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
+    -- Highlighting is native in Neovim 0.12; nvim-treesitter supplies the
+    -- parsers and queries. Unsupported/mid-install buffers fall back cleanly.
+    vim.api.nvim_create_autocmd("FileType", {
+      group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
+      pattern = {
+        "bash",
+        "helm",
+        "json",
+        "jsonc",
+        "lua",
+        "markdown",
+        "python",
+        "sh",
+        "vim",
+        "vimdoc",
+        "yaml",
       },
-
-      -- SMART INDENTATION
-      -- Treesitter-aware auto-indent when pressing Enter or using =.
-      -- More accurate than Vim's built-in indent rules.
-      indent = {
-        enable = true,
-      },
+      callback = function(args)
+        pcall(vim.treesitter.start, args.buf)
+      end,
     })
   end,
 }

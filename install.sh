@@ -128,7 +128,8 @@ elif [[ "$OS" == "Darwin" ]]; then
         exit 1
     fi
 
-    brew install neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags
+    brew install neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags \
+        lazygit helm tree-sitter-cli
 
     echo
 
@@ -161,6 +162,9 @@ elif [[ "$OS" == "Linux" ]]; then
     install_pkg libfido2
     install_pkg nodejs
     install_pkg npm
+    install_pkg lazygit
+    install_pkg helm
+    install_pkg tree-sitter-cli
 
     echo
 
@@ -200,7 +204,7 @@ elif [[ "$OS" == "Linux" ]]; then
 fi
 
 # ==============================================================================
-# NERD FONT (required by Ghostty, aerial.nvim, trouble.nvim)
+# NERD FONT (required by Ghostty and trouble.nvim)
 # ==============================================================================
 
 if [[ "$CONFIG_ONLY" != true ]]; then
@@ -232,6 +236,10 @@ link_config "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
 
 # GUI configs — only on local machines (not remote servers)
 if [[ "$CONFIG_ONLY" != true ]]; then
+    if [[ ! -f "$DOTFILES_DIR/ghostty/config" ]] && [[ -f "$DOTFILES_DIR/ghostty/config.example" ]]; then
+        cp "$DOTFILES_DIR/ghostty/config.example" "$DOTFILES_DIR/ghostty/config"
+        echo "✅ ghostty/config created from config.example"
+    fi
     link_config "$DOTFILES_DIR/ghostty"         ~/.config/ghostty
 
     # Ghostty platform config — symlink platform.conf to the right file
@@ -289,10 +297,10 @@ echo
 
 if command -v nvim &>/dev/null; then
     echo "=== Installing Neovim Plugins ==="
-    if nvim --headless "+Lazy! sync" +qa 2>/tmp/nvim-lazy-sync.log; then
+    if nvim --headless "+Lazy! restore" "+Lazy! clean" +qa 2>/tmp/nvim-lazy-sync.log; then
         echo "✅ Neovim plugins installed"
     else
-        echo "⚠️  Lazy sync had issues (continuing anyway). Log: /tmp/nvim-lazy-sync.log"
+        echo "⚠️  Lazy restore/clean had issues (continuing anyway). Log: /tmp/nvim-lazy-sync.log"
     fi
 
     echo "Installing Mason tools (formatters, linters)..."
@@ -307,7 +315,21 @@ if not ok then vim.cmd("qa!") return end
 vim.defer_fn(function() vim.cmd("qa!") end, 120000)
 
 registry.refresh(function()
-  local tools = { "black", "stylua", "prettier", "ruff", "eslint_d" }
+  local tools = {
+    "bash-language-server",
+    "black",
+    "debugpy",
+    "helm-ls",
+    "lua-language-server",
+    "marksman",
+    "prettier",
+    "pyright",
+    "ruff",
+    "shellcheck",
+    "shfmt",
+    "stylua",
+    "yaml-language-server",
+  }
   local to_install = {}
   for _, name in ipairs(tools) do
     local found, pkg = pcall(registry.get_package, name)

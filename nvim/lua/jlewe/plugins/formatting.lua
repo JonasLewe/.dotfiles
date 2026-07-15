@@ -8,7 +8,7 @@
 -- WHY NOT JUST LSP?
 --   LSP servers CAN format, but dedicated formatters are better:
 --   - black is the Python standard, not pyright
---   - prettier is the JS/TS/JSON standard, not ts_ls
+--   - prettier gives JSON, YAML, and Markdown one consistent style
 --   - stylua is the Lua standard, not lua_ls
 --   conform.nvim falls back to LSP if no formatter is configured.
 --
@@ -44,16 +44,12 @@ return {
   opts = {
     formatters_by_ft = {
       python = { "black" },
+      sh = { "shfmt" },
+      bash = { "shfmt" },
       lua = { "stylua" },
-      javascript = { "prettier" },
-      typescript = { "prettier" },
-      javascriptreact = { "prettier" },
-      typescriptreact = { "prettier" },
       json = { "prettier" },
       yaml = { "prettier" },
       markdown = { "prettier" },
-      css = { "prettier" },
-      html = { "prettier" },
     },
 
     -- Format on save: runs the configured formatter, falls back to LSP
