@@ -5,7 +5,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 ## What's included
 
 ### Shared
-- **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, DAP, JupyNvim, cyberdream
+- **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, Jira, DAP, JupyNvim, cyberdream
 - **tmux** — Vanilla config, vim keybindings, no plugin manager
 - **zsh** — Plain zsh with vi-mode, no frameworks
 - **Ghostty** — GPU-accelerated terminal (platform-specific overrides via symlink)

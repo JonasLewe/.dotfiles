@@ -43,4 +43,5 @@ karabiner/automatic_backups/
 # Local machine-specific configs
 *.local
 !*.local.example
+nvim/jira.local.lua
 .dual-graph/
