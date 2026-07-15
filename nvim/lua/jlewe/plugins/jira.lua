@@ -54,7 +54,7 @@ return {
   cmd = "Jira",
   keys = {
     {
-      "<leader>jm",
+      "<leader>jj",
       function()
         local config = load_local_config()
         if not config.project_key or config.project_key == "" then
