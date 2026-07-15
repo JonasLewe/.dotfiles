@@ -12,7 +12,13 @@
 
 return {
   "sheng-tse/jupynvim",
-  lazy = false,
+  -- Loading the full notebook stack on every Neovim launch costs about 4 ms.
+  -- Keep regular startup unchanged and load it only when it is actually used.
+  event = {
+    { event = "BufReadCmd", pattern = "*.ipynb" },
+    { event = "BufNewFile", pattern = "*.ipynb" },
+  },
+  cmd = { "JupynvimOpen", "JupynvimOpenRemote" },
   build = function(plugin)
     local install = loadfile(plugin.dir .. "/lua/jupynvim/install.lua")()
     install.run(plugin)
