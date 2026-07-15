@@ -121,11 +121,13 @@ sind dafuer nicht mehr notwendig.
 
 ## Jira
 
-**Space jm** -- Das Jira-Board aus `nvim/jira.local.lua` oeffnen.
+**Space jj** -- Das Jira-Board aus `nvim/jira.local.lua` oeffnen.
 
 Die maschinenlokale Datei wird nicht von Git getrackt. Als Vorlage dient
 `nvim/jira.example.lua`. Der Jira-PAT liegt separat im Neovim-Datenverzeichnis
-und wird einmalig mit `:Jira auth login` eingerichtet.
+und wird einmalig mit `:Jira auth login` eingerichtet. Mit `read_only = true`
+blockiert die lokale Konfiguration Status-, Assignee-, Worklog-, Kommentar-,
+Create- und Edit-Aktionen sowie vom Jira-Plugin ausgeloeste Git-Branch-Wechsel.
 
 ## Debugging (DAP)
 

@@ -10,6 +10,7 @@ return {
   label = "team-label",
   limit = 100,
   logging = false,
+  read_only = true, -- Block Jira writes and Jira-triggered Git branch changes
 
   active_query = 'project = "%s" AND labels = "team-label" ORDER BY Rank ASC',
 
