@@ -29,6 +29,7 @@ Alles liegt unter nvim/ im Dotfiles-Repo.
 - navigation.lua -- trouble.nvim (Diagnostics und Symbol-Liste)
 - dap.lua -- nvim-dap + dap-ui + virtual-text + mason-nvim-dap (Debugging)
 - jupyter.lua -- JupyNvim fuer native .ipynb-Notebooks
+- jira.lua -- Lazy-loaded Jira-Board mit maschinenlokaler Konfiguration
 - formatting.lua -- conform.nvim (Auto-Format on Save)
 - gitsigns.lua -- gitsigns.nvim (Git-Gutter, Hunk-Staging, Blame)
 - linting.lua -- nvim-lint (Async Linting)
@@ -117,6 +118,16 @@ sind dafuer nicht mehr notwendig.
 **Space xs** -- Zusaetzlicher Alias fuer dieselbe Symbol-Liste.
 
 **Space xx** -- Diagnostics-Panel (trouble) ein-/ausblenden.
+
+## Jira
+
+**Space jj** -- Das Jira-Board aus `nvim/jira.local.lua` oeffnen.
+
+Die maschinenlokale Datei wird nicht von Git getrackt. Als Vorlage dient
+`nvim/jira.example.lua`. Der Jira-PAT liegt separat im Neovim-Datenverzeichnis
+und wird einmalig mit `:Jira auth login` eingerichtet. Mit `read_only = true`
+blockiert die lokale Konfiguration Status-, Assignee-, Worklog-, Kommentar-,
+Create- und Edit-Aktionen sowie vom Jira-Plugin ausgeloeste Git-Branch-Wechsel.
 
 ## Debugging (DAP)
 
