@@ -1,0 +1,38 @@
+# ==============================================================================
+# GHOSTTY TERMINAL CONFIGURATION
+# ==============================================================================
+# Local setup:
+#   cp ~/.dotfiles/ghostty/config.example ~/.dotfiles/ghostty/config
+# The installer performs this copy automatically when config is missing.
+# Docs: https://ghostty.org/docs
+
+# Reuse one persistent tmux session across terminal restarts.
+command = tmux new -A -s default
+
+# Pick exactly one bundled theme.
+config-file = themes/cyberdream
+# config-file = themes/tokyonight
+# config-file = themes/cyberpunk-neon
+# config-file = themes/synthwave84
+
+# Optional shaders live in the separately installed shaders/ repository. They
+# stay disabled by default to keep the portable template lightweight.
+# custom-shader = shaders/cursor_blaze.glsl
+# custom-shader-animation = true
+
+# Font installed by install.sh.
+font-family = "JetBrainsMono Nerd Font"
+font-size = 14
+font-thicken = true
+
+window-padding-x = 0
+window-padding-y = 0
+window-padding-color = extend
+confirm-close-surface = true
+
+# macOS-only options are ignored on Linux.
+macos-titlebar-style = hidden
+macos-option-as-alt = false
+
+# install.sh points this symlink to mac.conf or linux.conf.
+config-file = platform.conf

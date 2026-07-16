@@ -13,6 +13,9 @@ ghostty/shaders/
 # Platform-specific symlink (created by install.sh)
 ghostty/platform.conf
 
+# Local Ghostty preferences (bootstrapped from config.example)
+ghostty/config
+
 # Binaries (downloaded/extracted, not part of dotfiles)
 nvim-linux-x86_64/
 nvim-linux-arm64/
@@ -30,10 +33,12 @@ karabiner/automatic_backups/
 *.swp
 *.swo
 *~
-nvim/lazy-lock.json
 
 # Logs
 *.log
+
+# Local Python environments
+.venv/
 
 # Local machine-specific configs
 *.local

@@ -19,20 +19,19 @@ local keymap = vim.keymap
 -- =============================================================================
 
 -- EXIT INSERT/VISUAL/TERMINAL MODE
--- "kj" pressed quickly is much more ergonomic than reaching for Escape.
--- The key sequence must be typed fast (within timeoutlen = 500ms).
--- You can still use Escape — this is just an additional shortcut.
-keymap.set("i", "kj", "<ESC>",        { desc = "Exit insert mode" })
-keymap.set("v", "kj", "<ESC>",        { desc = "Exit visual mode" })
--- "kj" to exit terminal mode, but NOT in lazygit (where j/k are navigation keys)
+-- Keep the established kj muscle-memory shortcut alongside native Escape.
+keymap.set("i", "kj", "<Esc>", { desc = "Exit insert mode" })
+keymap.set("v", "kj", "<Esc>", { desc = "Exit visual mode" })
 vim.api.nvim_create_autocmd("TermOpen", {
-  callback = function()
-    local buf = vim.api.nvim_get_current_buf()
-    -- Delay slightly to let the terminal process start
+  group = vim.api.nvim_create_augroup("UserTerminalKeymaps", { clear = true }),
+  callback = function(args)
     vim.defer_fn(function()
-      local bufname = vim.api.nvim_buf_get_name(buf)
+      if not vim.api.nvim_buf_is_valid(args.buf) then
+        return
+      end
+      local bufname = vim.api.nvim_buf_get_name(args.buf)
       if not bufname:match("lazygit") then
-        vim.keymap.set("t", "kj", "<C-\\><C-n>", { buffer = buf, desc = "Exit terminal mode" })
+        vim.keymap.set("t", "kj", "<C-\\><C-n>", { buffer = args.buf, desc = "Exit terminal mode" })
       end
     end, 100)
   end,
@@ -45,8 +44,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
 keymap.set("n", "<leader><space>", ":nohl<CR>", { desc = "Clear search highlights" })
 
 -- DELETE WITHOUT YANKING
--- Normally "x" cuts the character into the default register (you could paste it).
--- '"_x' sends it to the black hole register (_ ) — a true delete, no yank.
 keymap.set("n", "x", '"_x', { desc = "Delete char (no yank)" })
 
 -- INCREMENT / DECREMENT NUMBERS
@@ -63,14 +60,14 @@ keymap.set("n", "<leader>-", "<C-x>", { desc = "Decrement number" })
 
 -- CREATE SPLITS
 -- sv = split vertical (side by side), sh = split horizontal (top/bottom)
-keymap.set("n", "<leader>sv", "<C-w>v",       { desc = "Split window vertically" })
-keymap.set("n", "<leader>sh", "<C-w>s",       { desc = "Split window horizontally" })
+keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
+keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 
 -- Equalize all split sizes (useful after resizing or adding splits)
-keymap.set("n", "<leader>se", "<C-w>=",       { desc = "Equalize split sizes" })
+keymap.set("n", "<leader>se", "<C-w>=", { desc = "Equalize split sizes" })
 
 -- Close the current split (not the buffer — just this window pane)
-keymap.set("n", "<leader>sx", ":close<CR>",   { desc = "Close current split" })
+keymap.set("n", "<leader>sx", ":close<CR>", { desc = "Close current split" })
 
 -- NAVIGATE BETWEEN SPLITS
 -- Ctrl+hjkl moves between splits without needing the <C-w> prefix.
@@ -82,10 +79,10 @@ keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right split" })
 
 -- RESIZE SPLITS
 -- Hold Ctrl and press arrow keys to resize the current split incrementally.
-keymap.set("n", "<C-Left>",  ":vertical resize +3<CR>", { silent = true, desc = "Resize split ←" })
+keymap.set("n", "<C-Left>", ":vertical resize +3<CR>", { silent = true, desc = "Resize split ←" })
 keymap.set("n", "<C-Right>", ":vertical resize -3<CR>", { silent = true, desc = "Resize split →" })
-keymap.set("n", "<C-Up>",    ":resize -3<CR>",          { silent = true, desc = "Resize split ↑" })
-keymap.set("n", "<C-Down>",  ":resize +3<CR>",          { silent = true, desc = "Resize split ↓" })
+keymap.set("n", "<C-Up>", ":resize -3<CR>", { silent = true, desc = "Resize split ↑" })
+keymap.set("n", "<C-Down>", ":resize +3<CR>", { silent = true, desc = "Resize split ↓" })
 
 -- =============================================================================
 -- TABS
@@ -93,16 +90,16 @@ keymap.set("n", "<C-Down>",  ":resize +3<CR>",          { silent = true, desc = 
 -- Neovim tabs are like separate workspaces, each with their own layout of splits.
 -- Different from VS Code tabs — those are more like Neovim buffers.
 
-keymap.set("n", "<leader>to", ":tabnew<CR>",   { desc = "Open new tab" })
+keymap.set("n", "<leader>to", ":tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>tx", ":tabclose<CR>", { desc = "Close tab" })
-keymap.set("n", "<leader>tn", ":tabn<CR>",     { desc = "Go to next tab" })
-keymap.set("n", "<leader>tp", ":tabp<CR>",     { desc = "Go to previous tab" })
+keymap.set("n", "<leader>tn", ":tabn<CR>", { desc = "Go to next tab" })
+keymap.set("n", "<leader>tp", ":tabp<CR>", { desc = "Go to previous tab" })
 
 -- =============================================================================
 -- TERMINAL
 -- =============================================================================
 -- Open a small terminal split at the bottom of the screen.
--- Switch back to normal mode with: kj  or  Ctrl+\ Ctrl+n
+-- Switch back to normal mode with kj or Vim's native Ctrl+\ Ctrl+n sequence.
 keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" })
 
 -- =============================================================================
@@ -117,8 +114,8 @@ keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" 
 --   :b name  → switch to buffer by partial name (Tab to autocomplete)
 --   :vimgrep → search inside files, results go to quickfix list
 
-keymap.set("n", "<leader>e", ":Lex<CR>",  { desc = "Toggle file explorer (netrw)" })
-keymap.set("n", "<leader>E", ":Lex %:p:h<CR>",  { desc = "Open file explorer in current file dir (netrw)" })
+keymap.set("n", "<leader>e", ":Lex<CR>", { desc = "Toggle file explorer (netrw)" })
+keymap.set("n", "<leader>E", ":Lex %:p:h<CR>", { desc = "Open file explorer in current file dir (netrw)" })
 
 -- netrw overrides <C-l> (uses it for refresh), so re-apply split navigation inside netrw
 vim.api.nvim_create_autocmd("FileType", {

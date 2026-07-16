@@ -11,8 +11,8 @@
 --   )  → jumps over existing ) instead of doubling
 --   <CR> between {} → formats with proper indentation
 --
--- Also integrates with nvim-cmp: selecting a function from autocomplete
--- automatically adds () after the function name.
+-- Kept intentionally small: native LSP completion handles snippets, while this
+-- plugin only handles typed pairs after InsertEnter.
 
 return {
   "windwp/nvim-autopairs",
