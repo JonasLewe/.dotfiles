@@ -306,7 +306,7 @@ if command -v nvim &>/dev/null; then
 
     echo "Installing Treesitter parsers..."
     treesitter_script=$(mktemp /tmp/treesitter-install.XXXXXX.lua)
-    trap "rm -f '$treesitter_script'" EXIT
+    trap 'rm -f "$treesitter_script"' EXIT
     cat > "$treesitter_script" << 'LUAEOF'
 local ok, err = pcall(function()
   local treesitter = require("nvim-treesitter")
@@ -339,7 +339,7 @@ LUAEOF
     echo "Installing Mason tools (formatters, linters)..."
     # Write Mason install script to temp file (Lua heredoc doesn't work in -c mode)
     mason_script=$(mktemp /tmp/mason-install.XXXXXX.lua)
-    trap "rm -f '$mason_script'" EXIT
+    trap 'rm -f "$mason_script"' EXIT
     cat > "$mason_script" << 'LUAEOF'
 local ok, registry = pcall(require, "mason-registry")
 if not ok then vim.cmd("qa!") return end
@@ -460,7 +460,7 @@ if [[ ! -e ~/.gitconfig.local ]]; then
         echo "✅ Created empty ~/.gitconfig.local (set your email: git config --file ~/.gitconfig.local user.email you@example.com)"
     else
         echo
-        read -p "📧 Enter your Git email address: " git_email
+        read -r -p "📧 Enter your Git email address: " git_email
         if [[ -n "$git_email" ]]; then
             cat > ~/.gitconfig.local <<EOF
 [user]
