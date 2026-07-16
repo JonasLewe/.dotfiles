@@ -4,13 +4,17 @@
 
 local local_config
 
+local function local_config_path()
+  return vim.fn.stdpath("config") .. "/jira.local.lua"
+end
+
 local function load_local_config()
   if local_config then
     return local_config
   end
 
   local_config = {}
-  local path = vim.fn.stdpath("config") .. "/jira.local.lua"
+  local path = local_config_path()
   if not vim.uv.fs_stat(path) then
     return local_config
   end
@@ -112,6 +116,11 @@ end
 return {
   "letieu/jira.nvim",
   version = "v0.8.4",
+  -- Keep Jira completely disabled on machines without local Jira settings.
+  -- `cond` also prevents lazy.nvim from installing the plugin there.
+  cond = function()
+    return vim.uv.fs_stat(local_config_path()) ~= nil
+  end,
   cmd = "Jira",
   keys = {
     {
