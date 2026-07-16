@@ -502,4 +502,4 @@ else
     fi
 fi
 echo
-echo "Documentation: CLAUDE.md (full reference), docs/ (guides)"
+echo "Documentation: README.md (overview), docs/ (guides)"
