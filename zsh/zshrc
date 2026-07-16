@@ -137,3 +137,9 @@ if [[ -d "$HOME/.nvm" ]]; then
 fi
 
 [[ ":$PATH:" != *":$HOME/.dual-graph:"* ]] && export PATH="$PATH:$HOME/.dual-graph"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/jonaslewe/.lmstudio/bin"
+# End of LM Studio CLI section
+
+

@@ -8,18 +8,18 @@
 --   LSP servers provide type errors and basic diagnostics, but dedicated
 --   linters catch more:
 --   - ruff: Python style, import sorting, security issues (replaces flake8+isort)
---   - eslint: JS/TS code quality, framework-specific rules
+--   - shellcheck: Bash correctness and portability issues
 --   Linter diagnostics appear alongside LSP diagnostics in the same gutter.
 --
 -- USAGE:
---   Linting runs automatically on save, file open, and leaving insert mode.
+--   Linting runs automatically on save and leaving insert mode.
 --   Diagnostics show in the sign column and in trouble.nvim (<leader>xx).
 --
 -- INSTALLING LINTERS:
 --   Linters must be installed separately. Use Mason:
---     :MasonInstall ruff eslint_d
+--     :MasonInstall ruff shellcheck
 --   Or your system package manager:
---     pacman -S ruff / npm install -g eslint_d
+--     pacman -S ruff shellcheck
 --
 -- ADDING A NEW LINTER:
 --   Add the filetype + linter name to linters_by_ft below.
@@ -27,24 +27,24 @@
 
 return {
   "mfussenegger/nvim-lint",
-  event = { "BufWritePost", "BufReadPost", "InsertLeave" },
+  ft = { "python", "sh", "bash" },
   config = function()
     local lint = require("lint")
 
     lint.linters_by_ft = {
       python = { "ruff" },
-      javascript = { "eslint_d" },
-      typescript = { "eslint_d" },
-      javascriptreact = { "eslint_d" },
-      typescriptreact = { "eslint_d" },
+      sh = { "shellcheck" },
+      bash = { "shellcheck" },
     }
 
-    -- Auto-lint on save, file open, and leaving insert mode
-    vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
+    -- Keep external processes off the initial file-open path.
+    vim.api.nvim_create_autocmd({ "BufWritePost", "InsertLeave" }, {
       group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
       callback = function()
         lint.try_lint()
       end,
     })
+
+    -- The first InsertLeave or save runs it moments later during normal editing.
   end,
 }
