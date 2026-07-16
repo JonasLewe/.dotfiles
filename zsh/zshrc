@@ -53,11 +53,14 @@ zstyle ':vcs_info:git:*' formats '%F{yellow}(%b)%f '
 # Case-insensitive matching and menu selection.
 # Only regenerate completion dump once per day (compinit -C skips the full scan).
 autoload -Uz compinit
-if [[ -n ~/.zcompdump(#qN.mh+24) ]]; then
+typeset -a stale_compdump
+stale_compdump=(~/.zcompdump(N.mh+24))
+if [[ ! -f ~/.zcompdump ]] || (( ${#stale_compdump} > 0 )); then
   compinit
 else
   compinit -C
 fi
+unset stale_compdump
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'  # case-insensitive
 zstyle ':completion:*' menu select                     # arrow-key menu
 
@@ -138,8 +141,8 @@ fi
 
 [[ ":$PATH:" != *":$HOME/.dual-graph:"* ]] && export PATH="$PATH:$HOME/.dual-graph"
 
-# Added by LM Studio CLI (lms)
-export PATH="$PATH:/Users/jonaslewe/.lmstudio/bin"
-# End of LM Studio CLI section
-
+# LM Studio CLI (lms), when installed on this machine.
+if [[ -d "$HOME/.lmstudio/bin" && ":$PATH:" != *":$HOME/.lmstudio/bin:"* ]]; then
+  export PATH="$PATH:$HOME/.lmstudio/bin"
+fi
 

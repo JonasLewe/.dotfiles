@@ -14,8 +14,8 @@
 # Flags:
 #   --update       Skip prompts, install only what's missing
 #   --config-only  Remote server mode: symlink configs only, no package
-#                  installation, no GUI tools. Requires git, nvim, tmux,
-#                  zsh already installed on the server.
+#                  installation, no GUI tools. Requires git, nvim, tmux, zsh,
+#                  tree-sitter CLI, and a C build toolchain on the server.
 
 set -e  # Exit on error
 
@@ -111,7 +111,7 @@ link_config() {
 if [[ "$CONFIG_ONLY" == true ]]; then
     echo "=== Skipping package installation (config-only mode) ==="
     # Verify required tools are available
-    for cmd in git nvim tmux; do
+    for cmd in git nvim tmux zsh tree-sitter cc make; do
         if command -v "$cmd" &>/dev/null; then
             echo "✅ $cmd found"
         else
@@ -164,6 +164,7 @@ elif [[ "$OS" == "Linux" ]]; then
     install_pkg npm
     install_pkg lazygit
     install_pkg helm
+    install_pkg base-devel
     install_pkg tree-sitter-cli
 
     echo
@@ -297,11 +298,43 @@ echo
 
 if command -v nvim &>/dev/null; then
     echo "=== Installing Neovim Plugins ==="
-    if nvim --headless "+Lazy! restore" "+Lazy! clean" +qa 2>/tmp/nvim-lazy-sync.log; then
+    if DOTFILES_INSTALL=1 nvim --headless "+Lazy! restore" "+Lazy! clean" +qa 2>/tmp/nvim-lazy-sync.log; then
         echo "✅ Neovim plugins installed"
     else
         echo "⚠️  Lazy restore/clean had issues (continuing anyway). Log: /tmp/nvim-lazy-sync.log"
     fi
+
+    echo "Installing Treesitter parsers..."
+    treesitter_script=$(mktemp /tmp/treesitter-install.XXXXXX.lua)
+    trap "rm -f '$treesitter_script'" EXIT
+    cat > "$treesitter_script" << 'LUAEOF'
+local ok, err = pcall(function()
+  local treesitter = require("nvim-treesitter")
+  local parsers = require("jlewe.treesitter_languages")
+  local installed = treesitter.get_installed("parsers")
+  local missing = vim.tbl_filter(function(lang)
+    return not vim.list_contains(installed, lang)
+  end, parsers)
+
+  if #missing > 0 then
+    local success = treesitter.install(missing, { summary = true }):wait(300000)
+    assert(success, "one or more Treesitter parsers failed to install")
+  end
+end)
+
+if not ok then
+  vim.api.nvim_err_writeln(err)
+  vim.cmd("cquit 1")
+end
+vim.cmd("qa!")
+LUAEOF
+    if DOTFILES_INSTALL=1 nvim --headless -c "luafile $treesitter_script" 2>/tmp/nvim-treesitter.log; then
+        echo "✅ Treesitter parsers installed"
+    else
+        echo "⚠️  Some Treesitter parsers may have failed (continuing). Log: /tmp/nvim-treesitter.log"
+    fi
+    rm -f "$treesitter_script"
+    trap - EXIT
 
     echo "Installing Mason tools (formatters, linters)..."
     # Write Mason install script to temp file (Lua heredoc doesn't work in -c mode)
@@ -352,7 +385,7 @@ registry.refresh(function()
   end
 end)
 LUAEOF
-    if nvim --headless -c "luafile $mason_script" 2>/tmp/nvim-mason.log; then
+    if DOTFILES_INSTALL=1 nvim --headless -c "luafile $mason_script" 2>/tmp/nvim-mason.log; then
         echo "✅ Mason tools installed"
     else
         echo "⚠️  Some Mason tools may have failed (continuing). Log: /tmp/nvim-mason.log"
