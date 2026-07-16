@@ -31,4 +31,4 @@ The installer auto-detects the OS, installs packages, symlinks configs, and prom
 
 ## Documentation
 
-See `CLAUDE.md` for the full reference: architecture, keybindings, plugin list, platform matrix, and guides.
+See `docs/` for guides covering Neovim, native Vim workflows, and the Hyprland setup.
