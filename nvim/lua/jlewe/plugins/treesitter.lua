@@ -28,15 +28,7 @@ return {
   build = ":TSUpdate",
   config = function()
     local treesitter = require("nvim-treesitter")
-    local parsers = {
-      "bash",
-      "helm",
-      "json",
-      "lua",
-      "markdown",
-      "python",
-      "yaml",
-    }
+    local parsers = require("jlewe.treesitter_languages")
 
     treesitter.setup()
 
@@ -45,7 +37,7 @@ return {
     local missing = vim.tbl_filter(function(lang)
       return not vim.list_contains(installed, lang)
     end, parsers)
-    if #missing > 0 then
+    if #missing > 0 and vim.env.DOTFILES_INSTALL ~= "1" then
       vim.schedule(function()
         treesitter.install(missing, { summary = true })
       end)
