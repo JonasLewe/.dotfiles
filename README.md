@@ -29,6 +29,10 @@ cd ~/.dotfiles
 
 The installer auto-detects the OS, installs packages, symlinks configs, and prompts for machine-specific settings. Idempotent — safe to re-run.
 
+### Optional Jira integration
+
+Jira support is machine-local and has no plugin cost on machines that do not use it. `jira.nvim` is enabled and installed only when `~/.config/nvim/jira.local.lua` exists. To enable it, copy `nvim/jira.example.lua` to that path, adjust the project settings, and authenticate once with `:Jira auth login`. The example defaults to read-only mode, which blocks Jira writes and Jira-triggered Git branch changes.
+
 ## Documentation
 
 See `CLAUDE.md` for the full reference: architecture, keybindings, plugin list, platform matrix, and guides.
