@@ -35,4 +35,4 @@ Jira support is machine-local and has no plugin cost on machines that do not use
 
 ## Documentation
 
-See `CLAUDE.md` for the full reference: architecture, keybindings, plugin list, platform matrix, and guides.
+See `docs/` for guides covering Neovim, native Vim workflows, and the Hyprland setup.

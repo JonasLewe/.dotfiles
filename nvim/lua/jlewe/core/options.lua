@@ -147,11 +147,36 @@ opt.wildignore:append("**/node_modules/**,**/.git/**,**/venv/**,**/__pycache__/*
 -- netrw is Vim's built-in file browser. Open with :Ex, :Vex, :Lex
 -- banner=0 hides the info banner at the top (cleaner look)
 -- liststyle=1 shows files as a long listing (name + size + date)
--- liststyle=3 (tree mode) is NOT used — it has a bug causing E471 errors when navigating
 -- winsize=25 sets the explorer width to 25% when used in a split (:Lex, :Vex)
 vim.g.netrw_banner = 0
 vim.g.netrw_liststyle = 1
 vim.g.netrw_winsize = 25
+
+-- Lexplore keeps the window number where selected files should be opened in
+-- g:netrw_chgwin. Netrw v184 generates an invalid `wincmd` when that target
+-- window is closed and only the explorer remains. Resetting the stale target
+-- makes the selected file open in the remaining window instead.
+vim.api.nvim_create_autocmd("WinClosed", {
+  group = vim.api.nvim_create_augroup("UserNetrwWindowGuard", { clear = true }),
+  callback = function()
+    local tabpage = vim.api.nvim_get_current_tabpage()
+    vim.schedule(function()
+      if not vim.api.nvim_tabpage_is_valid(tabpage) then
+        return
+      end
+
+      local windows = vim.api.nvim_tabpage_list_wins(tabpage)
+      if #windows ~= 1 then
+        return
+      end
+
+      local buffer = vim.api.nvim_win_get_buf(windows[1])
+      if vim.bo[buffer].filetype == "netrw" then
+        vim.g.netrw_chgwin = -1
+      end
+    end)
+  end,
+})
 
 -- -----------------------------------------------------------------------------
 -- PERSISTENT UNDO

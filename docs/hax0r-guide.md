@@ -488,7 +488,7 @@ SSRF              →  Server dazu bringen, interne URLs abzurufen
 
 ## Ehrliche Einordnung: Brauche ich das alles noch?
 
-Berechtigte Frage. Dieses Dotfiles-Setup ist ein gutes Beispiel: CLAUDE.md, install.sh, die Plugin-Configs, dieser Guide — das meiste davon hat Claude Code geschrieben oder mitgeschrieben. Und die Tools werden besser, nicht schlechter. Also warum nicht einfach warten und in zwei Jahren alles von der AI machen lassen?
+Berechtigte Frage. Dieses Dotfiles-Setup ist ein gutes Beispiel: install.sh, die Plugin-Configs und dieser Guide — das meiste davon wurde mit AI-Unterstuetzung geschrieben. Und die Tools werden besser, nicht schlechter. Also warum nicht einfach warten und in zwei Jahren alles von der AI machen lassen?
 
 ### Was AI schon heute ersetzt
 
