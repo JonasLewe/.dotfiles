@@ -1,15 +1,4 @@
--- =============================================================================
--- COLORSCHEME — cyberdream
--- =============================================================================
--- A high-contrast, modern dark theme designed for terminals with transparency.
--- transparent = true makes the background invisible so the terminal wallpaper
--- shows through (works with Ghostty's transparency setting).
---
--- priority = 1000 ensures this loads before other plugins so colors are
--- available immediately (some plugins read highlight groups at startup).
---
--- To switch colorscheme temporarily: :colorscheme <Tab> to browse available.
--- To switch permanently: change the vim.cmd line below.
+-- Load the transparent theme before plugins consume highlight groups.
 
 return {
   "scottmckendry/cyberdream.nvim",

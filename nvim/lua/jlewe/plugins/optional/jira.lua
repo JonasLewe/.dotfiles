@@ -1,5 +1,5 @@
 -- =============================================================================
--- JIRA.NVIM — on-demand Jira board for machine-local projects and queries
+-- JIRA.NVIM — optional board for machine-local projects and queries
 -- =============================================================================
 
 local local_config

@@ -1,3 +1,4 @@
+-- Optional Pomodoro sessions and notifications.
 return {
   "epwalsh/pomo.nvim",
   version = "*",

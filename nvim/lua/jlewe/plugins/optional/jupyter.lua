@@ -1,14 +1,4 @@
--- =============================================================================
--- JUPYNVIM - NATIVE JUPYTER NOTEBOOKS
--- =============================================================================
--- Opens .ipynb files as editable notebook buffers with code/markdown cells,
--- Jupyter kernel execution, inline plots, LSP diagnostics, and completion.
---
--- QUICK START:
---   nvim nvim/examples/jupynvim-demo/demo.ipynb
---   <S-CR>      run current cell and move to the next one
---   <C-CR>      run current cell and stay in it
---   <leader>n   show all notebook actions in which-key
+-- Native .ipynb editing, kernel execution, inline plots and completion.
 
 return {
   "sheng-tse/jupynvim",
