@@ -1,31 +1,6 @@
--- =============================================================================
--- CONFORM.NVIM — Code Formatting
--- =============================================================================
--- Auto-formats code on save using external formatters (black, prettier, etc.).
--- Uses the same formatters you'd use on the command line, but runs them
--- automatically inside Neovim.
---
--- WHY NOT JUST LSP?
---   LSP servers CAN format, but dedicated formatters are better:
---   - black is the Python standard, not pyright
---   - prettier gives JSON, YAML, and Markdown one consistent style
---   - stylua is the Lua standard, not lua_ls
---   conform.nvim falls back to LSP if no formatter is configured.
---
--- USAGE:
---   Formatting happens automatically on save (format-on-save).
---   <leader>cf  → Format manually (also works on visual selection)
---   :ConformInfo → Show which formatters are active for the current file
---
--- INSTALLING FORMATTERS:
---   Formatters must be installed separately. Use Mason:
---     :MasonInstall black stylua prettier
---   Or your system package manager:
---     pacman -S python-black stylua prettier
---
--- ADDING A NEW FORMATTER:
---   Add the filetype + formatter name to formatters_by_ft below.
---   Full list: https://github.com/stevearc/conform.nvim#formatters
+-- Dedicated formatters run on save; LSP remains the fallback.
+
+local tooling = require("jlewe.tooling")
 
 return {
   "stevearc/conform.nvim",
@@ -42,17 +17,8 @@ return {
     },
   },
   opts = {
-    formatters_by_ft = {
-      python = { "black" },
-      sh = { "shfmt" },
-      bash = { "shfmt" },
-      lua = { "stylua" },
-      json = { "prettier" },
-      yaml = { "prettier" },
-      markdown = { "prettier" },
-    },
+    formatters_by_ft = tooling.formatters_by_ft,
 
-    -- Format on save: runs the configured formatter, falls back to LSP
     format_on_save = {
       timeout_ms = 5000,
       lsp_format = "fallback",

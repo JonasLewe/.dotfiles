@@ -1,71 +1,26 @@
--- =============================================================================
--- LSP — LANGUAGE SERVER PROTOCOL
--- =============================================================================
--- LSP connects Neovim to language servers that understand your code.
--- A language server runs in the background and provides:
---   • Go to definition (gd)
---   • Find references (gr)
---   • Hover documentation (K)
---   • Diagnostics (errors/warnings in real-time)
---   • Code actions (quick fixes, refactorings)
---   • Rename symbols across the project
---
--- HOW IT WORKS (Neovim 0.11+):
---   1. mason.nvim         — Downloads and manages language servers (like pacman for LSP)
---   2. mason-lspconfig    — Bridge: tells mason which servers to install
---   3. nvim-lspconfig     — Provides default configs for servers (cmd, filetypes, root_dir)
---   4. vim.lsp.enable()   — Native Neovim API to activate servers (replaces old lspconfig.setup())
---
--- USEFUL COMMANDS:
---   :Mason               → UI to manage installed servers
---   :LspInfo              → show active LSP clients for current buffer
---   :LspLog               → view LSP debug logs
---
--- ADDING A NEW LANGUAGE:
---   1. Add the server name to ensure_installed (mason-lspconfig) below
---   2. Add vim.lsp.enable("server_name") at the bottom
---   3. Run :Lazy sync, then :Mason to verify installation
---   Full list of servers: https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
+-- Mason installs servers; nvim-lspconfig supplies definitions; Neovim runs them.
+
+local tooling = require("jlewe.tooling")
 
 return {
 
-  -- ---------------------------------------------------------------------------
-  -- MASON — LSP Server Installer
-  -- ---------------------------------------------------------------------------
   {
     "williamboman/mason.nvim",
     cmd = { "Mason", "MasonInstall", "MasonUpdate", "MasonUninstall" },
     opts = {},
   },
 
-  -- ---------------------------------------------------------------------------
-  -- MASON-LSPCONFIG — Bridge between mason and lspconfig
-  -- ---------------------------------------------------------------------------
   {
     "williamboman/mason-lspconfig.nvim",
     cmd = { "LspInstall", "LspUninstall" },
     dependencies = { "williamboman/mason.nvim" },
     opts = {
-      -- Servers to install automatically.
-      -- Add more as you need them — find names with :Mason
-      ensure_installed = {
-        "bashls",
-        "helm_ls",
-        "lua_ls",
-        "marksman",
-        "pyright",
-        "yamlls",
-      },
+      ensure_installed = tooling.lsp_servers,
       -- Never auto-enable every package left in Mason's install directory.
-      automatic_enable = { "bashls", "helm_ls", "lua_ls", "marksman", "pyright", "yamlls" },
+      automatic_enable = tooling.lsp_servers,
     },
   },
 
-  -- ---------------------------------------------------------------------------
-  -- NVIM-LSPCONFIG — Default Server Configurations + Keymaps + Enable
-  -- ---------------------------------------------------------------------------
-  -- Provides default configs (cmd, filetypes, root_dir) for each server.
-  -- Also sets up LSP keymaps and enables servers via Neovim 0.11+ native API.
   {
     "neovim/nvim-lspconfig",
     -- Do not load LSP for an empty editor. For a file, defer activation until
@@ -145,11 +100,7 @@ return {
           },
         })
 
-        -- ENABLE SERVERS — Neovim 0.11+ native API
-        -- vim.lsp.enable() tells Neovim to start this server for matching filetypes.
-        -- The server config (cmd, filetypes, root_dir) comes from nvim-lspconfig.
-        -- Add new servers here after adding them to ensure_installed above.
-        vim.lsp.enable({ "bashls", "helm_ls", "lua_ls", "marksman", "pyright", "yamlls" })
+        vim.lsp.enable(tooling.lsp_servers)
       end
 
       if vim.v.vim_did_enter == 1 then

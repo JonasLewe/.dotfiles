@@ -1,24 +1,4 @@
--- =============================================================================
--- GITSIGNS.NVIM — Git Integration in the Editor
--- =============================================================================
--- Shows git diff status in the sign column (gutter) next to line numbers.
--- Also provides hunk operations: stage, reset, preview, blame.
---
--- WHY?
---   Without this, you only see git changes via `git diff` or LazyGit.
---   Gitsigns shows them live while you edit:
---   - Green bar: added line
---   - Yellow bar: changed line
---   - Red marker: deleted line
---
--- USAGE:
---   Signs appear automatically in any git-tracked file.
---   ]c / [c      → Jump to next/previous change (hunk)
---   <leader>hs   → Stage this hunk (like `git add` for just these lines)
---   <leader>hr   → Reset this hunk (discard changes)
---   <leader>hp   → Preview what changed in a popup
---   <leader>hb   → Show git blame for current line
---   <leader>hB   → Toggle persistent inline blame
+-- Live Git signs, hunk actions and blame for tracked buffers.
 
 return {
   "lewis6991/gitsigns.nvim",

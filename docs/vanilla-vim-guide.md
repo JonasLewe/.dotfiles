@@ -1,6 +1,8 @@
 # Vanilla Vim Guide
 
-Dieses Dokument zeigt dir die nativen Neovim/Vim-Alternativen zu den Plugins, die du entfernt hast. Alles hier funktioniert ohne ein einziges Plugin — in jedem Vim/Neovim, auf jedem Server.
+Dieses Dokument erklärt native Neovim/Vim-Workflows. Die Beispiele sind
+unabhängig von den installierten Plugins und funktionieren deshalb auch auf
+Servern mit einer minimalen Vim-Konfiguration.
 
 ---
 
@@ -55,8 +57,6 @@ N               " Vorheriger Treffer
 :bd              " Buffer schließen (Datei bleibt gespeichert)
 ```
 
-Tipp: `<leader>fb` öffnet Telescope Buffers — fuzzy Buffer-Suche. Die vanilla Alternative `:ls` + `:b` funktioniert genauso.
-
 ---
 
 ## 2. Dateiexplorer (ersetzt nvim-tree)
@@ -70,15 +70,8 @@ Tipp: `<leader>fb` öffnet Telescope Buffers — fuzzy Buffer-Suche. Die vanilla
 :Sex             " Explorer in horizontalem Split
 ```
 
-In deiner `options.lua` ist netrw bereits konfiguriert:
-- Kein Banner (cleaner Look)
-- Long-Listing (Name + Größe + Datum) — `liststyle=1`
-- Tree-Modus (`liststyle=3`) ist deaktiviert weil er einen `E471`-Bug beim Navigieren hat
-- 25% Breite bei Splits
-
-`<leader>e` öffnet `:Lex` — dein Dateiexplorer-Toggle.
-
-**Hinweis:** `<C-h/j/k/l>` zum Wechseln zwischen Splits funktioniert auch innerhalb von netrw, weil ein Autocmd in `keymaps.lua` die netrw-internen Mappings überschreibt (netrw belegt `<C-l>` sonst für Refresh).
+Die Dotfiles konfigurieren netrw als kompakte Langansicht. Aktuelle
+zusätzliche Mappings lassen sich mit `:nmap` oder which-key nachschlagen.
 
 ### Navigation in netrw
 
@@ -139,7 +132,7 @@ Tippe die ersten 2-3 Buchstaben, dann `<C-n>`. Vim schlägt aus allen offenen Bu
 
 ```bash
 # Installieren (einmalig)
-sudo apt install universal-ctags   # Linux
+sudo pacman -S universal-ctags     # Arch Linux
 brew install universal-ctags       # macOS
 
 # Tags generieren (im Projektverzeichnis ausführen)
@@ -329,32 +322,9 @@ git commit     " Commit schreiben (öffnet Neovim!)
 :help ins-completion " Alle eingebauten Completion-Modi
 ```
 
-### Deine konfigurierten Keymaps (Referenz)
-
-**Allgemein:**
-- `kj` — Insert/Visual/Terminal Mode verlassen
-- `<leader>nh` — Suchhighlights löschen
-- `x` — Zeichen löschen (ohne Yank)
-- `<leader>+` / `<leader>-` — Zahl erhöhen/verringern
-
-**Fenster/Splits:**
-- `<leader>sv` / `<leader>sh` — Vertical/Horizontal Split
-- `<leader>se` — Splits gleichmäßig verteilen
-- `<leader>sx` — Split schließen
-- `<C-h/j/k/l>` — Zwischen Splits navigieren
-- `<C-Pfeiltasten>` — Splits resizen
-
-**Tabs:**
-- `<leader>to` — Neuer Tab
-- `<leader>tx` — Tab schließen
-- `<leader>tn` / `<leader>tp` — Nächster/Vorheriger Tab
-
-**Dateien:**
-- `<leader>e` — Dateiexplorer (netrw) toggle
-- `<leader>fb` — Buffer-Liste (Telescope)
-
-**Terminal:**
-- `<leader>tt` — Terminal-Split öffnen
+Die konfigurierten Mappings werden bewusst nicht hier dupliziert. `Space`
+zeigt die Leader-Gruppen mit which-key, `?` die buffer-lokalen Mappings und
+`:verbose nmap <mapping>` die jeweilige Quelldatei.
 
 ---
 

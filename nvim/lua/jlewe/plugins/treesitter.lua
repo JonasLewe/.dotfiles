@@ -1,25 +1,4 @@
--- =============================================================================
--- TREESITTER — SYNTAX HIGHLIGHTING & CODE UNDERSTANDING
--- =============================================================================
--- Treesitter is a parser generator that builds a real syntax tree of your code.
--- Unlike the old regex-based Vim syntax highlighting, Treesitter actually
--- UNDERSTANDS the structure of the code.
---
--- Benefits over classic Vim syntax:
---   • More accurate and consistent highlighting
---   • Works correctly with nested languages (e.g. HTML inside JS)
---   • Powers other features: indentation, text objects, code folding
---   • Language-agnostic: add support for any language by installing a parser
---
--- HOW IT WORKS:
---   Each language has a "parser" — a compiled .so file that Treesitter uses
---   to analyze code. Parsers are downloaded and compiled automatically.
---   Stored in: ~/.local/share/nvim/site/parser/
---
--- USEFUL COMMANDS:
---   :TSInstall <language>    → install a specific parser
---   :TSUpdate                → update all installed parsers
---   :InspectTree             → visualize the syntax tree of the current file (cool!)
+-- nvim-treesitter supplies parsers and queries; Neovim 0.12 starts highlighting.
 
 return {
   "nvim-treesitter/nvim-treesitter",
