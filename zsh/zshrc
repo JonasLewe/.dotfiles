@@ -1,44 +1,21 @@
-# ==============================================================================
-# ZSHRC — INTERACTIVE SHELL CONFIGURATION
-# ==============================================================================
-# This file is sourced every time you open a new terminal or tmux pane.
-#
-# The difference between .zshrc and .zprofile:
-#   .zprofile  → runs once at login (PATH, environment variables)
-#   .zshrc     → runs for every new shell (aliases, prompt, keybindings)
-#
-# This is a vanilla zsh config — no frameworks (oh-my-zsh, prezto, etc.).
-# Every line here does something you understand.
+# Interactive shell configuration.
 
-# ==============================================================================
-# VI MODE
-# ==============================================================================
-# Enable vim keybindings in the shell.
-# Press Escape or kj to enter normal mode (hjkl navigation, etc.)
-# Press i or a to go back to insert mode.
 bindkey -v
-bindkey -M viins 'kj' vi-cmd-mode   # kj as Escape alternative
-export KEYTIMEOUT=20  # 200ms — enough time for kj sequence, still snappy
+bindkey -M viins 'kj' vi-cmd-mode
+export KEYTIMEOUT=20
 
-# Cursor shape: beam (|) in insert mode, block (█) in normal mode
 zle-keymap-select() {
   if [[ $KEYMAP == vicmd ]]; then
-    echo -ne '\e[2 q'  # block cursor
+    echo -ne '\e[2 q'
   else
-    echo -ne '\e[6 q'  # beam cursor
+    echo -ne '\e[6 q'
   fi
 }
 zle -N zle-keymap-select
 
-# Start each new prompt in insert mode with beam cursor
 zle-line-init() { echo -ne '\e[6 q' }
 zle -N zle-line-init
 
-# ==============================================================================
-# PROMPT
-# ==============================================================================
-# Show current directory (green) and git branch (yellow) if in a repo.
-# The % at the end is the standard zsh prompt character (# for root).
 autoload -Uz vcs_info add-zsh-hook
 add-zsh-hook precmd vcs_info
 setopt prompt_subst
@@ -46,12 +23,7 @@ PROMPT='%F{green}%~%f ${vcs_info_msg_0_}%# '
 RPROMPT='%F{8}%*%f'
 zstyle ':vcs_info:git:*' formats '%F{yellow}(%b)%f '
 
-# ==============================================================================
-# COMPLETION
-# ==============================================================================
-# zsh's built-in completion system. Tab to autocomplete commands, paths, etc.
-# Case-insensitive matching and menu selection.
-# Only regenerate completion dump once per day (compinit -C skips the full scan).
+# Rebuild completion metadata once per day; use the cache otherwise.
 autoload -Uz compinit
 typeset -a stale_compdump
 stale_compdump=(~/.zcompdump(N.mh+24))
@@ -61,88 +33,47 @@ else
   compinit -C
 fi
 unset stale_compdump
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'  # case-insensitive
-zstyle ':completion:*' menu select                     # arrow-key menu
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
+zstyle ':completion:*' menu select
 
-# ==============================================================================
-# HISTORY
-# ==============================================================================
 HISTFILE=~/.zsh_history
 HISTSIZE=50000
 SAVEHIST=50000
-setopt hist_ignore_dups       # don't store consecutive duplicates
-setopt hist_find_no_dups      # skip duplicates when searching history
-setopt hist_ignore_space      # commands starting with space are not saved (useful for secrets)
-setopt hist_reduce_blanks     # remove unnecessary whitespace from history entries
-setopt share_history          # share history between tmux panes/terminals
-setopt append_history         # append to history file, don't overwrite
+setopt hist_ignore_dups
+setopt hist_find_no_dups
+setopt hist_ignore_space
+setopt hist_reduce_blanks
+setopt share_history
+setopt append_history
+setopt AUTO_CD
 
-# ==============================================================================
-# NAVIGATION
-# ==============================================================================
-setopt AUTO_CD                # type a directory name to cd into it
-
-# ==============================================================================
-# ALIASES
-# ==============================================================================
-# Keep aliases minimal — type full commands to learn them.
-# Run `alias` to see all active aliases.
-
-# --color is GNU-specific (Linux); macOS BSD ls uses -G instead.
 if ls --color=auto / &>/dev/null; then
   alias la="ls -lah --color"
 else
   alias la="ls -lahG"
 fi
 
-# Web search via w3m (text browser)
 ddg() { w3m "https://html.duckduckgo.com/html/?q=$(echo "$*" | sed 's/ /+/g')"; }
-
-# ==============================================================================
-# PATH
-# ==============================================================================
-# ~/.local/bin is the standard location for user-installed tools on Linux.
-# export PATH="$PATH:$HOME/.local/bin"
-
-# ==============================================================================
-# PYTHON
-# ==============================================================================
-# Don't write __pycache__ / .pyc bytecode files into source directories.
 export PYTHONDONTWRITEBYTECODE=1
 
-# ==============================================================================
-# LOCAL OVERRIDES
-# ==============================================================================
-# ~/.zshrc.local is for machine-specific config: API keys, work aliases, etc.
-# It is NOT committed to git (.gitignore) — safe for secrets.
-# Copy the template: cp ~/.dotfiles/zsh/zshrc.local.example ~/.zshrc.local
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
-
-# Cargo/Rust environment (if installed)
 [[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
 
-# ==============================================================================
-# NVM — LAZY LOADING
-# ==============================================================================
-# nvm's default init script adds ~700ms to shell startup. This lazy-loads it:
-# nvm, node, npm, npx are available as commands but nvm only initializes
-# when you actually call one of them for the first time.
+# Defer nvm's startup cost until a Node command is used.
 if [[ -d "$HOME/.nvm" ]]; then
   export NVM_DIR="$HOME/.nvm"
   lazy_load_nvm() {
     unset -f nvm node npm npx
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+    [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
   }
-  nvm()  { lazy_load_nvm; nvm "$@"; }
+  nvm() { lazy_load_nvm; nvm "$@"; }
   node() { lazy_load_nvm; node "$@"; }
-  npm()  { lazy_load_nvm; npm "$@"; }
-  npx()  { lazy_load_nvm; npx "$@"; }
+  npm() { lazy_load_nvm; npm "$@"; }
+  npx() { lazy_load_nvm; npx "$@"; }
 fi
 
 [[ ":$PATH:" != *":$HOME/.dual-graph:"* ]] && export PATH="$PATH:$HOME/.dual-graph"
 
-# LM Studio CLI (lms), when installed on this machine.
 if [[ -d "$HOME/.lmstudio/bin" && ":$PATH:" != *":$HOME/.lmstudio/bin:"* ]]; then
   export PATH="$PATH:$HOME/.lmstudio/bin"
 fi
-

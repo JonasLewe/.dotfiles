@@ -412,7 +412,7 @@ Ein Rice sieht dann gut aus, wenn alles farblich zusammenpasst. Wähle EIN Schem
 
 ```
 Ghostty        → ghostty/config (theme = ...)
-Neovim         → nvim/lua/jlewe/core/options.lua (vim.cmd("colorscheme ..."))
+Neovim         → nvim/lua/jlewe/plugins/colorscheme.lua
 Hyprland       → hyprland/hyprland.conf (col.active_border, col.inactive_border)
 Waybar         → waybar/style.css (background-color, color, etc.)
 Rofi           → rofi/config.rasi (@bg, @fg, @accent, etc.)
