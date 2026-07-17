@@ -1,23 +1,9 @@
 #!/usr/bin/env bash
 
-# ==============================================================================
-# DOTFILES INSTALLER — macOS & Arch Linux
-# ==============================================================================
-# Usage: git clone <repo> ~/.dotfiles && cd ~/.dotfiles && ./install.sh
-#
-# Supports:
-#   - Arch Linux (CachyOS, EndeavourOS, etc.) via pacman
-#   - macOS via Homebrew
-#
-# This script is idempotent — safe to re-run. It skips what's already set up.
-#
-# Flags:
-#   --update       Skip prompts, install only what's missing
-#   --config-only  Remote server mode: symlink configs only, no package
-#                  installation, no GUI tools. Requires git, nvim, tmux, zsh,
-#                  tree-sitter CLI, and a C build toolchain on the server.
+# Usage: ./install.sh [--update] [--config-only]
+# Supports macOS/Homebrew, Arch Linux/pacman, and pre-provisioned servers.
 
-set -e  # Exit on error
+set -e
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 OS="$(uname)"
@@ -25,514 +11,347 @@ UPDATE_MODE=false
 CONFIG_ONLY=false
 INSTALL_RICE=false
 
-for arg in "$@"; do
+MAC_PACKAGES=(
+  neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags w3m
+  lazygit helm tree-sitter-cli
+)
+
+ARCH_PACKAGES=(
+  neovim tmux zsh ghostty git ripgrep fd ctags libfido2 nodejs npm w3m
+  lazygit helm base-devel tree-sitter-cli wl-clipboard
+)
+
+RICE_PACKAGES=(
+  hyprland waybar rofi-wayland dunst hyprpaper hyprlock hypridle
+  brightnessctl playerctl grim slurp wl-clip-persist breeze-icons
+)
+
+REQUIRED_COMMANDS=(git nvim tmux zsh tree-sitter cc make)
+
+parse_args() {
+  local arg
+  for arg in "$@"; do
     case "$arg" in
-        --update)      UPDATE_MODE=true ;;
-        --config-only) CONFIG_ONLY=true; UPDATE_MODE=true ;;
-        *)             echo "❌ Unknown flag: $arg"; echo "Usage: ./install.sh [--update] [--config-only]"; exit 1 ;;
+    --update)
+      UPDATE_MODE=true
+      ;;
+    --config-only)
+      CONFIG_ONLY=true
+      UPDATE_MODE=true
+      ;;
+    *)
+      echo "❌ Unknown flag: $arg"
+      echo "Usage: ./install.sh [--update] [--config-only]"
+      exit 1
+      ;;
     esac
-done
-
-if [[ "$CONFIG_ONLY" == true ]]; then
-    echo "📦 Config-only mode — symlinking configs, skipping package installation"
-    echo "   For remote servers where packages are already installed."
-    echo
-elif [[ "$UPDATE_MODE" == true ]]; then
-    echo "🔄 Update mode — skipping prompts, installing only what's missing"
-    echo
-fi
-
-echo "🚀 Installing dotfiles from: $DOTFILES_DIR"
-echo "🖥️  Detected OS: $OS"
-echo
-
-# ==============================================================================
-# SYMLINK HELPER
-# ==============================================================================
-
-# Creates a symlink. Skips if already pointing to the correct source.
-# In update mode, overwrites without prompting. Otherwise asks.
-# Usage: link_config <source> <target>
-link_config() {
-    local src="$1"
-    local dst="$2"
-
-    # Source must exist — skip if missing (prevents broken symlinks)
-    if [[ ! -e "$src" ]]; then
-        echo "⚠️  Source not found, skipping: $src"
-        return
-    fi
-
-    # Already correct — skip silently
-    if [[ -L "$dst" ]] && [[ "$(readlink "$dst")" == "$src" ]]; then
-        echo "✅ $dst (already linked)"
-        return
-    fi
-
-    if [[ -e "$dst" ]] || [[ -L "$dst" ]]; then
-        # Warn if target is a real directory (not a symlink) — potential data loss
-        if [[ -d "$dst" ]] && [[ ! -L "$dst" ]]; then
-            if [[ "$UPDATE_MODE" == true ]]; then
-                echo "⚠️  $dst is a directory (not a symlink) — backing up to ${dst}.bak"
-                mv "$dst" "${dst}.bak"
-            else
-                read -p "$dst is a directory with files. Back up and replace? (y/n) " -r
-                echo
-                if [[ $REPLY =~ ^[Yy]$ ]]; then
-                    mv "$dst" "${dst}.bak"
-                else
-                    echo "Skipping $dst"
-                    return
-                fi
-            fi
-        elif [[ "$UPDATE_MODE" == true ]]; then
-            rm -rf "$dst"
-        else
-            read -p "$dst already exists. Overwrite? (y/n) " -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                rm -rf "$dst"
-            else
-                echo "Skipping $dst"
-                return
-            fi
-        fi
-    fi
-
-    mkdir -p "$(dirname "$dst")"
-    ln -s "$src" "$dst"
-    echo "$dst -> $src"
+  done
 }
 
-# ==============================================================================
-# PACKAGE INSTALLATION
-# ==============================================================================
+link_config() {
+  local src="$1"
+  local dst="$2"
 
-if [[ "$CONFIG_ONLY" == true ]]; then
-    echo "=== Skipping package installation (config-only mode) ==="
-    # Verify required tools are available
-    for cmd in git nvim tmux zsh tree-sitter cc make; do
-        if command -v "$cmd" &>/dev/null; then
-            echo "✅ $cmd found"
-        else
-            echo "⚠️  $cmd not found — install it manually for full functionality"
-        fi
-    done
-    echo
+  if [[ ! -e "$src" ]]; then
+    echo "⚠️  Source not found, skipping: $src"
+    return
+  fi
 
-elif [[ "$OS" == "Darwin" ]]; then
-    echo "=== macOS Package Installation (Homebrew) ==="
+  if [[ -L "$dst" ]] && [[ "$(readlink "$dst")" == "$src" ]]; then
+    echo "✅ $dst (already linked)"
+    return
+  fi
 
-    if ! command -v brew &>/dev/null; then
-        echo "❌ Homebrew not found. Install it first: https://brew.sh"
-        exit 1
-    fi
-
-    brew install neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags \
-        lazygit helm tree-sitter-cli
-
-    echo
-
-elif [[ "$OS" == "Linux" ]]; then
-    if ! command -v pacman &>/dev/null; then
-        echo "❌ pacman not found. This script requires an Arch-based distro (CachyOS, Arch, etc.)"
-        exit 1
-    fi
-
-    echo "=== Linux Package Installation (pacman) ==="
-
-    # Helper: install a package if not already installed
-    install_pkg() {
-        if ! pacman -Qi "$1" &>/dev/null; then
-            echo "📥 Installing $1..."
-            sudo pacman -S --noconfirm "$1"
-        else
-            echo "✅ $1 already installed"
-        fi
-    }
-
-    install_pkg neovim
-    install_pkg tmux
-    install_pkg zsh
-    install_pkg ghostty
-    install_pkg git
-    install_pkg ripgrep
-    install_pkg fd
-    install_pkg ctags
-    install_pkg libfido2
-    install_pkg nodejs
-    install_pkg npm
-    install_pkg lazygit
-    install_pkg helm
-    install_pkg base-devel
-    install_pkg tree-sitter-cli
-
-    echo
-
-    # Optional: Hyprland + Rice
-    # In update mode: auto-install if Hyprland is already present
-    if [[ "$UPDATE_MODE" == true ]]; then
-        if pacman -Qi hyprland &>/dev/null; then
-            INSTALL_RICE=true
-        fi
-    else
-        read -p "🎨 Install Hyprland + rice tools (waybar, rofi, dunst, etc.)? (y/n) " -r
-        echo
+  if [[ -e "$dst" ]] || [[ -L "$dst" ]]; then
+    if [[ -d "$dst" ]] && [[ ! -L "$dst" ]]; then
+      if [[ "$UPDATE_MODE" == true ]]; then
+        echo "⚠️  $dst is a directory — backing up to ${dst}.bak"
+        mv "$dst" "${dst}.bak"
+      else
+        read -r -p "$dst is a directory with files. Back up and replace? (y/n) "
         if [[ $REPLY =~ ^[Yy]$ ]]; then
-            INSTALL_RICE=true
+          mv "$dst" "${dst}.bak"
+        else
+          echo "Skipping $dst"
+          return
         fi
+      fi
+    elif [[ "$UPDATE_MODE" == true ]]; then
+      rm -rf "$dst"
+    else
+      read -r -p "$dst already exists. Overwrite? (y/n) "
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        rm -rf "$dst"
+      else
+        echo "Skipping $dst"
+        return
+      fi
+    fi
+  fi
+
+  mkdir -p "$(dirname "$dst")"
+  ln -s "$src" "$dst"
+  echo "$dst -> $src"
+}
+
+install_pacman_packages() {
+  local package
+  for package in "$@"; do
+    if pacman -Qi "$package" &>/dev/null; then
+      echo "✅ $package already installed"
+    else
+      echo "📥 Installing $package..."
+      sudo pacman -S --noconfirm "$package"
+    fi
+  done
+}
+
+verify_server_commands() {
+  local command_name
+  echo "=== Checking pre-installed server tools ==="
+  for command_name in "${REQUIRED_COMMANDS[@]}"; do
+    if command -v "$command_name" &>/dev/null; then
+      echo "✅ $command_name found"
+    else
+      echo "⚠️  $command_name not found — install it manually for full functionality"
+    fi
+  done
+}
+
+install_packages() {
+  if [[ "$CONFIG_ONLY" == true ]]; then
+    verify_server_commands
+    return
+  fi
+
+  case "$OS" in
+  Darwin)
+    command -v brew &>/dev/null || {
+      echo "❌ Homebrew not found. Install it first: https://brew.sh"
+      exit 1
+    }
+    echo "=== macOS packages ==="
+    brew install "${MAC_PACKAGES[@]}"
+    ;;
+  Linux)
+    command -v pacman &>/dev/null || {
+      echo "❌ Linux installation requires an Arch-based system with pacman"
+      exit 1
+    }
+    echo "=== Arch Linux packages ==="
+    install_pacman_packages "${ARCH_PACKAGES[@]}"
+
+    if [[ "$UPDATE_MODE" == true ]]; then
+      if pacman -Qi hyprland &>/dev/null; then
+        INSTALL_RICE=true
+      fi
+    else
+      read -r -p "🎨 Install Hyprland + rice tools? (y/n) "
+      if [[ $REPLY =~ ^[Yy]$ ]]; then
+        INSTALL_RICE=true
+      fi
     fi
 
     if [[ "$INSTALL_RICE" == true ]]; then
-        echo "=== Hyprland & Rice Tools ==="
-        install_pkg hyprland
-        install_pkg waybar
-        install_pkg rofi-wayland
-        install_pkg dunst
-        install_pkg hyprpaper
-        install_pkg hyprlock
-        install_pkg hypridle
-        install_pkg brightnessctl
-        install_pkg playerctl
-        install_pkg grim
-        install_pkg slurp
-        install_pkg wl-clipboard
-        install_pkg wl-clip-persist
-        install_pkg breeze-icons
-
-        echo
+      echo "=== Hyprland and rice packages ==="
+      install_pacman_packages "${RICE_PACKAGES[@]}"
     fi
-fi
+    ;;
+  *)
+    echo "❌ Unsupported operating system: $OS"
+    exit 1
+    ;;
+  esac
+}
 
-# ==============================================================================
-# NERD FONT (required by Ghostty and trouble.nvim)
-# ==============================================================================
-
-if [[ "$CONFIG_ONLY" != true ]]; then
-    if [[ "$OS" == "Linux" ]]; then
-        install_pkg ttf-jetbrains-mono-nerd
-    elif [[ "$OS" == "Darwin" ]]; then
-        if brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
-            echo "✅ JetBrainsMono Nerd Font already installed"
-        else
-            echo "📥 Installing JetBrainsMono Nerd Font..."
-            brew install --cask font-jetbrains-mono-nerd-font
-        fi
-    fi
-fi
-
-# ==============================================================================
-# SYMLINKS — Shared (all platforms)
-# ==============================================================================
-
-echo "=== Symlinking Configurations ==="
-
-# Core configs — always symlinked (local + remote)
-link_config "$DOTFILES_DIR/nvim"            ~/.config/nvim
-link_config "$DOTFILES_DIR/tmux/tmux.conf"  ~/.tmux.conf
-link_config "$DOTFILES_DIR/zsh/zshrc"       ~/.zshrc
-link_config "$DOTFILES_DIR/zsh/zprofile"    ~/.zprofile
-link_config "$DOTFILES_DIR/git/gitconfig"   ~/.gitconfig
-link_config "$DOTFILES_DIR/git/gitignore_global" ~/.gitignore_global
-
-# GUI configs — only on local machines (not remote servers)
-if [[ "$CONFIG_ONLY" != true ]]; then
-    if [[ ! -f "$DOTFILES_DIR/ghostty/config" ]] && [[ -f "$DOTFILES_DIR/ghostty/config.example" ]]; then
-        cp "$DOTFILES_DIR/ghostty/config.example" "$DOTFILES_DIR/ghostty/config"
-        echo "✅ ghostty/config created from config.example"
-    fi
-    link_config "$DOTFILES_DIR/ghostty"         ~/.config/ghostty
-
-    # Ghostty platform config — symlink platform.conf to the right file
-    if [[ "$OS" == "Darwin" ]]; then
-        ln -sf "$DOTFILES_DIR/ghostty/mac.conf" "$DOTFILES_DIR/ghostty/platform.conf"
-        echo "✅ ghostty/platform.conf → mac.conf"
-    else
-        ln -sf "$DOTFILES_DIR/ghostty/linux.conf" "$DOTFILES_DIR/ghostty/platform.conf"
-        echo "✅ ghostty/platform.conf → linux.conf"
-    fi
-fi
-
-echo
-
-
-# ==============================================================================
-# SYMLINKS — Linux-only (Hyprland / Rice)
-# ==============================================================================
-
-if [[ "$CONFIG_ONLY" != true ]] && [[ "$INSTALL_RICE" == true ]]; then
-    echo "=== Symlinking Rice Configurations ==="
-
-    link_config "$DOTFILES_DIR/hyprland"  ~/.config/hypr
-    link_config "$DOTFILES_DIR/waybar"    ~/.config/waybar
-    link_config "$DOTFILES_DIR/rofi"      ~/.config/rofi
-    link_config "$DOTFILES_DIR/dunst"     ~/.config/dunst
-
-    echo
-fi
-
-# ==============================================================================
-# LAZY.NVIM (Neovim Plugin Manager)
-# ==============================================================================
-
-if command -v nvim &>/dev/null; then
-    lazypath="$HOME/.local/share/nvim/lazy/lazy.nvim"
-    if [[ ! -d "$lazypath" ]]; then
-        echo "Installing lazy.nvim..."
-        git clone --filter=blob:none https://github.com/folke/lazy.nvim.git --branch=stable "$lazypath"
-        echo "lazy.nvim installed"
-    else
-        echo "✅ lazy.nvim already installed"
-    fi
-else
-    echo "ℹ️  nvim not found — skipping plugin setup"
-fi
-
-echo
-
-# ==============================================================================
-# NEOVIM PLUGINS & TOOLS (headless install)
-# ==============================================================================
-# Installs all plugins via lazy.nvim and all formatters/linters via Mason.
-# Runs Neovim in headless mode — no UI needed.
-
-if command -v nvim &>/dev/null; then
-    echo "=== Installing Neovim Plugins ==="
-    if DOTFILES_INSTALL=1 nvim --headless "+Lazy! restore" "+Lazy! clean" +qa 2>/tmp/nvim-lazy-sync.log; then
-        echo "✅ Neovim plugins installed"
-    else
-        echo "⚠️  Lazy restore/clean had issues (continuing anyway). Log: /tmp/nvim-lazy-sync.log"
-    fi
-
-    echo "Installing Treesitter parsers..."
-    treesitter_script=$(mktemp /tmp/treesitter-install.XXXXXX.lua)
-    trap 'rm -f "$treesitter_script"' EXIT
-    cat > "$treesitter_script" << 'LUAEOF'
-local ok, err = pcall(function()
-  local treesitter = require("nvim-treesitter")
-  local parsers = require("jlewe.treesitter_languages")
-  local installed = treesitter.get_installed("parsers")
-  local missing = vim.tbl_filter(function(lang)
-    return not vim.list_contains(installed, lang)
-  end, parsers)
-
-  if #missing > 0 then
-    local success = treesitter.install(missing, { summary = true }):wait(300000)
-    assert(success, "one or more Treesitter parsers failed to install")
-  end
-end)
-
-if not ok then
-  vim.api.nvim_err_writeln(err)
-  vim.cmd("cquit 1")
-end
-vim.cmd("qa!")
-LUAEOF
-    if DOTFILES_INSTALL=1 nvim --headless -c "luafile $treesitter_script" 2>/tmp/nvim-treesitter.log; then
-        echo "✅ Treesitter parsers installed"
-    else
-        echo "⚠️  Some Treesitter parsers may have failed (continuing). Log: /tmp/nvim-treesitter.log"
-    fi
-    rm -f "$treesitter_script"
-    trap - EXIT
-
-    echo "Installing Mason tools (formatters, linters)..."
-    # Write Mason install script to temp file (Lua heredoc doesn't work in -c mode)
-    mason_script=$(mktemp /tmp/mason-install.XXXXXX.lua)
-    trap 'rm -f "$mason_script"' EXIT
-    cat > "$mason_script" << 'LUAEOF'
-local ok, registry = pcall(require, "mason-registry")
-if not ok then vim.cmd("qa!") return end
-
--- Timeout: quit after 120s regardless (network issues, etc.)
-vim.defer_fn(function() vim.cmd("qa!") end, 120000)
-
-registry.refresh(function()
-  local tools = {
-    "bash-language-server",
-    "black",
-    "debugpy",
-    "helm-ls",
-    "lua-language-server",
-    "marksman",
-    "prettier",
-    "pyright",
-    "ruff",
-    "shellcheck",
-    "shfmt",
-    "stylua",
-    "yaml-language-server",
-  }
-  local to_install = {}
-  for _, name in ipairs(tools) do
-    local found, pkg = pcall(registry.get_package, name)
-    if found and not pkg:is_installed() then
-      table.insert(to_install, pkg)
-    end
-  end
-  if #to_install == 0 then
-    vim.schedule(function() vim.cmd("qa!") end)
+install_font() {
+  if [[ "$CONFIG_ONLY" == true ]]; then
     return
-  end
-  local done = 0
-  for _, pkg in ipairs(to_install) do
-    pkg:install():once("closed", vim.schedule_wrap(function()
-      done = done + 1
-      if done >= #to_install then
-        vim.cmd("qa!")
-      end
-    end))
-  end
-end)
-LUAEOF
-    if DOTFILES_INSTALL=1 nvim --headless -c "luafile $mason_script" 2>/tmp/nvim-mason.log; then
-        echo "✅ Mason tools installed"
-    else
-        echo "⚠️  Some Mason tools may have failed (continuing). Log: /tmp/nvim-mason.log"
-    fi
-    rm -f "$mason_script"
-    trap - EXIT
+  fi
 
-    echo
-fi
+  if [[ "$OS" == "Linux" ]]; then
+    install_pacman_packages ttf-jetbrains-mono-nerd
+  elif brew list --cask font-jetbrains-mono-nerd-font &>/dev/null; then
+    echo "✅ JetBrainsMono Nerd Font already installed"
+  else
+    brew install --cask font-jetbrains-mono-nerd-font
+  fi
+}
 
-# ==============================================================================
-# GHOSTTY SHADERS (skip on remote servers)
-# ==============================================================================
+link_configs() {
+  echo "=== Linking configurations ==="
+  link_config "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+  link_config "$DOTFILES_DIR/tmux/tmux.conf" "$HOME/.tmux.conf"
+  link_config "$DOTFILES_DIR/zsh/zshrc" "$HOME/.zshrc"
+  link_config "$DOTFILES_DIR/zsh/zprofile" "$HOME/.zprofile"
+  link_config "$DOTFILES_DIR/git/gitconfig" "$HOME/.gitconfig"
+  link_config "$DOTFILES_DIR/git/gitignore_global" "$HOME/.gitignore_global"
 
-if [[ "$CONFIG_ONLY" != true ]]; then
-    ghostty_shaders="$DOTFILES_DIR/ghostty/shaders"
-    if [[ ! -d "$ghostty_shaders" ]]; then
-        echo "Installing Ghostty shaders..."
-        git clone https://github.com/0xhckr/ghostty-shaders "$ghostty_shaders" || echo "⚠️  Could not clone Ghostty shaders (cosmetic only, continuing)"
-    else
-        echo "✅ Ghostty shaders already installed"
-    fi
+  if [[ "$CONFIG_ONLY" == true ]]; then
+    return
+  fi
 
-    echo
-fi
+  if [[ ! -f "$DOTFILES_DIR/ghostty/config" ]]; then
+    cp "$DOTFILES_DIR/ghostty/config.example" "$DOTFILES_DIR/ghostty/config"
+  fi
+  link_config "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 
-# ==============================================================================
-# MAN PAGE (Linux only, skip on remote servers)
-# ==============================================================================
+  if [[ "$OS" == "Darwin" ]]; then
+    ln -sf "$DOTFILES_DIR/ghostty/mac.conf" "$DOTFILES_DIR/ghostty/platform.conf"
+  else
+    ln -sf "$DOTFILES_DIR/ghostty/linux.conf" "$DOTFILES_DIR/ghostty/platform.conf"
+  fi
 
-if [[ "$CONFIG_ONLY" != true ]] && [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
-    mkdir -p ~/.local/share/man/man7
-    link_config "$DOTFILES_DIR/man/dotfiles.7" ~/.local/share/man/man7/dotfiles.7
-    echo
-fi
+  if [[ "$INSTALL_RICE" == true ]]; then
+    link_config "$DOTFILES_DIR/hyprland" "$HOME/.config/hypr"
+    link_config "$DOTFILES_DIR/waybar" "$HOME/.config/waybar"
+    link_config "$DOTFILES_DIR/rofi" "$HOME/.config/rofi"
+    link_config "$DOTFILES_DIR/dunst" "$HOME/.config/dunst"
+  fi
+}
 
-# ==============================================================================
-# SSH CONFIG (manual setup)
-# ==============================================================================
+install_neovim() {
+  if ! command -v nvim &>/dev/null; then
+    echo "ℹ️  nvim not found — skipping plugin and tool installation"
+    return
+  fi
 
-if [[ -d "$DOTFILES_DIR/ssh" ]]; then
-    if [[ ! -e ~/.ssh/config ]]; then
-        echo "SSH config not found"
-        echo "  To set up: cp $DOTFILES_DIR/ssh/config.example ~/.ssh/config"
-        echo "  Then edit and chmod 600 ~/.ssh/config"
-    else
-        echo "✅ SSH config already exists"
-    fi
-    echo
-fi
+  echo "=== Installing Neovim plugins ==="
+  if DOTFILES_INSTALL=1 nvim --headless "+Lazy! restore" "+Lazy! clean" +qa 2>/tmp/nvim-lazy-sync.log; then
+    echo "✅ Neovim plugins installed"
+  else
+    echo "⚠️  Lazy restore/clean had issues. Log: /tmp/nvim-lazy-sync.log"
+  fi
 
-# ==============================================================================
-# LOCAL CONFIG FILES
-# ==============================================================================
+  echo "=== Installing Treesitter parsers ==="
+  if DOTFILES_INSTALL=1 nvim --headless "+lua require('jlewe.install').treesitter()" 2>/tmp/nvim-treesitter.log; then
+    echo "✅ Treesitter parsers installed"
+  else
+    echo "⚠️  Some Treesitter parsers failed. Log: /tmp/nvim-treesitter.log"
+  fi
 
-# .zshrc.local — machine-specific shell config (nvm, IBM CLI, etc.)
-if [[ ! -e ~/.zshrc.local ]]; then
+  echo "=== Installing Mason tools ==="
+  if DOTFILES_INSTALL=1 nvim --headless "+lua require('jlewe.install').mason()" 2>/tmp/nvim-mason.log; then
+    echo "✅ Mason tools installed"
+  else
+    echo "⚠️  Some Mason tools failed. Log: /tmp/nvim-mason.log"
+  fi
+}
+
+install_optional_assets() {
+  [[ "$CONFIG_ONLY" == true ]] && return
+
+  local shaders="$DOTFILES_DIR/ghostty/shaders"
+  if [[ -d "$shaders" ]]; then
+    echo "✅ Ghostty shaders already installed"
+  else
+    git clone https://github.com/0xhckr/ghostty-shaders "$shaders" ||
+      echo "⚠️  Could not clone Ghostty shaders (cosmetic only)"
+  fi
+
+  if [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
+    link_config "$DOTFILES_DIR/man/dotfiles.7" "$HOME/.local/share/man/man7/dotfiles.7"
+  fi
+}
+
+report_ssh_config() {
+  if [[ -e "$HOME/.ssh/config" ]]; then
+    echo "✅ SSH config already exists"
+  else
+    echo "SSH config is machine-local. Copy ssh/config.example manually if needed."
+  fi
+}
+
+setup_local_configs() {
+  if [[ ! -e "$HOME/.zshrc.local" ]]; then
     if [[ -f "$DOTFILES_DIR/zsh/zshrc.local.example" ]]; then
-        cp "$DOTFILES_DIR/zsh/zshrc.local.example" ~/.zshrc.local
+      cp "$DOTFILES_DIR/zsh/zshrc.local.example" "$HOME/.zshrc.local"
     else
-        touch ~/.zshrc.local
+      touch "$HOME/.zshrc.local"
     fi
-    echo "✅ Created ~/.zshrc.local (edit to add API keys, work aliases, nvm, etc.)"
-else
-    echo "✅ ~/.zshrc.local already exists"
-fi
+    echo "✅ Created ~/.zshrc.local"
+  fi
 
-# .gitconfig.local — machine-specific git config (email)
-if [[ ! -e ~/.gitconfig.local ]]; then
-    if [[ "$UPDATE_MODE" == true ]]; then
-        touch ~/.gitconfig.local
-        echo "✅ Created empty ~/.gitconfig.local (set your email: git config --file ~/.gitconfig.local user.email you@example.com)"
-    else
-        echo
-        read -r -p "📧 Enter your Git email address: " git_email
-        if [[ -n "$git_email" ]]; then
-            cat > ~/.gitconfig.local <<EOF
+  if [[ -e "$HOME/.gitconfig.local" ]]; then
+    return
+  fi
+
+  if [[ "$UPDATE_MODE" == true ]]; then
+    touch "$HOME/.gitconfig.local"
+    echo "✅ Created empty ~/.gitconfig.local"
+    return
+  fi
+
+  read -r -p "📧 Enter your Git email address: " git_email
+  if [[ -n "$git_email" ]]; then
+    cat >"$HOME/.gitconfig.local" <<EOF
 [user]
 	email = $git_email
 EOF
-            echo "✅ Created ~/.gitconfig.local with email: $git_email"
-        else
-            touch ~/.gitconfig.local
-            echo "✅ Created empty ~/.gitconfig.local (set your email later: git config --file ~/.gitconfig.local user.email you@example.com)"
-        fi
-    fi
-else
-    echo "✅ ~/.gitconfig.local already exists"
-fi
+  else
+    touch "$HOME/.gitconfig.local"
+  fi
+  echo "✅ Created ~/.gitconfig.local"
+}
 
-echo
+set_default_shell() {
+  if ! command -v zsh &>/dev/null; then
+    echo "ℹ️  zsh not found — skipping default shell change"
+    return
+  fi
 
-# ==============================================================================
-# SET DEFAULT SHELL
-# ==============================================================================
+  if [[ "$SHELL" == *"zsh"* ]]; then
+    echo "✅ zsh is already the default shell"
+    return
+  fi
 
-if [[ "$CONFIG_ONLY" == true ]]; then
-    # On remote servers: only change shell if zsh exists, don't fail if chsh unavailable
-    if command -v zsh &>/dev/null; then
-        if [[ "$SHELL" != *"zsh"* ]]; then
-            if command -v chsh &>/dev/null; then
-                echo "Setting zsh as default shell..."
-                chsh -s "$(which zsh)" 2>/dev/null || echo "⚠️  chsh failed — ask your admin or add 'exec zsh' to ~/.bashrc"
-            else
-                echo "⚠️  chsh not available — add 'exec zsh' to ~/.bashrc to use zsh"
-            fi
-        else
-            echo "✅ zsh is already the default shell"
-        fi
-    else
-        echo "ℹ️  zsh not found — shell config will apply when zsh is installed"
-    fi
-else
-    if [[ "$SHELL" != *"zsh"* ]]; then
-        echo "Setting zsh as default shell..."
-        chsh -s "$(command -v zsh)" || echo "⚠️  chsh failed — you may need to run it manually or log in again"
-        echo "Default shell changed to zsh (takes effect on next login)"
-    else
-        echo "✅ zsh is already the default shell"
-    fi
-fi
+  if ! command -v chsh &>/dev/null; then
+    echo "⚠️  chsh unavailable — change the default shell manually"
+    return
+  fi
 
-echo
+  echo "Setting zsh as default shell..."
+  if ! chsh -s "$(command -v zsh)"; then
+    echo "⚠️  chsh failed — change the default shell manually"
+  fi
+}
 
-
-# ==============================================================================
-# DONE
-# ==============================================================================
-
-echo "Installation complete!"
-echo
-if [[ "$CONFIG_ONLY" == true ]]; then
-    echo "Remote server setup done. Next steps:"
-    echo "  1. Start a new shell (or run: exec zsh)"
-    echo "  2. Open Neovim: 'nvim' (plugins and tools are already installed)"
-    echo "  3. Start tmux: 'tmux'"
-elif [[ "$UPDATE_MODE" == true ]]; then
-    echo "All configs are up to date."
-else
-    echo "Next steps:"
-    echo "  1. Log out and back in (to activate zsh as default shell)"
-    echo "  2. Start Neovim: 'nvim' (lazy.nvim will auto-install plugins)"
-    echo "  3. Start tmux: 'tmux'"
+print_summary() {
+  echo
+  echo "Installation complete!"
+  if [[ "$CONFIG_ONLY" == true ]]; then
+    echo "Start a new shell, then open Neovim and tmux."
+  elif [[ "$UPDATE_MODE" == true ]]; then
+    echo "All configured components are up to date."
+  else
+    echo "Log out and back in, then start Neovim or tmux."
     if [[ "$INSTALL_RICE" == true ]]; then
-        echo "  4. Start Hyprland: log in on TTY1 (auto-starts via zprofile)"
-        echo "  5. Read the rice guide: docs/rice-guide.md"
+      echo "Hyprland starts automatically on TTY1."
     fi
-fi
-echo
-echo "Documentation: README.md (overview), docs/ (guides)"
+  fi
+  echo "Documentation: README.md and docs/"
+}
+
+main() {
+  parse_args "$@"
+
+  echo "🚀 Installing dotfiles from: $DOTFILES_DIR"
+  echo "🖥️  Detected OS: $OS"
+  if [[ "$CONFIG_ONLY" == true ]]; then
+    echo "📦 Config-only mode"
+  elif [[ "$UPDATE_MODE" == true ]]; then
+    echo "🔄 Update mode"
+  fi
+
+  install_packages
+  install_font
+  link_configs
+  install_neovim
+  install_optional_assets
+  report_ssh_config
+  setup_local_configs
+  set_default_shell
+  print_summary
+}
+
+main "$@"
