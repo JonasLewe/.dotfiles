@@ -55,7 +55,9 @@
         "format-wifi": "  {essid}",
         "format-ethernet": "  {ifname}",
         "format-disconnected": "  disconnected",
-        "tooltip-format": "{ipaddr}/{cidr}"
+        "tooltip-format": "{essid}\nSignal: {signalStrength}%\n{ipaddr}/{cidr}\nClick: manage networks",
+        "tooltip-format-disconnected": "No network\nClick: join a network",
+        "on-click": "~/.config/networkmanager-dmenu/networkmanager_dmenu_user"
     },
 
     // --- BACKLIGHT ---
