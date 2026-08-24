@@ -3,6 +3,7 @@ return {
   lsp_servers = {
     "bashls",
     "helm_ls",
+    "jsonls",
     "lua_ls",
     "marksman",
     "pyright",
@@ -14,6 +15,7 @@ return {
     "black",
     "debugpy",
     "helm-ls",
+    "json-lsp",
     "lua-language-server",
     "marksman",
     "prettier",

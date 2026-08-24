@@ -23,7 +23,7 @@ nvim/
 
 - `core/` enthält ausschließlich Neovim-Verhalten ohne Plugin-Abhängigkeit.
 - `plugins/` enthält die regelmäßig verwendeten Erweiterungen.
-- `plugins/optional/` enthält Jira, Jupyter, DAP und Pomodoro.
+- `plugins/optional/` enthält DAP und Pomodoro.
 - `tooling.lua` ist die gemeinsame Quelle für LSP-Server, Mason-Pakete,
   Formatter, Linter und Debug-Adapter.
 - `install.lua` enthält den Headless-Bootstrap, den `install.sh` aufruft.
@@ -79,10 +79,6 @@ Mason.
 
 ### Optionale Integrationen
 
-- JupyNvim wird ausschließlich für `.ipynb` oder über seine Commands geladen.
-- Jira wird nur installiert und aktiviert, wenn `jira.local.lua` existiert.
-  `jira.example.lua` dokumentiert die maschinenlokale Konfiguration.
-- Der Jira-Read-only-Modus blockiert schreibende UI- und API-Einstiegspunkte.
 - DAP und Pomodoro werden erst über ihre Commands oder Keymaps geladen.
 
 ## Plugin hinzufügen
