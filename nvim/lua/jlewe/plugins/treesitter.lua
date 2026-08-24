@@ -41,22 +41,12 @@ return {
     })
 
     -- Highlighting is native in Neovim 0.12; nvim-treesitter supplies the
-    -- parsers and queries. Unsupported/mid-install buffers fall back cleanly.
+    -- parsers and queries. Try it for every detected filetype instead of
+    -- maintaining a second language allowlist here. If no parser exists,
+    -- the regex syntax enabled in core/options.lua remains active.
     vim.api.nvim_create_autocmd("FileType", {
       group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
-      pattern = {
-        "bash",
-        "helm",
-        "json",
-        "jsonc",
-        "lua",
-        "markdown",
-        "python",
-        "sh",
-        "vim",
-        "vimdoc",
-        "yaml",
-      },
+      pattern = "*",
       callback = function(args)
         pcall(vim.treesitter.start, args.buf)
       end,
