@@ -5,7 +5,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 ## What's included
 
 ### Shared
-- **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, Jira, DAP, JupyNvim, cyberdream
+- **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, DAP, cyberdream
 - **tmux** — Vanilla config, vim keybindings, no plugin manager
 - **zsh** — Plain zsh with vi-mode, no frameworks
 - **Ghostty** — GPU-accelerated terminal (platform-specific overrides via symlink)
@@ -28,10 +28,6 @@ cd ~/.dotfiles
 ```
 
 The installer auto-detects the OS, installs packages, symlinks configs, and prompts for machine-specific settings. Idempotent — safe to re-run.
-
-### Optional Jira integration
-
-Jira support is machine-local and has no plugin cost on machines that do not use it. `jira.nvim` is enabled and installed only when `~/.config/nvim/jira.local.lua` exists. To enable it, copy `nvim/jira.example.lua` to that path, adjust the project settings, and authenticate once with `:Jira auth login`. The example defaults to read-only mode, which blocks Jira writes and Jira-triggered Git branch changes.
 
 ## Documentation
 
