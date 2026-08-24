@@ -24,6 +24,7 @@ ARCH_PACKAGES=(
 RICE_PACKAGES=(
   hyprland waybar rofi-wayland dunst hyprpaper hyprlock hypridle
   brightnessctl playerctl grim slurp wl-clip-persist breeze-icons
+  networkmanager networkmanager-dmenu
 )
 
 REQUIRED_COMMANDS=(git nvim tmux zsh tree-sitter cc make)
@@ -206,6 +207,7 @@ link_configs() {
     link_config "$DOTFILES_DIR/hyprland" "$HOME/.config/hypr"
     link_config "$DOTFILES_DIR/waybar" "$HOME/.config/waybar"
     link_config "$DOTFILES_DIR/rofi" "$HOME/.config/rofi"
+    link_config "$DOTFILES_DIR/networkmanager-dmenu" "$HOME/.config/networkmanager-dmenu"
     link_config "$DOTFILES_DIR/dunst" "$HOME/.config/dunst"
   fi
 }
