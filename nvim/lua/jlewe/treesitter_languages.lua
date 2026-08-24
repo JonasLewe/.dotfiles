@@ -7,4 +7,5 @@ return {
   "markdown",
   "python",
   "yaml",
+  "zsh",
 }
