@@ -21,7 +21,17 @@
     // Which modules to show and where
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["hyprland/window"],
-    "modules-right": ["cpu", "memory", "network", "backlight", "pulseaudio", "battery", "clock"],
+    "modules-right": ["custom/insync", "cpu", "memory", "network", "backlight", "pulseaudio", "battery", "clock"],
+
+    // Show only when Insync is installed; check once when Waybar starts.
+    "custom/insync": {
+        "exec-if": "command -v insync >/dev/null 2>&1",
+        "exec": "echo Insync",
+        "interval": "once",
+        "format": "{text}",
+        "tooltip": false,
+        "on-click": "command -v insync >/dev/null 2>&1 && insync show"
+    },
 
     // --- WORKSPACES ---
     // Shows workspace buttons (1-9). Click to switch.

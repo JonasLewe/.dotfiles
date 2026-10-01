@@ -42,6 +42,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("hyprpaper")
     hl.exec_cmd("wl-clip-persist --clipboard regular")
     hl.exec_cmd("hypridle")
+    hl.exec_cmd("command -v insync >/dev/null 2>&1 && env QT_QPA_PLATFORM=xcb nice -n 10 ionice -c 2 -n 7 insync start")
 end)
 
 -- =============================================================================
