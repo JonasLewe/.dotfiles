@@ -55,6 +55,11 @@ Der ausführliche native Workflow steht im `vanilla-vim-guide.md`.
 Telescope bietet Datei-, Text-, Buffer- und Verlaufssuche. Trouble zeigt
 Diagnostics und Dokumentsymbole. netrw bleibt der integrierte Dateiexplorer.
 
+Live Grep sucht ab dem aktuellen Arbeitsverzeichnis auch in versteckten
+Dateien und Verzeichnissen, etwa `.gitlab-ci.yml` und `.gitlab/`.
+`.git` bleibt ausgeschlossen; Ignore-Regeln und Regex-Suche gelten weiterhin.
+Das Arbeitsverzeichnis lässt sich mit `:pwd` prüfen.
+
 ### LSP und Tooling
 
 Mason installiert die in `tooling.lua` deklarierten Werkzeuge. nvim-lspconfig
