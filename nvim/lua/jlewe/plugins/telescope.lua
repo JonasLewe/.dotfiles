@@ -16,6 +16,9 @@ return {
       local telescope = require("telescope")
       telescope.setup({
         pickers = {
+          live_grep = {
+            additional_args = { "--hidden", "--glob", "!.git" },
+          },
           find_files = {
             hidden = true,
           },
