@@ -44,7 +44,14 @@ keymap.set("n", "<leader>tx", ":tabclose<CR>", { desc = "Close tab" })
 keymap.set("n", "<leader>tn", ":tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", ":tabp<CR>", { desc = "Go to previous tab" })
 
-keymap.set("n", "<leader>tt", ":new | term<CR>", { desc = "Open terminal split" })
+keymap.set("n", "<leader>tt", function()
+  local file = vim.api.nvim_buf_get_name(0)
+  local cwd = file ~= "" and vim.fs.dirname(file) or vim.fn.getcwd()
+
+  vim.cmd.new()
+  vim.fn.jobstart({ vim.o.shell }, { cwd = cwd, term = true })
+  vim.cmd.startinsert()
+end, { desc = "Open terminal split in current file directory" })
 keymap.set("n", "<leader>e", ":Lex<CR>", { desc = "Toggle file explorer (netrw)" })
 keymap.set("n", "<leader>E", ":Lex %:p:h<CR>", { desc = "Open file explorer in current file dir (netrw)" })
 
