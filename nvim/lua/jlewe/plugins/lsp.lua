@@ -7,13 +7,19 @@ return {
   {
     "williamboman/mason.nvim",
     cmd = { "Mason", "MasonInstall", "MasonUpdate", "MasonUninstall" },
-    opts = {},
+    opts = {
+      registries = {
+        "github:mkindberg/ghostty-ls",
+        "github:mason-org/mason-registry",
+      },
+    },
   },
 
   {
     "williamboman/mason-lspconfig.nvim",
     cmd = { "LspInstall", "LspUninstall" },
     dependencies = { "williamboman/mason.nvim" },
+    event = { "BufReadPost", "BufNewFile" },
     opts = {
       ensure_installed = tooling.lsp_servers,
       -- Never auto-enable every package left in Mason's install directory.
@@ -100,7 +106,25 @@ return {
           },
         })
 
+        vim.lsp.config("yamlls", {
+          settings = {
+            yaml = {
+              customTags = {
+                "tag:yaml.org,2002:python/name:pymdownx.superfences.fence_code_format",
+              },
+            },
+          },
+        })
+
+        -- ghostty-ls lives in its own Mason registry and therefore has no
+        -- nvim-lspconfig definition for mason-lspconfig to enable for us.
+        vim.lsp.config("ghostty", {
+          cmd = { "ghostty-ls" },
+          filetypes = { "ghostty" },
+        })
+
         vim.lsp.enable(tooling.lsp_servers)
+        vim.lsp.enable("ghostty")
       end
 
       if vim.v.vim_did_enter == 1 then

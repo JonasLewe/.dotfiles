@@ -14,6 +14,7 @@ return {
     "bash-language-server",
     "black",
     "debugpy",
+    "ghostty-ls",
     "helm-ls",
     "json-lsp",
     "lua-language-server",

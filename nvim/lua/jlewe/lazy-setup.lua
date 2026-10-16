@@ -19,5 +19,8 @@ require("lazy").setup({
 }, {
   checker = { enabled = false },
   change_detection = { notify = false },
+  -- Keep application-provided runtime files. Ghostty exposes its filetype,
+  -- syntax, compiler, and comment settings through an XDG runtime directory.
+  performance = { rtp = { reset = false } },
   rocks = { enabled = false },
 })
