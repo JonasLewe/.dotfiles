@@ -2,7 +2,7 @@
  * ROFI CONFIGURATION
  * =============================================================================
  * Rofi is an application launcher for Wayland/X11.
- * Open with: SUPER + d (configured in hyprland.conf)
+ * Open with: SUPER + d (configured in hyprland.lua)
  * Docs: https://davatorium.github.io/rofi/
  *
  * USAGE:

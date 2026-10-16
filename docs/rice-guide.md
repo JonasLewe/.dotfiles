@@ -413,7 +413,7 @@ Ein Rice sieht dann gut aus, wenn alles farblich zusammenpasst. Wähle EIN Schem
 ```
 Ghostty        → ghostty/config (theme = ...)
 Neovim         → nvim/lua/jlewe/plugins/colorscheme.lua
-Hyprland       → hyprland/hyprland.conf (col.active_border, col.inactive_border)
+Hyprland       → hyprland/hyprland.lua (general.col.active_border, general.col.inactive_border)
 Waybar         → waybar/style.css (background-color, color, etc.)
 Rofi           → rofi/config.rasi (@bg, @fg, @accent, etc.)
 Dunst          → dunst/dunstrc ([urgency_*] Sektionen)
@@ -457,17 +457,20 @@ Phase 3 (Fortgeschritten):
 
 ### Window Rules Beispiel
 
-In `hyprland/hyprland.conf`:
-```
-# Firefox immer auf Workspace 2
-windowrulev2 = workspace 2, class:^(firefox)$
+In `hyprland/hyprland.lua`:
+```lua
+-- Firefox immer auf Workspace 2
+hl.window_rule({ match = { class = "firefox" }, workspace = "2" })
 
-# Dateimanager immer floating
-windowrulev2 = float, class:^(thunar)$
+-- Dateimanager immer floating
+hl.window_rule({ match = { class = "thunar" }, float = true })
 
-# Bild-Viewer floating und zentriert
-windowrulev2 = float, class:^(imv)$
-windowrulev2 = center, class:^(imv)$
+-- Bild-Viewer floating und zentriert
+hl.window_rule({
+    match = { class = "imv" },
+    float = true,
+    center = true,
+})
 ```
 
 ### Inspiration

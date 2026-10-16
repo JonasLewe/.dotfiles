@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Power menu for Hyprland via Rofi
-# Keybind: SUPER + Delete (configured in hyprland.conf)
+# Keybind: SUPER + Delete (configured in hyprland.lua)
 
 # Self-contained theme: reset default theme to prevent bleed-through
 menu_theme='@theme "/dev/null"

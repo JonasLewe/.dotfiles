@@ -74,3 +74,6 @@ fi
 
 [[ ":$PATH:" != *":$HOME/.dual-graph:"* ]] && export PATH="$PATH:$HOME/.dual-graph"
 
+# >>> Codex installer >>>
+export PATH="/home/jonas/.local/bin:$PATH"
+# <<< Codex installer <<<
