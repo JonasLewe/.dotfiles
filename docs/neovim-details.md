@@ -70,6 +70,11 @@ Sprachunterstützung wird an einer Stelle ergänzt:
 2. Nur bei abweichenden Defaults eine `vim.lsp.config()`-Anpassung ergänzen.
 3. `./install.sh --update` ausführen oder das Werkzeug mit `:Mason` installieren.
 
+Ghostty ist eine Ausnahme: Die Anwendung liefert Filetype, Syntax und
+Kommentaroptionen über einen eigenen Neovim-Runtime-Pfad. Dieser Pfad bleibt
+beim Start bewusst erhalten. `ghostty-ls` stammt aus einer zusätzlichen
+Mason-Registry und wird deshalb separat in `plugins/lsp.lua` konfiguriert.
+
 Conform formatiert beim Speichern und fällt bei Bedarf auf LSP-Formatierung
 zurück. nvim-lint startet nach dem Speichern oder beim Verlassen des Insert
 Mode. Treesitter-Parser stehen separat in `treesitter_languages.lua`, weil sie
