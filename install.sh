@@ -212,6 +212,17 @@ link_configs() {
   fi
 }
 
+install_tmux_plugins() {
+  local plugin
+  for plugin in tmux-resurrect tmux-continuum; do
+    if [[ -d "$HOME/.tmux/plugins/$plugin" ]]; then
+      echo "✅ $plugin already installed"
+    else
+      git clone "https://github.com/tmux-plugins/$plugin" "$HOME/.tmux/plugins/$plugin"
+    fi
+  done
+}
+
 install_neovim() {
   if ! command -v nvim &>/dev/null; then
     echo "ℹ️  nvim not found — skipping plugin and tool installation"
@@ -348,6 +359,7 @@ main() {
   install_packages
   install_font
   link_configs
+  install_tmux_plugins
   install_neovim
   install_optional_assets
   report_ssh_config
