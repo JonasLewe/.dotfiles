@@ -6,7 +6,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 
 ### Shared
 - **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, DAP, cyberdream
-- **tmux** — Vanilla config, vim keybindings, no plugin manager
+- **tmux** — Vim keybindings, session persistence via resurrect/continuum, no plugin manager
 - **zsh** — Plain zsh with vi-mode, no frameworks
 - **Ghostty** — GPU-accelerated terminal (platform-specific overrides via symlink)
 - **Git** — Minimal gitconfig (email via `~/.gitconfig.local`)
@@ -15,6 +15,10 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 - **Hyprland** — Tiling Wayland compositor (+ Waybar, Rofi, Dunst)
 
 Philosophy: **vanilla first** — learn native features before adding plugins.
+
+tmux saves sessions every 15 minutes and restores them when the tmux server starts.
+Save manually with `Ctrl+a`, then `Ctrl+s`; restore with `Ctrl+a`, then `Ctrl+r`.
+Layouts and working directories are restored; running programs are restarted only where supported, not resumed from memory.
 
 ## Installation
 
