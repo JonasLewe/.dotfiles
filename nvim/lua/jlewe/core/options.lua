@@ -29,6 +29,9 @@ opt.smartcase = true
 opt.cursorline = true
 opt.scrolloff = 8
 
+-- Show the cursor's percentage through the file; the default %P tracks the viewport.
+opt.rulerformat = "%-14.(%l,%c%V%) %3p%%"
+
 opt.termguicolors = true
 opt.background = "dark"
 opt.signcolumn = "yes"
