@@ -3,7 +3,7 @@ local keymap = vim.keymap
 keymap.set("i", "kj", "<Esc>", { desc = "Exit insert mode" })
 keymap.set("v", "kj", "<Esc>", { desc = "Exit visual mode" })
 
--- LazyGit needs kj itself, so terminal escape is buffer-local and delayed.
+-- Terminal tools can opt out via b:terminal_passthrough; LazyGit also needs kj itself.
 vim.api.nvim_create_autocmd("TermOpen", {
   group = vim.api.nvim_create_augroup("UserTerminalKeymaps", { clear = true }),
   callback = function(args)
@@ -12,7 +12,7 @@ vim.api.nvim_create_autocmd("TermOpen", {
         return
       end
       local bufname = vim.api.nvim_buf_get_name(args.buf)
-      if not bufname:match("lazygit") then
+      if not bufname:match("lazygit") and not vim.b[args.buf].terminal_passthrough then
         vim.keymap.set("t", "kj", "<C-\\><C-n>", { buffer = args.buf, desc = "Exit terminal mode" })
       end
     end, 100)
