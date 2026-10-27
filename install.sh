@@ -13,12 +13,12 @@ INSTALL_RICE=false
 
 MAC_PACKAGES=(
   neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags w3m
-  lazygit helm tree-sitter-cli
+  lazygit helm k9s tree-sitter-cli
 )
 
 ARCH_PACKAGES=(
   neovim tmux zsh ghostty git ripgrep fd ctags libfido2 nodejs npm w3m
-  lazygit helm base-devel tree-sitter-cli wl-clipboard
+  lazygit helm k9s base-devel tree-sitter-cli wl-clipboard
 )
 
 RICE_PACKAGES=(

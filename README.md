@@ -6,6 +6,7 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 
 ### Shared
 - **Neovim** — native LSP completion, Treesitter, Telescope, Trouble, LazyGit, DAP, cyberdream
+- **K9s** — Kubernetes terminal UI, also available through Neovim's `:K9s` command
 - **tmux** — Vim keybindings, session persistence via resurrect/continuum, no plugin manager
 - **zsh** — Plain zsh with vi-mode, no frameworks
 - **Ghostty** — GPU-accelerated terminal (platform-specific overrides via symlink)

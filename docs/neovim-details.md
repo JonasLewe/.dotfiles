@@ -10,6 +10,8 @@ anschließend lazy.nvim.
 nvim/
 ├── init.lua
 ├── lazy-lock.json
+├── plugin/
+│   └── k9s.lua
 └── lua/jlewe/
     ├── core/
     │   ├── options.lua
@@ -22,6 +24,9 @@ nvim/
 ```
 
 - `core/` enthält ausschließlich Neovim-Verhalten ohne Plugin-Abhängigkeit.
+- `nvim/plugin/` enthält lokale Erweiterungen, die Neovim automatisch lädt.
+  Eine Datei entfernen und Neovim neu starten deaktiviert die Erweiterung;
+  ein `require()` in `init.lua` ist nicht nötig.
 - `plugins/` enthält die regelmäßig verwendeten Erweiterungen.
 - `plugins/optional/` enthält DAP und Pomodoro.
 - `tooling.lua` ist die gemeinsame Quelle für LSP-Server, Mason-Pakete,
@@ -90,6 +95,37 @@ Mason.
 ### Optionale Integrationen
 
 - DAP und Pomodoro werden erst über ihre Commands oder Keymaps geladen.
+
+### Kubernetes mit k9s
+
+`install.sh` installiert k9s über Homebrew bzw. pacman. Auf einem bestehenden
+System genügt `brew install k9s` (macOS) oder `sudo pacman -S k9s` (Arch);
+`./install.sh --update` nimmt es beim nächsten vollständigen Update mit.
+Bei `--config-only` muss k9s bereits auf dem Server installiert sein.
+
+Die Integration liegt vollständig in `nvim/plugin/k9s.lua`: Command,
+Keymap, which-key-Gruppe und Fenstersteuerung. Zum Deaktivieren diese Datei
+entfernen oder in `k9s.lua.disabled` umbenennen und Neovim neu starten.
+Das über den Installer bereitgestellte CLI bleibt unabhängig davon nutzbar.
+
+`:K9s` öffnet k9s in einem zentrierten Floating Window mit abgerundetem Rahmen
+und aktiviert direkt die Terminal-Eingabe. Das Fenster nutzt etwa 90 % des
+Editors und passt sich beim Ändern der Terminalgröße an.
+Zusätzliche Argumente werden weitergereicht, beispielsweise
+`:K9s --context mein-cluster -n default`. Die Keymap ist in der
+which-key-Gruppe `kubernetes` zu finden.
+
+k9s verwendet die lokale Kubeconfig (`~/.kube/config` oder `KUBECONFIG`).
+Cluster-Zugänge bleiben maschinenspezifisch. In k9s wechselt `:ctx` den
+Kontext, `:ns` den Namespace; `?` zeigt die Hilfe und `:q` beendet k9s und
+schließt bei erfolgreichem Exit das Floating Window. Bei einem Fehler bleibt
+die Ausgabe sichtbar. Mit `Ctrl+\`, danach `Ctrl+n`, gelangst du in Neovims
+Normalmodus; dort schließen `q` oder `Esc` das Fenster samt Terminal-Prozess.
+`kj` wird in k9s nicht abgefangen, damit die Navigation mit `j` und `k`
+funktioniert. Dafür setzt die Erweiterung `b:terminal_passthrough`, die
+allgemeine Ausnahme für Terminal-Buffer mit eigener Tastensteuerung.
+
+Referenz: [k9s-Befehle und Tastenkürzel](https://k9scli.io/topics/commands/).
 
 ## Plugin hinzufügen
 
