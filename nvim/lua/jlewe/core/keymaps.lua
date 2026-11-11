@@ -66,32 +66,8 @@ keymap.set("n", "<leader>tt", function()
   vim.fn.jobstart({ vim.o.shell }, { cwd = cwd, term = true })
   vim.cmd.startinsert()
 end, { desc = "Open terminal split in current file directory" })
-local function toggle_explorer(use_cwd)
-  -- An explicit Lexplore path updates an open sidebar instead of closing it.
-  local explorer = vim.t.netrw_lexbufnr
-  if explorer and vim.fn.bufwinid(explorer) ~= -1 then
-    vim.cmd.Lexplore()
-    return
-  end
-
-  local cwd = vim.fn.getcwd()
-  local dir = cwd
-  local file = vim.api.nvim_buf_get_name(0)
-  if not use_cwd and vim.bo.buftype == "" and file ~= "" and not file:match("^%a[%w+.-]*://") then
-    dir = vim.fs.dirname(file)
-  end
-  if vim.fn.isdirectory(dir) == 0 then
-    dir = cwd
-  end
-  vim.cmd("Lexplore " .. vim.fn.fnameescape(dir))
-end
-
-keymap.set("n", "<leader>e", function()
-  toggle_explorer(false)
-end, { desc = "Toggle file explorer in current file directory (netrw)" })
-keymap.set("n", "<leader>E", function()
-  toggle_explorer(true)
-end, { desc = "Toggle file explorer in working directory (netrw)" })
+keymap.set("n", "<leader>e", ":Lex<CR>", { desc = "Toggle file explorer (netrw)" })
+keymap.set("n", "<leader>E", ":Lex %:p:h<CR>", { desc = "Open file explorer in current file dir (netrw)" })
 
 -- netrw reserves Ctrl-l for refresh; keep split navigation consistent there.
 vim.api.nvim_create_autocmd("FileType", {

@@ -64,10 +64,6 @@ Der ausführliche native Workflow steht im `vanilla-vim-guide.md`.
 
 Telescope bietet Datei-, Text-, Buffer- und Verlaufssuche. Trouble zeigt
 Diagnostics und Dokumentsymbole. netrw bleibt der integrierte Dateiexplorer.
-`Space e` öffnet die Seitenleiste im Ordner der aktuellen Datei, auch nach
-einer Telescope- oder Obsidian-Suche. `Space E` verwendet stattdessen das
-Arbeitsverzeichnis. Erneutes Drücken schließt die Seitenleiste; ohne normale
-Datei im aktuellen Buffer verwendet auch `Space e` das Arbeitsverzeichnis.
 
 Live Grep sucht ab dem aktuellen Arbeitsverzeichnis auch in versteckten
 Dateien und Verzeichnissen, etwa `.gitlab-ci.yml` und `.gitlab/`.
