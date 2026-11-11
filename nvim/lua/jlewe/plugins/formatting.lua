@@ -10,7 +10,7 @@ return {
     {
       "<leader>cf",
       function()
-        require("conform").format({ lsp_format = "fallback", timeout_ms = 5000 })
+        require("conform").format({ timeout_ms = 5000 })
       end,
       mode = { "n", "v" },
       desc = "Format code",
@@ -18,10 +18,10 @@ return {
   },
   opts = {
     formatters_by_ft = tooling.formatters_by_ft,
+    default_format_opts = { lsp_format = "fallback" },
 
     format_on_save = {
       timeout_ms = 5000,
-      lsp_format = "fallback",
     },
   },
 }
