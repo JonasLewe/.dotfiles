@@ -43,7 +43,7 @@ return {
     -- Highlighting is native in Neovim 0.12; nvim-treesitter supplies the
     -- parsers and queries. Try it for every detected filetype instead of
     -- maintaining a second language allowlist here. If no parser exists,
-    -- the regex syntax enabled in core/options.lua remains active.
+    -- Neovim's default regex syntax remains active.
     vim.api.nvim_create_autocmd("FileType", {
       group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
       pattern = "*",

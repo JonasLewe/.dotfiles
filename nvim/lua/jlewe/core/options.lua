@@ -7,9 +7,8 @@ vim.g.loaded_perl_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
--- Keep Vim's regex syntax as a fallback for filetypes without a Treesitter
--- parser. Treesitter replaces it automatically in buffers where it starts.
-vim.cmd("syntax enable")
+-- Let Neovim enable syntax after init.lua. Enabling it here can read Lua
+-- buffers before lazy.nvim registers its BufReadPost handlers.
 
 local opt = vim.opt
 

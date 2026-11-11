@@ -22,8 +22,9 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     opts = {
       ensure_installed = tooling.lsp_servers,
-      -- Never auto-enable every package left in Mason's install directory.
-      automatic_enable = tooling.lsp_servers,
+      -- setup_lsp below enables our servers after their definitions and custom
+      -- settings are ready. Mason must not enable them earlier on BufReadPost.
+      automatic_enable = false,
     },
   },
 
@@ -138,7 +139,8 @@ return {
       end
 
       if vim.v.vim_did_enter == 1 then
-        setup_lsp()
+        -- Finish the buffer's read/filetype events before enabling clients.
+        vim.schedule(setup_lsp)
       else
         vim.api.nvim_create_autocmd("VimEnter", { once = true, callback = setup_lsp })
       end

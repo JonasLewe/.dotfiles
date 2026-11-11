@@ -72,8 +72,11 @@ Das Arbeitsverzeichnis lässt sich mit `:pwd` prüfen.
 ### LSP und Tooling
 
 Mason installiert die in `tooling.lua` deklarierten Werkzeuge. nvim-lspconfig
-liefert die Serverdefinitionen, Neovim aktiviert die Server nativ. Neue
-Sprachunterstützung wird an einer Stelle ergänzt:
+liefert die Serverdefinitionen, Neovim aktiviert die Server nativ. Die Aktivierung
+erfolgt zentral in `plugins/lsp.lua`, nachdem Definitionen und eigene Einstellungen
+bereitstehen; Masons automatische Aktivierung bleibt ausgeschaltet.
+
+Neue Sprachunterstützung wird an einer Stelle ergänzt:
 
 1. LSP-Server und Mason-Paket in `tooling.lua` eintragen.
 2. Nur bei abweichenden Defaults eine `vim.lsp.config()`-Anpassung ergänzen.
