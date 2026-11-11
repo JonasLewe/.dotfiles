@@ -109,6 +109,16 @@ return {
         vim.lsp.config("yamlls", {
           settings = {
             yaml = {
+              schemas = {
+                -- GitLab accepts tags: [], but its upstream schema requires
+                -- at least one tag. Prefer our patched schema over SchemaStore.
+                [vim.uri_from_fname(vim.fn.stdpath("config") .. "/schemas/gitlab-ci.json")] = {
+                  "**/.gitlab-ci.yml",
+                  "**/.gitlab-ci.yaml",
+                  "**/*.gitlab-ci.yml",
+                  "**/*.gitlab-ci.yaml",
+                },
+              },
               customTags = {
                 "tag:yaml.org,2002:python/name:pymdownx.superfences.fence_code_format",
               },
