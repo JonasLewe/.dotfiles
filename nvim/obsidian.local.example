@@ -1,0 +1,11 @@
+{
+  "name": "personal",
+  "path": "~/Documents/Obsidian Vault",
+  "daily_notes": {
+    "folder": "Daily Notes",
+    "date_format": "DD.MM.YYYY"
+  },
+  "attachments": {
+    "folder": "/"
+  }
+}

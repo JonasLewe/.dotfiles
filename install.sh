@@ -13,7 +13,7 @@ INSTALL_RICE=false
 
 MAC_PACKAGES=(
   neovim tmux zsh ghostty git ripgrep fd node fzf glab jq ctags w3m
-  lazygit helm k9s tree-sitter-cli
+  lazygit helm k9s tree-sitter-cli pngpaste
 )
 
 ARCH_PACKAGES=(

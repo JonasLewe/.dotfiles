@@ -32,6 +32,7 @@ nvim/
   ein `require()` in `init.lua` ist nicht nötig.
 - `plugins/` enthält die regelmäßig verwendeten Erweiterungen.
 - `plugins/optional/` enthält die erst bei Bedarf geladene DAP-Integration.
+- Die optionale Obsidian-Integration wird durch `obsidian.local` aktiviert.
 - `after/lsp/` ergänzt einzelne LSP-Server; `schemas/` enthält lokale Schemas.
 - `tooling.lua` ist die gemeinsame Quelle für LSP-Server, Mason-Pakete,
   Formatter, Linter und Debug-Adapter.
@@ -150,6 +151,57 @@ funktioniert. Dafür setzt die Erweiterung `b:terminal_passthrough`, die
 allgemeine Ausnahme für Terminal-Buffer mit eigener Tastensteuerung.
 
 Referenz: [k9s-Befehle und Tastenkürzel](https://k9scli.io/topics/commands/).
+
+### Obsidian-Vault
+
+Neovim und die Obsidian-App bearbeiten denselben Vault. Es gibt keine Kopie
+und keinen zusätzlichen Synchronisationsdienst. Die maschinenspezifische
+Konfiguration liegt in `nvim/obsidian.local` (JSON, von Git ignoriert).
+Auf einem neuen Rechner `nvim/obsidian.local.example` dorthin kopieren und
+`path` auf den bestehenden Vault setzen. Ohne gültigen Vault bleibt das
+Plugin deaktiviert.
+
+`obsidian-nvim/obsidian.nvim` lädt beim Öffnen einer Markdown-Datei im Vault
+oder über `:Obsidian` und die Gruppe `Space o`. Die Version folgt stabilen
+Releases; `lazy-lock.json` hält den installierten Stand fest. Telescope und
+Neovims native Completion werden wiederverwendet. Innerhalb des Vaults
+übernimmt `obsidian-ls`, außerhalb bleibt Marksman zuständig.
+
+Nach einem Neustart beispielsweise `nvim "$HOME/Documents/Obsidian Vault"`
+öffnen oder von überall `Space o f` für die Notizsuche verwenden.
+
+| Befehl | Funktion |
+| --- | --- |
+| `:Obsidian quick_switch` | Notiz nach Dateiname suchen |
+| `:Obsidian search` | Volltextsuche im Vault |
+| `:Obsidian new Mein Thema` | Notiz mit diesem Dateinamen in der Vault-Wurzel anlegen |
+| `:Obsidian today` | Daily Note öffnen oder anlegen |
+| `:Obsidian backlinks` | Rückverweise auf die aktuelle Notiz anzeigen |
+| `:Obsidian open` | Aktuelle Notiz in der Obsidian-App öffnen |
+| `:Obsidian paste_img` | Clipboard-Bild ablegen und in der Notiz verlinken |
+
+Die letzten drei Aktionen sind über buffer-lokale Tasten nur in Vault-Notizen
+verfügbar. `Enter` im Normalmodus folgt Links oder bedient Checkboxen;
+`]o` und `[o` springen zwischen Links. Beim Tippen von `[[` und einem Teil
+des Namens erscheinen Linkvorschläge. `Ctrl-Space` stößt Completion manuell
+an, `Tab` wählt einen Vorschlag und `Enter` übernimmt die Auswahl.
+
+Neue Notizen behalten Titel, Leerzeichen und Großschreibung als Dateinamen.
+Daily Notes liegen wie in der App unter `Daily Notes` mit `DD.MM.YYYY` als
+Dateiname; Bildanhänge landen in der Vault-Wurzel. Diese beiden Ablagen lassen
+sich in der lokalen JSON-Datei anpassen. Es werden keine Vorlagen vorgegeben.
+Vorhandene Properties werden gelesen, aber nicht automatisch ergänzt oder
+umgeschrieben. Automatische Formatierung beim Speichern ist ausschließlich
+für Vault-Notizen aus; explizites Formatieren mit `Space c f` bleibt möglich.
+
+`pngpaste` für Clipboard-Bilder auf macOS ist Teil von `install.sh`; unter
+Wayland ist `wl-clipboard` bereits vorgesehen. Die Markdown-Parser
+`markdown` und `markdown_inline` stehen in der gemeinsamen Treesitter-Liste.
+`:checkhealth obsidian` prüft die Integration. Hinweise auf optionale Audio-
+und Bildbearbeitungsprogramme erfordern für diesen Notiz-Workflow keine
+zusätzliche Installation.
+
+Referenz: [obsidian.nvim](https://github.com/obsidian-nvim/obsidian.nvim).
 
 ## Plugin hinzufügen
 

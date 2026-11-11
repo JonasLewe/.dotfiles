@@ -20,8 +20,12 @@ return {
     formatters_by_ft = tooling.formatters_by_ft,
     default_format_opts = { lsp_format = "fallback" },
 
-    format_on_save = {
-      timeout_ms = 5000,
-    },
+    format_on_save = function(bufnr)
+      -- Preserve Obsidian Markdown on save; explicit <leader>cf still formats it.
+      if require("jlewe.obsidian").contains(bufnr) then
+        return
+      end
+      return { timeout_ms = 5000 }
+    end,
   },
 }
