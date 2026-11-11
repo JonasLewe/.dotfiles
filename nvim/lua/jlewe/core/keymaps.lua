@@ -46,7 +46,21 @@ keymap.set("n", "<leader>tp", ":tabp<CR>", { desc = "Go to previous tab" })
 
 keymap.set("n", "<leader>tt", function()
   local file = vim.api.nvim_buf_get_name(0)
-  local cwd = file ~= "" and vim.fs.dirname(file) or vim.fn.getcwd()
+  local cwd = vim.fn.getcwd()
+
+  if vim.bo.buftype == "terminal" then
+    -- Terminal names are term://{cwd}//{pid}:{command}, not file paths.
+    local terminal_dir = file:match("^term://(.-)//%d+:")
+    if terminal_dir then
+      cwd = vim.fn.fnamemodify(terminal_dir, ":p")
+    end
+  elseif vim.bo.buftype == "" and file ~= "" then
+    cwd = vim.fs.dirname(file)
+  end
+
+  if vim.fn.isdirectory(cwd) == 0 then
+    cwd = vim.fn.getcwd()
+  end
 
   vim.cmd.new()
   vim.fn.jobstart({ vim.o.shell }, { cwd = cwd, term = true })
