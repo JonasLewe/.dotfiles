@@ -46,6 +46,20 @@ return {
         group = vim.api.nvim_create_augroup("UserLspConfig", {}),
         callback = function(ev)
           local client = assert(vim.lsp.get_client_by_id(ev.data.client_id))
+          local in_vault = require("jlewe.obsidian").contains(ev.buf)
+          if in_vault and client.name == "obsidian-ls" then
+            -- Marksman owns ordinary Markdown navigation, symbols and rename.
+            -- Obsidian's commands still use its vault-aware resolver directly.
+            for _, capability in ipairs({
+              "definitionProvider",
+              "referencesProvider",
+              "documentSymbolProvider",
+              "workspaceSymbolProvider",
+              "renameProvider",
+            }) do
+              client.server_capabilities[capability] = false
+            end
+          end
           local opts = function(desc)
             return { buffer = ev.buf, desc = "LSP: " .. desc }
           end
@@ -76,11 +90,16 @@ return {
                 triggers[#triggers + 1] = string.char(char)
               end
               client.server_capabilities.completionProvider.triggerCharacters = triggers
-              vim.bo[ev.buf].completeopt = "menuone,noselect,fuzzy,nosort"
-            else
-              vim.bo[ev.buf].completeopt = "menuone,noselect,popup"
             end
-            vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+            -- Either server may attach last; keep the vault's completion options.
+            vim.bo[ev.buf].completeopt = in_vault and "menuone,noselect,popup,fuzzy,nosort"
+              or "menuone,noselect,popup"
+            vim.lsp.completion.enable(true, client.id, ev.buf, {
+              autotrigger = true,
+              convert = in_vault and function()
+                return { dup = 0 }
+              end or nil,
+            })
             vim.keymap.set("i", "<C-Space>", vim.lsp.completion.get, opts("Trigger completion"))
             vim.keymap.set("i", "<Tab>", function()
               return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>"

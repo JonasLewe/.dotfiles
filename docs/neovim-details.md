@@ -158,14 +158,23 @@ Neovim und die Obsidian-App bearbeiten denselben Vault. Es gibt keine Kopie
 und keinen zusätzlichen Synchronisationsdienst. Die maschinenspezifische
 Konfiguration liegt in `nvim/obsidian.local` (JSON, von Git ignoriert).
 Auf einem neuen Rechner `nvim/obsidian.local.example` dorthin kopieren und
-`path` auf den bestehenden Vault setzen. Ohne gültigen Vault bleibt das
-Plugin deaktiviert.
+`path` auf den bestehenden Vault setzen. Zusätzlich
+`nvim/obsidian.marksman.toml` als `.marksman.toml` in die Vault-Wurzel kopieren,
+sofern dort keine eigene Marksman-Konfiguration liegt. Dieser Marker aktiviert
+die dateiübergreifende Unterstützung von Marksman; Wiki-Links verwenden Dateinamen.
+Ohne gültigen Vault bleibt das Obsidian-Plugin deaktiviert.
 
 `obsidian-nvim/obsidian.nvim` lädt beim Öffnen einer Markdown-Datei im Vault
 oder über `:Obsidian` und die Gruppe `Space o`. Die Version folgt stabilen
 Releases; `lazy-lock.json` hält den installierten Stand fest. Telescope und
-Neovims native Completion werden wiederverwendet. Innerhalb des Vaults
-übernimmt `obsidian-ls`, außerhalb bleibt Marksman zuständig.
+Neovims native Completion werden wiederverwendet. Marksman läuft auch im Vault
+und bietet die normale Markdown-Unterstützung: Hover (`K`), Diagnostics,
+Definitionen (`gd`), Referenzen (`gr`), Symbole und Umbenennen von Überschriften
+(`Space r n` / `grn`). `obsidian-ls` ergänzt Notiz-/Tag-/Block-Completion,
+Code Actions und Folding. Beide liefern native Completion; identische
+Einfügetexte werden im Menü nicht doppelt gezeigt. Standard-Navigation und
+Symbol-Rename gehen nur an Marksman, damit keine doppelten Ergebnisse oder
+aufeinanderfolgenden Rename-Operationen entstehen.
 
 Nach einem Neustart beispielsweise `nvim "$HOME/Documents/Obsidian Vault"`
 öffnen oder von überall `Space o f` für die Notizsuche verwenden.
@@ -179,9 +188,11 @@ Nach einem Neustart beispielsweise `nvim "$HOME/Documents/Obsidian Vault"`
 | `:Obsidian backlinks` | Rückverweise auf die aktuelle Notiz anzeigen |
 | `:Obsidian open` | Aktuelle Notiz in der Obsidian-App öffnen |
 | `:Obsidian paste_img` | Clipboard-Bild ablegen und in der Notiz verlinken |
+| `:Obsidian rename Neuer Name` | Notizdatei samt Vault-Verweisen umbenennen |
 
-Die letzten drei Aktionen sind über buffer-lokale Tasten nur in Vault-Notizen
-verfügbar. `Enter` im Normalmodus folgt Links oder bedient Checkboxen;
+Backlinks, App-Öffnen und Bildablage sind über buffer-lokale Tasten nur in
+Vault-Notizen verfügbar. `Enter` im Normalmodus folgt Links mit Obsidian-Auflösung (auch
+Blockverweisen) oder bedient Checkboxen;
 `]o` und `[o` springen zwischen Links. Beim Tippen von `[[` und einem Teil
 des Namens erscheinen Linkvorschläge. `Ctrl-Space` stößt Completion manuell
 an, `Tab` wählt einen Vorschlag und `Enter` übernimmt die Auswahl.

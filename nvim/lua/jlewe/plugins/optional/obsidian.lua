@@ -56,6 +56,57 @@ return {
     end,
     config = function(_, opts)
       require("obsidian").setup(opts)
+      local commands = require("obsidian.commands")
+      -- Keep Obsidian's alias/block navigation independent of the Markdown LSP.
+      commands.register("follow_link", {
+        nargs = "?",
+        note_action = true,
+        func = function(data)
+          if not require("jlewe.obsidian").contains(0) then
+            return vim.notify("Obsidian: open a vault note first", vim.log.levels.WARN)
+          end
+          local strategy = vim.trim(data.args)
+          require("obsidian.actions").follow_link(nil, {
+            open_strategy = strategy ~= "" and require("obsidian.api").get_open_strategy(strategy) or nil,
+          })
+        end,
+      })
+      -- Explicit note renames use Obsidian; normal LSP symbol renames use Marksman.
+      commands.register("rename", {
+        nargs = "*",
+        note_action = true,
+        func = function(data)
+          local bufnr = vim.api.nvim_get_current_buf()
+          local client = vim.lsp.get_clients({ bufnr = bufnr, name = "obsidian-ls" })[1]
+          if not client or not require("jlewe.obsidian").contains(bufnr) then
+            return vim.notify("Obsidian: open a vault note first", vim.log.levels.WARN)
+          end
+          local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+          local function rename(name)
+            name = name and vim.trim(name)
+            if not name or name == "" then
+              return
+            end
+            params.newName = name
+            local sent = client:request("textDocument/rename", params, function(err, edit)
+              if err then
+                vim.notify("Obsidian rename: " .. err.message, vim.log.levels.ERROR)
+              elseif edit then
+                vim.lsp.util.apply_workspace_edit(edit, client.offset_encoding)
+              end
+            end, bufnr)
+            if not sent then
+              vim.notify("Obsidian rename: language server is unavailable", vim.log.levels.ERROR)
+            end
+          end
+          local name = vim.trim(data.args)
+          if name ~= "" then
+            rename(name)
+          else
+            vim.ui.input({ prompt = "New note name: " }, rename)
+          end
+        end,
+      })
       -- Filetype detection can precede lazy's BufNewFile/command handler.
       -- Register the plugin's buffer events for a note already detected as Markdown.
       if require("jlewe.obsidian").contains(0) and vim.bo.filetype == "markdown" then

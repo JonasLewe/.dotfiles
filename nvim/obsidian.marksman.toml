@@ -1,0 +1,4 @@
+# Use filenames for Obsidian wiki links, rather than slugs of H1 headings.
+# Copy to .marksman.toml in the vault root to enable cross-file Markdown LSP.
+[completion]
+wiki.style = "file-stem"

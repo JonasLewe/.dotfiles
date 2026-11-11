@@ -2,8 +2,12 @@
 -- Link completion and manual completion via Ctrl-Space remain available.
 return {
   root_dir = function(bufnr, on_dir)
-    -- The vault uses obsidian-ls for links, completion and rename operations.
-    if not require("jlewe.obsidian").contains(bufnr) then
+    local vault = require("jlewe.obsidian")
+    -- Keep nested note folders in the configured vault workspace.
+    -- Marksman also needs .marksman.toml in that root to index all notes.
+    if vault.contains(bufnr) then
+      on_dir(vault.config.path)
+    else
       on_dir(vim.fs.root(bufnr, { ".marksman.toml", ".git" }))
     end
   end,
