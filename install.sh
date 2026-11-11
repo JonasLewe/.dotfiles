@@ -251,16 +251,8 @@ install_neovim() {
   fi
 }
 
-install_optional_assets() {
+link_man_page() {
   [[ "$CONFIG_ONLY" == true ]] && return
-
-  local shaders="$DOTFILES_DIR/ghostty/shaders"
-  if [[ -d "$shaders" ]]; then
-    echo "✅ Ghostty shaders already installed"
-  else
-    git clone https://github.com/0xhckr/ghostty-shaders "$shaders" ||
-      echo "⚠️  Could not clone Ghostty shaders (cosmetic only)"
-  fi
 
   if [[ "$OS" == "Linux" ]] && [[ -f "$DOTFILES_DIR/man/dotfiles.7" ]]; then
     link_config "$DOTFILES_DIR/man/dotfiles.7" "$HOME/.local/share/man/man7/dotfiles.7"
@@ -361,7 +353,7 @@ main() {
   link_configs
   install_tmux_plugins
   install_neovim
-  install_optional_assets
+  link_man_page
   report_ssh_config
   setup_local_configs
   set_default_shell
