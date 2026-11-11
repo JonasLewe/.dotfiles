@@ -18,7 +18,6 @@ return {
         { "<leader>f", group = "find" },
         { "<leader>h", group = "git hunks" },
         { "<leader>l", group = "lazy" },
-        { "<leader>p", group = "pomodoro" },
         { "<leader>s", group = "splits" },
         { "<leader>t", group = "tabs/terminal" },
         { "<leader>x", group = "diagnostics" },
