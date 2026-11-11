@@ -15,6 +15,7 @@
 
 [push]
 	autoSetupRemote = true
+	default = current
 
 [alias]
 	st = status
@@ -23,3 +24,6 @@
 
 [color]
 	ui = auto
+
+[branch]
+	autoSetupMerge = simple

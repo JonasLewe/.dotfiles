@@ -1,6 +1,7 @@
 # Machine-specific git config — NOT committed to git.
 # Copy to ~/.gitconfig.local and fill in your email.
 # The install script does this automatically.
+# Keep machine-specific hook registrations and credential helpers here too.
 
 [user]
 	email = your-email@example.com
