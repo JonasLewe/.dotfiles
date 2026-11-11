@@ -15,6 +15,10 @@ Cross-platform personal dotfiles for **macOS** and **Arch Linux**. One repo, bot
 ### Linux (Arch / CachyOS)
 - **Hyprland** — Tiling Wayland compositor (+ Waybar, Rofi, Dunst)
 
+### Optional macOS configuration
+- **Borders** — `borders/bordersrc` is used by an existing Homebrew Borders service
+  through `~/.config/borders`. The installer does not install or start this service.
+
 Philosophy: **vanilla first** — learn native features before adding plugins.
 
 tmux saves sessions every 15 minutes and restores them when the tmux server starts.

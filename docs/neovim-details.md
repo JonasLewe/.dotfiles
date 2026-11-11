@@ -10,6 +10,9 @@ anschließend lazy.nvim.
 nvim/
 ├── init.lua
 ├── lazy-lock.json
+├── after/lsp/marksman.lua
+├── schemas/
+│   └── gitlab-ci.json
 ├── plugin/
 │   └── k9s.lua
 └── lua/jlewe/
@@ -28,7 +31,8 @@ nvim/
   Eine Datei entfernen und Neovim neu starten deaktiviert die Erweiterung;
   ein `require()` in `init.lua` ist nicht nötig.
 - `plugins/` enthält die regelmäßig verwendeten Erweiterungen.
-- `plugins/optional/` enthält DAP und Pomodoro.
+- `plugins/optional/` enthält die erst bei Bedarf geladene DAP-Integration.
+- `after/lsp/` ergänzt einzelne LSP-Server; `schemas/` enthält lokale Schemas.
 - `tooling.lua` ist die gemeinsame Quelle für LSP-Server, Mason-Pakete,
   Formatter, Linter und Debug-Adapter.
 - `install.lua` enthält den Headless-Bootstrap, den `install.sh` aufruft.
@@ -80,10 +84,21 @@ Kommentaroptionen über einen eigenen Neovim-Runtime-Pfad. Dieser Pfad bleibt
 beim Start bewusst erhalten. `ghostty-ls` stammt aus einer zusätzlichen
 Mason-Registry und wird deshalb separat in `plugins/lsp.lua` konfiguriert.
 
+Für GitLab-CI-Dateien verwendet YAML-LSP das lokale Schema unter `schemas/`.
+Herkunft, Anpassung und Update-Anleitung stehen in der
+[Schema-Dokumentation](../nvim/schemas/README.md). Der Marksman-Override unter
+`after/lsp/marksman.lua` verhindert Completion beim Tippen von `#`;
+Link-Completion und manuelle Completion bleiben verfügbar.
+
 Conform formatiert beim Speichern und fällt bei Bedarf auf LSP-Formatierung
-zurück. nvim-lint startet nach dem Speichern oder beim Verlassen des Insert
-Mode. Treesitter-Parser stehen separat in `treesitter_languages.lua`, weil sie
-sowohl interaktiv als auch vom Installer verwendet werden.
+zurück. Python nutzt standardmäßig Black. Enthält die `poetry.lock` neben der
+nächsten `pyproject.toml` YAPF, wird stattdessen `poetry run yapf --style google`
+ohne LSP-Fallback verwendet; Poetry muss verfügbar sein. Dateien in `.venv/`
+oder einer über `pyvenv.cfg` erkannten Umgebung werden nicht formatiert.
+
+nvim-lint startet nach dem Speichern oder beim Verlassen des Insert Mode.
+Treesitter-Parser stehen separat in `treesitter_languages.lua`, weil sie sowohl
+interaktiv als auch vom Installer verwendet werden.
 
 ### Git und Debugging
 
@@ -94,7 +109,13 @@ Mason.
 
 ### Optionale Integrationen
 
-- DAP und Pomodoro werden erst über ihre Commands oder Keymaps geladen.
+DAP wird erst über seine Debug-Keymaps geladen; der Python-Adapter `debugpy`
+bleibt Teil des Toolings.
+
+YouTrack wird über den lokalen Checkout `~/Developer/yt-tui.nvim` eingebunden.
+Nur wenn das Verzeichnis vorhanden ist, werden Plugin, Commands und Keymaps
+registriert. `:YtTui` lädt und öffnet die Integration bei Bedarf. Der Installer
+legt den Checkout nicht an.
 
 ### Kubernetes mit k9s
 
