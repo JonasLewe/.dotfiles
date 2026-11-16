@@ -8,11 +8,15 @@ return {
     dir = plugin_dir,
     name = "yt-tui.nvim",
     main = "yt-tui",
-    cmd = { "YtTui", "YtTuiClose" },
+    cmd = { "YtTui", "YtTuiToggle", "YtTuiHide", "YtTuiRestart", "YtTuiClose" },
     keys = {
-      { "<leader>yt", "<cmd>YtTui<cr>", desc = "Open YouTrack" },
+      { "<leader>yt", "<cmd>YtTuiRestart<cr>", desc = "Start YouTrack fresh" },
+      { "<leader>yy", "<cmd>YtTuiToggle<cr>", desc = "Toggle YouTrack" },
     },
-    opts = {},
+    opts = {
+      executable = "/usr/bin/env",
+      args = { "EDITOR=nvim", "yt-tui" },
+    },
   },
   {
     "folke/which-key.nvim",
